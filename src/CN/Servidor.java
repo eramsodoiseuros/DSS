@@ -17,7 +17,7 @@ public class Servidor {
     public Map<String, Gestor> getListaGestores() {
         Map<String, Gestor> listaGestoresReturn = new TreeMap<String, Gestor>();
         for(Gestor g : this.listaGestores.values()){
-            listaGestoresReturn.putIfAbsent(g.getCodeId(), g.clone());
+            listaGestoresReturn.putIfAbsent(g.getCodeId(), g.Clone());
         }
         return listaGestoresReturn;
     }
@@ -31,14 +31,16 @@ public class Servidor {
     }
 
     public Inventario getInventario() {
-        return inventario.clone();
+        return inventario.Clone();
     }
 
     public GestorPedidos getGestor_Pedidos() {
-        return gestor_Pedidos.clone();
+        return gestor_Pedidos.Clone();
     }
 
     public Integer getParking() {
         return parking;
     }
+
+
 }
