@@ -1,6 +1,18 @@
 package CN;
 
+import java.util.ArrayList;
+
 public class Entrega extends Pedido {
+
+    public String getCodID(){
+        return codID;
+    }
+
+    public Entrega(ArrayList<Palete> p, String codID) {
+        this.codID = codID;
+        this.conteudo = new ArrayList<Palete>(p);
+        this.estado = true;
+    }
 
     @Override
     boolean estado() {
