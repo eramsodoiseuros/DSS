@@ -31,11 +31,11 @@ public class Servidor {
     }
 
     public Inventario getInventario() {
-        return inventario.clone();
+        return inventario.Clone();
     }
 
     public GestorPedidos getGestor_Pedidos() {
-        return gestor_Pedidos.clone();
+        return gestor_Pedidos.Clone();
     }
 
     public Integer getParking() {
