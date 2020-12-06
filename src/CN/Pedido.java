@@ -3,9 +3,9 @@ package CN;
 import java.util.ArrayList;
 
 abstract class Pedido {
-    public String codID;
-    public ArrayList<Palete> conteudo;
-    public boolean estado;
+    String codID;
+    ArrayList<Palete> conteudo;
+    boolean estado;
 
     abstract boolean estado();
 }

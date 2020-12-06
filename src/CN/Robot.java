@@ -5,52 +5,52 @@ public class Robot {
     private Boolean ativo;
     private Integer ordensFeitas;
 
-    public Robot(String codeId) {
+    protected Robot(String codeId) {
         this.codeId = codeId;
         this.ativo = false;
         this.ordensFeitas = 0;
     }
 
-    public Robot(Robot r){
+    protected Robot(Robot r){
         this.codeId = r.getCodeId();
         this.ativo = r.getAtivo();
         this.ordensFeitas = r.getOrdensFeitas();
     }
 
-    private boolean notificaRecolha(String codeIdRequesicao, String codeIdPalete){
+    protected boolean notificaRecolha(String codeIdRequesicao, String codeIdPalete){
         return true;//por fazer
     }
 
-    private boolean notificaEntrega(String codeIdEntrega, String codeIdPalete){
+    protected boolean notificaEntrega(String codeIdEntrega, String codeIdPalete){
         return true;//por fazer
     }
 
-    private void ordem(){}
-    private void estado(){}
+    protected void ordem(){}
+    protected void estado(){}
 
 
 
-    public String getCodeId() {
+    protected String getCodeId() {
         return codeId;
     }
 
-    public Boolean getAtivo() {
+    protected Boolean getAtivo() {
         return ativo;
     }
 
-    public Integer getOrdensFeitas() {
+    protected Integer getOrdensFeitas() {
         return ordensFeitas;
     }
 
-    public void setId(String id) {
+    protected void setId(String id) {
         this.codeId = id;
     }
 
-    public void setAtivo(Boolean ativo) {
+    protected void setAtivo(Boolean ativo) {
         this.ativo = ativo;
     }
 
-    public void setOrdensFeitas(Integer ordensFeitas) {
+    protected void setOrdensFeitas(Integer ordensFeitas) {
         this.ordensFeitas = ordensFeitas;
     }
 

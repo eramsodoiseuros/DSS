@@ -9,38 +9,38 @@ public class Palete {
     private boolean armazenado;
     private String codID;
 
-    public boolean isRefrigerado() {
+    protected boolean isRefrigerado() {
         return refrigerado;
     }
-    public void setRefrigerado(boolean refrigerado) {
+    protected void setRefrigerado(boolean refrigerado) {
         this.refrigerado = refrigerado;
     }
-    public ArrayList<String> getConteudo() {
+    protected ArrayList<String> getConteudo() {
         return conteudo;
     }
-    public void setConteudo(ArrayList<String> conteudo) {
+    protected void setConteudo(ArrayList<String> conteudo) {
         this.conteudo = conteudo;
     }
-    public boolean isArmazenado() {
+    protected boolean isArmazenado() {
         return armazenado;
     }
-    public void setArmazenado(boolean armazenado) {
+    protected void setArmazenado(boolean armazenado) {
         this.armazenado = armazenado;
     }
-    public String getCodID() {
+    protected String getCodID() {
         return codID;
     }
-    public void setCodID(String codID) {
+    protected void setCodID(String codID) {
         this.codID = codID;
     }
 
-    public Palete(boolean refrigerado, ArrayList<String> conteudo, String codID) {
+    protected Palete(boolean refrigerado, ArrayList<String> conteudo, String codID) {
         this.refrigerado = refrigerado;
         this.conteudo = conteudo;
         this.codID = codID;
     }
 
-    public Palete(String codID) {
+    protected Palete(String codID) {
         this.codID = codID;
     }
 

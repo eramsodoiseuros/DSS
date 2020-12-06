@@ -10,63 +10,63 @@ public class GestorPedidos {
     private HashMap<String, Requisicao> requisicoes_ATIVAS;
     private HashMap<String, Entrega> entrega_ATIVAS;
 
-    public GestorPedidos(HashMap<String, Requisicao> requisicoes_FEITAS, HashMap<String, Entrega> entrega_FEITAS, HashMap<String, Requisicao> requisicoes_ATIVAS, HashMap<String, Entrega> entrega_ATIVAS) {
+    protected GestorPedidos(HashMap<String, Requisicao> requisicoes_FEITAS, HashMap<String, Entrega> entrega_FEITAS, HashMap<String, Requisicao> requisicoes_ATIVAS, HashMap<String, Entrega> entrega_ATIVAS) {
         this.requisicoes_FEITAS = requisicoes_FEITAS;
         this.entrega_FEITAS = entrega_FEITAS;
         this.requisicoes_ATIVAS = requisicoes_ATIVAS;
         this.entrega_ATIVAS = entrega_ATIVAS;
     }
 
-    public ArrayList<Requisicao> listaRequisicoes_FEITAS(){
+    protected ArrayList<Requisicao> listaRequisicoes_FEITAS(){
         return new ArrayList<>(requisicoes_FEITAS.values());
     }
 
-    public ArrayList<Requisicao> listaRequisicoes_ATIVAS(){
+    protected ArrayList<Requisicao> listaRequisicoes_ATIVAS(){
         return new ArrayList<>(requisicoes_ATIVAS.values());
     }
 
-    public ArrayList<Entrega> listaEntrega_FEITAS(){
+    protected ArrayList<Entrega> listaEntrega_FEITAS(){
         return new ArrayList<>(entrega_FEITAS.values());
     }
 
-    public ArrayList<Entrega> listaEntrega_ATIVAS(){
+    protected ArrayList<Entrega> listaEntrega_ATIVAS(){
         return new ArrayList<>(entrega_ATIVAS.values());
     }
 
-    public void removeRF(String codID){
+    protected void removeRF(String codID){
         this.requisicoes_FEITAS.remove(codID);
     }
 
-    public void removeRA(String codID){
+    protected void removeRA(String codID){
         this.requisicoes_ATIVAS.remove(codID);
     }
 
-    public void removeEF(String codID){
+    protected void removeEF(String codID){
         this.entrega_FEITAS.remove(codID);
     }
 
-    public void removeEA(String codID){
+    protected void removeEA(String codID){
         this.entrega_ATIVAS.remove(codID);
     }
 
-    public void addRF(Requisicao r){
+    protected void addRF(Requisicao r){
         this.requisicoes_FEITAS.putIfAbsent(r.getCodID(), r);
     }
 
-    public void addRA(Requisicao r){
+    protected void addRA(Requisicao r){
         this.requisicoes_ATIVAS.putIfAbsent(r.getCodID(), r);
     }
 
-    public void addEF(Entrega e){
+    protected void addEF(Entrega e){
         this.entrega_FEITAS.putIfAbsent(e.getCodID(), e);
     }
 
-    public void addEA(Entrega e){
+    protected void addEA(Entrega e){
         this.entrega_ATIVAS.putIfAbsent(e.getCodID(), e);
     }
 
     // NOT WELL DONE BTW
-    public GestorPedidos Clone() {
+    protected GestorPedidos Clone() {
         return new GestorPedidos(this.requisicoes_FEITAS, this.entrega_FEITAS, this.requisicoes_ATIVAS, this.entrega_ATIVAS);
     }
 }

@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public class Entrega extends Pedido {
 
-    public String getCodID(){
+    protected String getCodID(){
         return codID;
     }
 
-    public Entrega(ArrayList<Palete> p, String codID) {
+    protected Entrega(ArrayList<Palete> p, String codID) {
         this.codID = codID;
         this.conteudo = new ArrayList<Palete>(p);
         this.estado = true;
