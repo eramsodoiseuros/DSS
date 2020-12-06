@@ -8,7 +8,10 @@ public class ControladorSessoes {
 
     private boolean iniciaSessao (String password, String codID){
        if ((servidor.getListaGestores().get(codID).getPassword().equals(password) && servidor.getListaGestores().get(codID).getOnline()) == false) return true;
-       
+       else return false;
     }
 
+    private void terminaSessao (String codID){
+        servidor.listaGestores.get(codID).setOnline(false);
+    }
 }
