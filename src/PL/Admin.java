@@ -6,11 +6,13 @@ import CN.Servidor;
 
 public class Admin {
 
+    private Servidor servidor;
+
     private void deleteUser(String codID){
 
-        Servidor.getListaGestores().remove(codID);
+        servidor.removeGestor(codID);
     }
-    private void addUser (String codID) {
-        Servidor.add
+    private void addUser (String codID, String nome) {
+        servidor.addGestor(codID,nome);
     }
 }

@@ -21,7 +21,7 @@ private boolean online;
     public Gestor(Gestor g) {
         this.nome = g.getNome();
         this.password = g.getPassword();
-        this.codeID = g.getCodID();
+        this.codeID = g.getCodeID();
         this.online = g.getOnline();
     }
 

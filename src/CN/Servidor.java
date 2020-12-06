@@ -44,5 +44,12 @@ public class Servidor {
         return parking;
     }
 
+    public void removeGestor (String codID){
+        listaGestores.remove(codID);
+    }
+
+    public void addGestor (String codID, String nome){
+        listaGestores.put(codID, new Gestor(nome, codID,codID+ "12345", true));
+    }
 
 }
