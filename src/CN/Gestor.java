@@ -62,7 +62,7 @@ private boolean online;
         this.password = password;
     }
 
-    public String getCodID() {
+    public String getCodeID() {
         return codeID;
     }
 
