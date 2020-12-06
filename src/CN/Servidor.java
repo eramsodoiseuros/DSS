@@ -6,7 +6,6 @@ import java.util.Queue;
 import java.util.TreeMap;
 
 public class Servidor {
-    private Map<String, Pedido> listaPedidos;
     private Map<String, Gestor> listaGestores;
     private Queue<Robot> robotsDisponiveis;
 
@@ -15,16 +14,8 @@ public class Servidor {
 
     private Integer parking;
 
-    public Map<String, Pedido> getListaPedidos() {
-        Map<String, Pedido> listaPedidosReturn = new TreeMap<String, Pedido>();
-        for(Pedido p : this.listaPedidos.values()){
-            listaPedidosReturn.putIfAbsent(p.getCodeId(), p.clone());
-        }
-        return listaPedidosReturn;
-    }
-
     public Map<String, Gestor> getListaGestores() {
-        Map<String, Pedido> listaGestoresReturn = new TreeMap<String, Gestor>();
+        Map<String, Gestor> listaGestoresReturn = new TreeMap<String, Gestor>();
         for(Gestor g : this.listaGestores.values()){
             listaGestoresReturn.putIfAbsent(g.getCodeId(), g.clone());
         }
