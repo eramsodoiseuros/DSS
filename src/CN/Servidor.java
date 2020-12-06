@@ -6,7 +6,7 @@ import java.util.Queue;
 import java.util.TreeMap;
 
 public class Servidor {
-    private Map<String, Gestor> listaGestores;
+    public Map<String, Gestor> listaGestores;
     private Queue<Robot> robotsDisponiveis;
 
     private Inventario inventario;
