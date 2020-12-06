@@ -7,8 +7,24 @@ public class Gestor {
 
 private String nome;
 private String password;
-private String codID;
+private String codeID;
 private boolean online;
+
+
+    public Gestor(String nome, String password, String codID, boolean online) {
+        this.nome = nome;
+        this.password = password;
+        this.codeID = codID;
+        this.online = online;
+    }
+
+    public Gestor(Gestor g) {
+        this.nome = g.getNome();
+        this.password = g.getPassword();
+        this.codeID = g.getCodID();
+        this.online = g.getOnline();
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -18,12 +34,16 @@ private boolean online;
         return online == gestor.online &&
                 Objects.equals(nome, gestor.nome) &&
                 Objects.equals(password, gestor.password) &&
-                Objects.equals(codID, gestor.codID);
+                Objects.equals(codeID, gestor.codeID);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nome, password, codID, online);
+        return Objects.hash(nome, password, codeID, online);
+    }
+
+    public boolean getOnline() {
+        return online;
     }
 
     public String getNome() {
@@ -43,11 +63,11 @@ private boolean online;
     }
 
     public String getCodID() {
-        return codID;
+        return codeID;
     }
 
     public void setCodID(String codID) {
-        this.codID = codID;
+        this.codeID = codID;
     }
 
     public boolean isOnline() {
@@ -63,14 +83,18 @@ private boolean online;
         return "Gestor{" +
                 "nome='" + nome + '\'' +
                 ", password='" + password + '\'' +
-                ", codID='" + codID + '\'' +
+                ", codeID='" + codeID + '\'' +
                 ", online=" + online +
                 '}';
     }
 
+    public Gestor clone(){
+        return new Gestor(this);
+    }
+
     private boolean checkPassID (String password, String codID){
         boolean r = false;
-        if (password.equals(this.password) && codID.equals(this.codID)) r = true;
+        if (password.equals(this.password) && codID.equals(this.codeID)) r = true;
 
         return r;
 }
