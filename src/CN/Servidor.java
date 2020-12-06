@@ -17,9 +17,7 @@ public class Servidor {
     public Map<String, Gestor> getListaGestores() {
         Map<String, Gestor> listaGestoresReturn = new TreeMap<String, Gestor>();
         for(Gestor g : this.listaGestores.values()){
-
             listaGestoresReturn.putIfAbsent(g.getCodeID(), g.clone());
-
         }
         return listaGestoresReturn;
     }
@@ -50,6 +48,20 @@ public class Servidor {
 
     public void addGestor (String codID, String nome){
         listaGestores.put(codID, new Gestor(nome, codID,codID+ "12345", true));
+    }
+
+
+    public boolean isParkingAvailable(){
+        if (parking == 0) return true;
+        return false;
+    }
+
+    public void minusSpot(){
+        parking--;
+    }
+
+    public void plusSpot(){
+        parking++;
     }
 
 }
