@@ -10,6 +10,13 @@ public class GestorPedidos {
     private HashMap<String, Requisicao> requisicoes_ATIVAS;
     private HashMap<String, Entrega> entrega_ATIVAS;
 
+    public GestorPedidos(HashMap<String, Requisicao> requisicoes_FEITAS, HashMap<String, Entrega> entrega_FEITAS, HashMap<String, Requisicao> requisicoes_ATIVAS, HashMap<String, Entrega> entrega_ATIVAS) {
+        this.requisicoes_FEITAS = requisicoes_FEITAS;
+        this.entrega_FEITAS = entrega_FEITAS;
+        this.requisicoes_ATIVAS = requisicoes_ATIVAS;
+        this.entrega_ATIVAS = entrega_ATIVAS;
+    }
+
     public ArrayList<Requisicao> listaRequisicoes_FEITAS(){
         return new ArrayList<>(requisicoes_FEITAS.values());
     }
@@ -58,4 +65,8 @@ public class GestorPedidos {
         this.entrega_ATIVAS.putIfAbsent(e.getCodID(), e);
     }
 
+    // NOT WELL DONE BTW
+    public GestorPedidos Clone() {
+        return new GestorPedidos(this.requisicoes_FEITAS, this.entrega_FEITAS, this.requisicoes_ATIVAS, this.entrega_ATIVAS);
+    }
 }
