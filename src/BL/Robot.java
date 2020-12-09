@@ -1,4 +1,4 @@
-package CN;
+package BL;
 
 public class Robot {
     private String codeId;
@@ -25,9 +25,21 @@ public class Robot {
         return true;//por fazer
     }
 
-    protected void ordem(){}
-    protected void estado(){}
+    protected void ordem(){
 
+    }
+    protected void estado(){
+
+    }
+
+    boolean doWork(int[][] mapa){
+        boolean did_it = false;
+        //check first row
+            // can or cannot work
+        // check second row
+            // same shit
+        return did_it;
+    }
 
 
     protected String getCodeId() {

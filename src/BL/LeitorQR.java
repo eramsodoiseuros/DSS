@@ -1,4 +1,4 @@
-package CN;
+package BL;
 
 public class LeitorQR {
 

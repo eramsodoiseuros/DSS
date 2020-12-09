@@ -1,4 +1,4 @@
-package CN;
+package BL;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,6 +9,13 @@ public class GestorPedidos {
 
     private HashMap<String, Requisicao> requisicoes_ATIVAS;
     private HashMap<String, Entrega> entrega_ATIVAS;
+
+    protected GestorPedidos(){
+        this.requisicoes_FEITAS = new HashMap<>();
+        this.entrega_FEITAS = new HashMap<>();
+        this.requisicoes_ATIVAS = new HashMap<>();
+        this.entrega_ATIVAS = new HashMap<>();
+    }
 
     protected GestorPedidos(HashMap<String, Requisicao> requisicoes_FEITAS, HashMap<String, Entrega> entrega_FEITAS, HashMap<String, Requisicao> requisicoes_ATIVAS, HashMap<String, Entrega> entrega_ATIVAS) {
         this.requisicoes_FEITAS = requisicoes_FEITAS;

@@ -1,4 +1,4 @@
-package CN;
+package BL;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,6 +8,12 @@ public class Inventario {
     private HashMap<String,Palete> inventario;
     private int size_t1;
     private int size_t2;
+
+    protected Inventario() {
+        this.inventario = new HashMap<>();
+        this.size_t1 = 0;
+        this.size_t2 = 0;
+    }
 
     protected Inventario(HashMap<String, Palete> inventario, int size_t1, int size_t2) {
         this.inventario = inventario;

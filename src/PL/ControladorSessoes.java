@@ -1,17 +1,23 @@
 package PL;
 
-import CN.Servidor;
+import BL.Servidor;
 
 public class ControladorSessoes {
 
-    private Servidor servidor;
+    private Admin a;
 
     private boolean iniciaSessao (String password, String codID){
-       if ((servidor.getListaGestores().get(codID).getPassword().equals(password) && servidor.getListaGestores().get(codID).getOnline()) == false) return true;
-       else return false;
+        boolean b;
+        if(b = !(a.servidor.getListaGestores().get(codID).getPassword().equals(password) && a.servidor.getListaGestores().get(codID).getOnline()))
+            a.servidor.online(codID);
+        return b;
     }
 
     private void terminaSessao (String codID){
-        servidor.listaGestores.get(codID).setOnline(false);
+        if(a.servidor.getListaGestores().get(codID).getOnline())
+            a.servidor.offline(codID);
     }
+
+    // TEM O MENU
+    // PERGUNTA INFOS AO ADMIN
 }
