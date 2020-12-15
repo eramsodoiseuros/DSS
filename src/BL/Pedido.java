@@ -2,9 +2,9 @@ package BL;
 
 import java.util.ArrayList;
 
-abstract class Pedido {
-    String codID;
-    ArrayList<Palete> conteudo;
+public abstract class Pedido {
+    String codeID;
+    Palete conteudo;
     boolean estado;
 
     abstract boolean estado();

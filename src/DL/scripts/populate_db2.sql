@@ -1,6 +1,6 @@
-USE Armazem;
+USE mydb;
 
-SHOW VARIABLES LIKE "secure_file_priv";
+-- SHOW VARIABLES LIKE "secure_file_priv";
 
 
 -- -----------------------------------------------------

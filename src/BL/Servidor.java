@@ -44,10 +44,10 @@ public class Servidor {
         //threadpool.shutdown();
     }
 
-    public Servidor(){//falta iniciar  robosEmProgresso threadpool
-        this.listaGestores = new HashMap<>();
-        this.robotsDisponiveis = new PriorityQueue<>();
-        this.listaRobots = new HashMap<>();
+    public Servidor(){
+        this.listaGestores = new HashMap<String, Gestor>();
+        this.robotsDisponiveis = new PriorityQueue<Robot>();
+        this.listaRobots = new HashMap<String, Robot>();
         this.inventario = new Inventario();
         this.gestor_Pedidos = new GestorPedidos();
         this.parking = 1;
@@ -56,8 +56,9 @@ public class Servidor {
 
         tamanho_lateral = 40;
         tamanho_altura = 20;
-        for(int i = 0; i < tamanho_lateral; i++)
-            for(int j = 0; j < tamanho_altura; j++)
+        int[][] mapa = new int[tamanho_altura][tamanho_lateral];
+        for(int i = 0; i < tamanho_altura; i++)
+            for(int j = 0; j < tamanho_lateral; j++)
                 mapa[i][j] = 0;
     }
 
@@ -66,11 +67,7 @@ public class Servidor {
     }
 
     public Map<String, Gestor> getListaGestores() {
-        Map<String, Gestor> listaGestoresReturn = new TreeMap<>();
-        for(Gestor g : this.listaGestores.values()){
-            listaGestoresReturn.putIfAbsent(g.getCodeID(), g.clone());
-        }
-        return listaGestoresReturn;
+        return new HashMap<String, Gestor>(listaGestores);
     }
 
     public Queue getRobotsDisponiveis() {
@@ -98,7 +95,7 @@ public class Servidor {
     }
 
     public void addGestor (String codID, String nome){
-        listaGestores.put(codID, new Gestor(nome, codID, codID+"12345", true));
+        listaGestores.put(codID, new Gestor(nome, codID, codID+"123", false));
     }
 
     public Integer manageRobo(Robot robot){

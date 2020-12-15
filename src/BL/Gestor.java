@@ -1,8 +1,12 @@
 package BL;
 
+import DL.Dados;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
-public class Gestor {
+public class Gestor implements Dados<Gestor>{
 
 private String nome;
 private String password;
@@ -24,6 +28,14 @@ private boolean online;
         this.online = g.getOnline();
     }
 
+    public Gestor(){
+    }
+
+    public Gestor(List<String> l){
+        this.codeID = l.get(0);
+        this.nome = l.get(1);
+        this.password = l.get(2);
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -97,6 +109,18 @@ private boolean online;
 
         return r;
 }
+
+    public Dados<Gestor> fromRow(final List<String> l) {
+        return new Gestor(l);
+    }
+
+    public List<String> toRow() {
+        List<String> r = new ArrayList<>();
+        r.add(this.codeID);
+        r.add(this.nome);
+        r.add(this.password);
+        return r;
+    }
 
 /* FALTA FAZER
     private Map<String, Pair> consultaLista (boolean online){

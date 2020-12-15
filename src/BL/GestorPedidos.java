@@ -76,4 +76,14 @@ public class GestorPedidos {
     protected GestorPedidos Clone() {
         return new GestorPedidos(this.requisicoes_FEITAS, this.entrega_FEITAS, this.requisicoes_ATIVAS, this.entrega_ATIVAS);
     }
+
+    @Override
+    public String toString() {
+        return "GestorPedidos{" +
+                "requisicoes_FEITAS=" + requisicoes_FEITAS +
+                ", entrega_FEITAS=" + entrega_FEITAS +
+                ", requisicoes_ATIVAS=" + requisicoes_ATIVAS +
+                ", entrega_ATIVAS=" + entrega_ATIVAS +
+                '}';
+    }
 }
