@@ -1,6 +1,7 @@
 package DL;
 
 import BL.Entrega;
+import BL.Robot;
 
 import java.util.*;
 
@@ -11,8 +12,12 @@ public class EntregaDAO extends DataAcessObject<String, Entrega>{
         super(new Entrega(), "Entrega", Arrays.asList("codID", "conteudo"));
     }
 
-    public EntregaDAO getInstance(){
+    public static EntregaDAO getInstance(){
         return EntregaDAO.singleton;
+    }
+
+    public ArrayList<Entrega> values(){
+        return (ArrayList<Entrega>) super.values();
     }
 
     public Entrega get(final String key) {

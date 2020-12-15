@@ -11,14 +11,7 @@ public class Admin {
     protected Servidor servidor;
 
     protected Admin(){
-        boolean estado = false;
-        if(estado){
-
-            //load last
-        } else servidor = new Servidor();
-
-        // falta verificar estado
-        // load last
+        servidor = new Servidor();
     }
 
     public void deleteUser(String codID){

@@ -12,8 +12,12 @@ public class GestorDAO extends DataAcessObject<String, Gestor>{
         super(new Gestor(), "Gestor", Arrays.asList("codID", "nome", "password"));
     }
 
-    public GestorDAO getInstance(){
+    public static GestorDAO getInstance(){
         return GestorDAO.singleton;
+    }
+
+    public ArrayList<Gestor> values(){
+        return (ArrayList<Gestor>) super.values();
     }
 
     public Gestor get(final String key) {

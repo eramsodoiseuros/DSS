@@ -1,5 +1,6 @@
 package DL;
 
+import BL.Entrega;
 import BL.Requisicao;
 
 import java.util.*;
@@ -11,13 +12,18 @@ public class RequisicaoDAO extends DataAcessObject<String, Requisicao>{
         super(new Requisicao(), "Requisicao", Arrays.asList("codID", "conteudo"));
     }
 
-    public RequisicaoDAO getInstance(){
+    public static RequisicaoDAO getInstance(){
         return RequisicaoDAO.singleton;
     }
 
     public Requisicao get(final String key) {
         return super.get(key);
     }
+
+    public ArrayList<Requisicao> values(){
+        return (ArrayList<Requisicao>) super.values();
+    }
+
 
     public Requisicao put(final Requisicao value) {
         return super.put(value, value.getCodID());

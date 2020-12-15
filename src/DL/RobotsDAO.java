@@ -1,8 +1,11 @@
 package DL;
 
+import BL.Gestor;
 import BL.Robot;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.PriorityQueue;
 import java.util.Set;
 
 public class RobotsDAO extends DataAcessObject<String, Robot>{
@@ -12,12 +15,20 @@ public class RobotsDAO extends DataAcessObject<String, Robot>{
         super(new Robot(), "Robot", Arrays.asList("codID", "ordens_feitas"));
     }
 
-    public RobotsDAO getInstance(){
+    public static RobotsDAO getInstance(){
         return RobotsDAO.singleton;
     }
 
     public Robot get(final String key) {
         return super.get(key);
+    }
+
+    public PriorityQueue<Robot> values(){
+        return (PriorityQueue<Robot>) super.values();
+    }
+
+    public ArrayList<Robot> values2(){
+        return (ArrayList<Robot>) super.values();
     }
 
     public Robot put(final Robot value) {

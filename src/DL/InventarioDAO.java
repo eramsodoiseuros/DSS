@@ -1,18 +1,24 @@
 package DL;
 
 import BL.Palete;
+import BL.Robot;
 
 import java.util.*;
 
 public class InventarioDAO extends DataAcessObject<String, Palete>{
+
     private static InventarioDAO singleton = new InventarioDAO();
 
     public InventarioDAO() {
         super(new Palete(), "Palete", Arrays.asList("codID", "refrigerado", "conteudo"));
     }
 
-    public InventarioDAO getInstance(){
+    public static InventarioDAO getInstance(){
         return InventarioDAO.singleton;
+    }
+
+    public ArrayList<Palete> values(){
+        return (ArrayList<Palete>) super.values();
     }
 
     public Palete get(final String key) {
