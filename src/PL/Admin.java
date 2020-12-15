@@ -21,14 +21,14 @@ public class Admin {
         // load last
     }
 
-    private void deleteUser(String codID){
+    public void deleteUser(String codID){
         servidor.removeGestor(codID);
     }
-    private void addUser (String codID, String nome) {
+    public void addUser (String codID, String nome) {
         servidor.addGestor(codID,nome);
     }
 
-    private Map<String, Palete> consultarListaPaletes (){
+    public Map<String, Palete> consultarListaPaletes (){
         return servidor.getInventario();
     } // falta tabela
 

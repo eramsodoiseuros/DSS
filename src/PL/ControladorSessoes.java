@@ -6,7 +6,7 @@ public class ControladorSessoes {
 
     private Admin a;
 
-    private boolean iniciaSessao (String password, String codID){
+    public boolean iniciaSessao(String password, String codID){
         boolean b;
         if(b = !(a.servidor.getListaGestores().get(codID).getPassword().equals(password) && a.servidor.getListaGestores().get(codID).getOnline()))
             a.servidor.online(codID);
