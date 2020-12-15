@@ -1,6 +1,11 @@
 package BL;
 
-public class Robot {
+import DL.Dados;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Robot implements Dados<Robot>{
     private String codeID;
     private Integer ordensFeitas;
 
@@ -27,6 +32,14 @@ public class Robot {
     public Robot(){
     }
 
+    public Robot(List<String> l) {
+        this.codeID = l.get(0);
+        this.ordensFeitas = Integer.parseInt(l.get(1));
+        this.ativo = false;
+        this.posX = 0;
+        this.posY = 1;
+    }
+
     protected boolean notificaRecolha(String codeIdRequesicao, String codeIdPalete){
         return true;//por fazer
     }
@@ -38,6 +51,7 @@ public class Robot {
     protected void ordem(){
 
     }
+
     protected void estado(){
 
     }
@@ -167,4 +181,16 @@ public class Robot {
     public Robot clone(){
         return new Robot(this);
     }
+
+    public Dados<Robot> fromRow(final List<String> l) {
+        return new Robot(l);
+    }
+
+    public List<String> toRow() {
+        List<String> r = new ArrayList<>();
+        r.add(this.codeID);
+        r.add(this.ordensFeitas.toString());
+        return r;
+    }
+
 }

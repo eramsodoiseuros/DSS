@@ -6,5 +6,4 @@ public interface Dados<K> {
     Dados<K> fromRow(List<String> row);
 
     List<String> toRow();
-
 }
