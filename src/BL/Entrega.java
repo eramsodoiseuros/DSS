@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Entrega extends Pedido {
 
-    protected String getCodID(){
+    public String getCodID(){
         return codID;
     }
 
@@ -12,6 +12,9 @@ public class Entrega extends Pedido {
         this.codID = codID;
         this.conteudo = new ArrayList<Palete>(p);
         this.estado = true;
+    }
+
+    public Entrega(){
     }
 
     @Override

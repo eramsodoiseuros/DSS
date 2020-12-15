@@ -40,35 +40,23 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Pedido`
+-- Table `mydb`.`Entrega`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Pedido` (
+CREATE TABLE IF NOT EXISTS `mydb`.`Entrega` (
   `codID` VARCHAR(5) NOT NULL,
-  `tipo` TINYINT NOT NULL,
+  `conteudo` VARCHAR(90) NULL,
   PRIMARY KEY (`codID`))
 ENGINE = InnoDB;
 
-
 -- -----------------------------------------------------
--- Table `mydb`.`Conteudo`
+-- Table `mydb`.`Palete`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Conteudo` (
-  `Pedido_codID` VARCHAR(5) NOT NULL,
-  `Palete_codID` VARCHAR(5) NOT NULL,
-  PRIMARY KEY (`Pedido_codID`, `Palete_codID`),
-  INDEX `fk_Pedido_has_Palete_Palete1_idx` (`Palete_codID` ASC) VISIBLE,
-  INDEX `fk_Pedido_has_Palete_Pedido_idx` (`Pedido_codID` ASC) VISIBLE,
-  CONSTRAINT `fk_Pedido_has_Palete_Pedido`
-    FOREIGN KEY (`Pedido_codID`)
-    REFERENCES `mydb`.`Pedido` (`codID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Pedido_has_Palete_Palete1`
-    FOREIGN KEY (`Palete_codID`)
-    REFERENCES `mydb`.`Palete` (`codID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+CREATE TABLE IF NOT EXISTS `mydb`.`Requisicao` (
+  `codID` VARCHAR(5) NOT NULL,
+  `conteudo` VARCHAR(90) NULL,
+  PRIMARY KEY (`codID`))
 ENGINE = InnoDB;
+
 
 
 -- -----------------------------------------------------

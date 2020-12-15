@@ -2,7 +2,7 @@ package BL;
 
 import java.util.ArrayList;
 
-abstract class Pedido {
+public abstract class Pedido {
     String codID;
     ArrayList<Palete> conteudo;
     boolean estado;

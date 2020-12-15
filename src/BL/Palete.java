@@ -27,7 +27,7 @@ public class Palete {
     protected void setArmazenado(boolean armazenado) {
         this.armazenado = armazenado;
     }
-    protected String getCodID() {
+    public String getCodID() {
         return codID;
     }
     protected void setCodID(String codID) {
@@ -38,6 +38,9 @@ public class Palete {
         this.refrigerado = refrigerado;
         this.conteudo = conteudo;
         this.codID = codID;
+    }
+
+    public Palete(){
     }
 
     protected Palete(String codID) {
@@ -69,4 +72,5 @@ public class Palete {
     public int hashCode() {
         return Objects.hash(refrigerado, conteudo, armazenado, codID);
     }
+
 }

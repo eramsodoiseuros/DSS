@@ -24,6 +24,9 @@ private boolean online;
         this.online = g.getOnline();
     }
 
+    public Gestor(){
+    }
+
 
     @Override
     public boolean equals(Object o) {

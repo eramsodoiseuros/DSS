@@ -1,14 +1,15 @@
 package BL;
 
 public class Robot {
-    private String codeId;
-    private Boolean ativo;
+    private String codeID;
     private Integer ordensFeitas;
+
+    private Boolean ativo;
     private Integer posX;
     private Integer posY;
 
-    protected Robot(String codeId) {
-        this.codeId = codeId;
+    protected Robot(String codeID) {
+        this.codeID= codeID;
         this.ativo = false;
         this.ordensFeitas = 0;
         this.posX = 0;
@@ -16,11 +17,14 @@ public class Robot {
     }
 
     protected Robot(Robot r){
-        this.codeId = r.getCodeId();
+        this.codeID = r.getCodeID();
         this.ativo = r.getAtivo();
         this.ordensFeitas = r.getOrdensFeitas();
         this.posX = r.getPosX();
         this.posY = r.getPosY();
+    }
+
+    public Robot(){
     }
 
     protected boolean notificaRecolha(String codeIdRequesicao, String codeIdPalete){
@@ -110,8 +114,8 @@ public class Robot {
         return false;
     }
 
-    protected String getCodeId() {
-        return codeId;
+    public String getCodeID() {
+        return codeID;
     }
 
     protected Boolean getAtivo() {
@@ -135,8 +139,8 @@ public class Robot {
         setPosY(y);
     }
 
-    protected void setId(String id) {
-        this.codeId = id;
+    protected void setCodeID(String id) {
+        this.codeID = id;
     }
 
     protected void setAtivo(Boolean ativo) {
@@ -150,14 +154,14 @@ public class Robot {
     @Override
     public String toString() {
         return "Robot{" +
-                "codeId='" + codeId + '\'' +
+                "codeId='" + codeID + '\'' +
                 ", ativo=" + ativo +
                 ", ordensFeitas=" + ordensFeitas +
                 '}';
     }
 
     public boolean equals(Robot robo){
-        return this.getCodeId().equals(robo.getCodeId());
+        return this.getCodeID().equals(robo.getCodeID());
     }
 
     public Robot clone(){
