@@ -57,7 +57,7 @@ public class Robot implements Dados<Robot>{
     }
 
     //momento em que o robo se encontra ligado até pegar/recolher na palete na pos X Y
-    public boolean andaParaPalete(int[][] mapa, int x, int y){
+    public boolean andaParaPalete(Integer[][] mapa, int x, int y){
 
         boolean did_it  = false;
 
@@ -68,7 +68,7 @@ public class Robot implements Dados<Robot>{
     }
 
     //do momento em que o robo tem uma palete e chega a area de carregamento
-    public boolean entregaPalete(int[][] mapa){
+    public boolean entregaPalete(Integer[][] mapa){
 
         boolean did_it  = false;
         Integer lastX   = getPosX();
@@ -81,13 +81,14 @@ public class Robot implements Dados<Robot>{
     }
 
     //retorna o robo para a posição defaul e desliga o moço
-    public boolean takeBreak(int[][] mapa){
+    public boolean takeBreak(Integer[][] mapa){
 
         boolean did_it  = false;
 
         if (getPosX() == 1 && getPosY() == 1){
             moveState(mapa, 0, 1);
             setAtivo(false);
+            this.ordensFeitas++; //assumir que robot acaba ordem sempre que retorna ao estado default
             did_it = true;
         } else rotate(mapa);
 
@@ -95,7 +96,7 @@ public class Robot implements Dados<Robot>{
     }
 
     //robo da um passo clockwise
-    private void rotate(int[][] mapa){
+    private void rotate(Integer[][] mapa){
 
         Integer lastX   = getPosX();
         Integer lastY   = getPosY();
@@ -110,19 +111,30 @@ public class Robot implements Dados<Robot>{
     }
 
     //move o robot para a proxima posição, se nao estiver ocupada
-    private void moveState(int[][] mapa, Integer newPosX, Integer newPosY){
+    private void moveState(Integer[][] mapa, Integer newPosX, Integer newPosY){
         if (mapa[newPosX][newPosY] != 1){
             mapa[getPosX()][getPosY()]  = 0;
             mapa[newPosX][newPosY]      = 1;
             setPos(newPosX,newPosY);
         }
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     //liga o robo para começar a trabalhar, se a posição inicial nao estiver ocupada
-    protected boolean startWork(int[][] mapa){
+    protected boolean startWork(Integer[][] mapa) {
+
         if (mapa[1][1]!= 1){
             setAtivo(true);
             moveState(mapa, 1,1);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             return true;
         }
         return false;

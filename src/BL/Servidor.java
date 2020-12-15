@@ -1,6 +1,11 @@
 package BL;
 
+import java.awt.*;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import DL.*;
 
@@ -11,9 +16,35 @@ public class Servidor {
     private Inventario inventario;
     private GestorPedidos gestor_Pedidos;
     private Integer parking;
-    private Integer[][] mapa; // -1 nao pode, 0 onde pode, 1 onde esta, prateleiras vazias 2, prateleiras cheias 3
+    private Integer[][] mapa; // -1 nao pode, 0 onde pode, 1 onde esta, prateleiras vazias 2, prateleiras cheias 3, 4-10 quantidade de stuff la
     private int tamanho_lateral;
     private int tamanho_altura;
+    private ExecutorService threadpool;
+    private ArrayList<Future<Robot>> robosEmProgresso;
+
+    private void run() throws ExecutionException, InterruptedException {
+        boolean novaRecolha = true;
+        while (true) {
+            //ver se algum dos robôs terminou o que está em progresso
+            for (Future<Robot> r : robosEmProgresso) {
+                if (r.isDone()) {
+                    //Processa o R, seja como for
+                    Robot res = r.get();
+                    if (res.getAtivo()) recolherRobo(res);
+                    else robosEmProgresso.remove(r);
+                    //terminaPalete
+                }
+            }
+
+            if (novaRecolha && robosEmProgresso.size()<3){
+                Future<Robot> futureTask = threadpool.submit(() -> recolherPalete(new Palete("yep")));
+                robosEmProgresso.add(futureTask);
+            }
+            //maybe fazer um sleepzito aqui so we don't check robot constantly
+            //menu
+        }
+        //threadpool.shutdown();
+    }
 
 
     public Servidor(){
@@ -23,6 +54,8 @@ public class Servidor {
         this.inventario = new Inventario();
         this.gestor_Pedidos = new GestorPedidos();
         this.parking = 1;
+        this.robosEmProgresso = new ArrayList<>();
+        this.threadpool = Executors.newCachedThreadPool();
 
         tamanho_lateral = 40;
         tamanho_altura = 20;
@@ -85,6 +118,63 @@ public class Servidor {
 
     public void addGestor (String codID, String nome){
         listaGestores.put(codID, new Gestor(nome, codID, codID+"123", false));
+    }
+
+    public Integer manageRobo(Robot robot){
+        Integer caso = 1;
+        if (caso == 1){
+            return caso++;
+        }
+        return caso;
+    }
+
+    //so pode ser chamado se ouver espaço
+    //corre do momento em que o robot é ligado até guardar a palete
+    public Robot recolherPalete(Palete p) {
+
+        Point destino = getEspacoLivre();
+        Robot robot = robotsDisponiveis.element();
+        boolean iniciado = false;
+        boolean entregou = false;
+
+        while (iniciado) iniciado = robot.startWork(mapa);
+
+        robotsDisponiveis.remove(robot);
+
+        while (entregou) entregou = robot.andaParaPalete(mapa, destino.x, destino.y);
+
+        p.setArmazenado(true);
+        p.setLocalizacao(destino);
+        inventario.add(p);
+        mapa[destino.x][destino.y]++;
+        if (mapa[destino.x][destino.y] == 10) mapa[destino.x][destino.y] = 3;
+
+        return robot;
+    }
+
+    //robo retorna a posição defaul e é desligado
+    public void recolherRobo(Robot robot){
+        boolean voltou = false;
+        while (voltou) voltou = robot.takeBreak(mapa);
+        robotsDisponiveis.add(robot);
+    }
+
+    public Point getEspacoLivre(){
+        int i = 0;
+        Point pointReturn = new Point();
+
+        for(; mapa[0][i] >= 4 || mapa[0][i] <= 9; i++);
+        if (i < 7) {
+            pointReturn.setLocation(0,i);
+            return pointReturn;
+        }
+
+        for(i = 0; mapa[0][i] >= 4 || mapa[0][i] <= 9; i++);
+        if (i < 7) {
+            pointReturn.setLocation(0,i);
+            return pointReturn;
+        }
+        return pointReturn;
     }
 
 

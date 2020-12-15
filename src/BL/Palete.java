@@ -1,5 +1,6 @@
 package BL;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -8,6 +9,7 @@ public class Palete {
     private String conteudo;
     private boolean armazenado;
     private String codeID;
+    private Point localizacao;
 
     protected boolean isRefrigerado() {
         return refrigerado;
@@ -33,6 +35,9 @@ public class Palete {
     protected void setCodID(String codID) {
         this.codeID = codID;
     }
+    protected void setLocalizacao(Point l) {this.localizacao = l;}
+
+    protected Point getLocalizacao(){return this.localizacao;}
 
     protected Palete(boolean refrigerado, String conteudo, String codID) {
         this.refrigerado = refrigerado;
@@ -63,6 +68,7 @@ public class Palete {
                 ", conteudo=" + conteudo +
                 ", armazenado=" + armazenado +
                 ", codID='" + codeID + '\'' +
+                ", localizacao='" + localizacao.x +' '+localizacao.y+ '\'' +
                 '}';
     }
 
@@ -73,12 +79,14 @@ public class Palete {
         Palete palete = (Palete) o;
         return refrigerado == palete.refrigerado &&
                 armazenado == palete.armazenado &&
+                localizacao.equals(palete.getLocalizacao()) &&
+                Objects.equals(conteudo, palete.conteudo) &&
                 Objects.equals(codeID, palete.codeID);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(refrigerado, conteudo, armazenado, codeID);
+        return Objects.hash(refrigerado, conteudo, armazenado, codeID, localizacao);
     }
 
 }
