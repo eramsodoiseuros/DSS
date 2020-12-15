@@ -1,5 +1,6 @@
 package BL;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -8,6 +9,7 @@ public class Palete {
     private ArrayList<String> conteudo;
     private boolean armazenado;
     private String codID;
+    private Point localizacao;
 
     protected boolean isRefrigerado() {
         return refrigerado;
@@ -33,11 +35,15 @@ public class Palete {
     protected void setCodID(String codID) {
         this.codID = codID;
     }
+    protected void setLocalizacao(Point l) {this.localizacao = l;}
 
-    protected Palete(boolean refrigerado, ArrayList<String> conteudo, String codID) {
+    protected Point getLocalizacao() {return this.localizacao;}
+
+    protected Palete(boolean refrigerado, ArrayList<String> conteudo, String codID, Point localizacao) {
         this.refrigerado = refrigerado;
         this.conteudo = conteudo;
         this.codID = codID;
+        this.localizacao = localizacao;
     }
 
     protected Palete(String codID) {
@@ -51,6 +57,7 @@ public class Palete {
                 ", conteudo=" + conteudo +
                 ", armazenado=" + armazenado +
                 ", codID='" + codID + '\'' +
+                ", localizacao='" + localizacao.x +' '+localizacao.y+ '\'' +
                 '}';
     }
 
@@ -61,12 +68,13 @@ public class Palete {
         Palete palete = (Palete) o;
         return refrigerado == palete.refrigerado &&
                 armazenado == palete.armazenado &&
+                localizacao.equals(palete.getLocalizacao()) &&
                 Objects.equals(conteudo, palete.conteudo) &&
                 Objects.equals(codID, palete.codID);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(refrigerado, conteudo, armazenado, codID);
+        return Objects.hash(refrigerado, conteudo, armazenado, codID, localizacao);
     }
 }
