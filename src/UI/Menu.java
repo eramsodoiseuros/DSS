@@ -108,7 +108,7 @@ public class Menu {
                                     dentro1 = false;
                                     break;
                                 case 0:
-                                    trataLogOut();
+                                    trataFimSessao();
                             }
                         }
                     }
