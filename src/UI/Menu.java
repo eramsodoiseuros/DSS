@@ -9,9 +9,11 @@ import java.util.Scanner;
 import static java.lang.System.in;
 
 public class Menu {
-    private ControladorSessoes CS;
-    private Admin admin;
-    private Servidor servidor;
+    private ControladorSessoes cs;
+
+    public Menu(){
+        cs = new ControladorSessoes();
+    }
 
     public void printMenu(){
         System.out.println("1. Iniciar Sessão");
@@ -70,33 +72,45 @@ public class Menu {
         //input.close();
         return txt;
     }
+
     public void run() {
         printMenu();
         int i = lerInt();
-        do {
+        boolean dentro0 = true;
+        String output;
+        while (dentro0){
             switch (i) {
                 case 1:
                     if(trataInicioSessao()){
                         printMenuGestor();
+                        boolean dentro1 = true;
                         int g = lerInt();
-                        do{
-                        switch (g){
-                            case 1:
-                                admin.consultarListaPaletes().toString();
-                                break;
-                            case 2:
-                                servidor.getRobotsDisponiveis().toString();
-                                break;
-                            case 3:
-                                servidor.getGestor_Pedidos().toString();
-                                break;
-                            case 4:
-                                servidor.getGestor_Pedidos().toString();
-                                break;
-
+                        while (dentro1) {
+                            switch (g) {
+                                case 1:
+                                    output = cs.consultarListaPaletes().toString();
+                                    System.out.println(output);
+                                    dentro1 = false;
+                                    break;
+                                case 2:
+                                    output = cs.getRobotsDisponiveis();
+                                    System.out.println(output);
+                                    dentro1 = false;
+                                    break;
+                                case 3:
+                                    output = cs.getGestor_Pedidos();
+                                    System.out.println(output);
+                                    dentro1 = false;
+                                    break;
+                                case 4:
+                                    output = cs.getGestor_Pedidos();
+                                    System.out.println(output);
+                                    dentro1 = false;
+                                    break;
+                                case 0:
+                                    trataFimSessao();
+                            }
                         }
-
-                    } while (g!=0);
                     }
                     else {
                         System.out.println("Credenciais Erradas");
@@ -105,31 +119,45 @@ public class Menu {
                     break;
                 case 2:
                     printMenuAdmin();
+                    boolean dentro2 = true;
                     int a = lerInt();
-                    do{
+                    while (dentro2){
                         switch (a){
                             case 1:
                                 trataAddGestor();
+                                dentro2 = false;
                                 break;
                             case 2:
                                 trataRemGestor();
+                                dentro2 = false;
                                 break;
                         }
-                    } while (a!=0);
+                    }
+                    run();
                     break;
             }
-        } while (i!=0); // A opção 0 é usada para sair do menu.
+            if(i == 0) dentro0 = false;
+        }
         System.out.println("Até breve!...");
     }
 
+    private void trataFimSessao() {
+       // isto
+    }
 
-   public boolean trataInicioSessao (){
+
+    public boolean trataInicioSessao (){
        System.out.println("CodID:");
        String c = lerString();
        System.out.println("Password:");
        String p = lerString();
-       return CS.iniciaSessao(p,c);
-
+       boolean r = false;
+       try{
+           r = cs.iniciaSessao(c,p);
+       } catch (NullPointerException e){
+           System.out.println("Não existem Gestores neste Armazém.");
+       }
+       return r;
    }
 
    public void trataAddGestor (){
@@ -137,12 +165,12 @@ public class Menu {
        String c = lerString();
        System.out.println("Nome:");
        String n = lerString();
-       admin.addUser(c,n);
+       cs.addUser(c,n);
    }
 
     public void trataRemGestor (){
         System.out.println("CodID:");
         String c = lerString();
-        admin.deleteUser(c);
+        cs.deleteUser(c);
     }
 }

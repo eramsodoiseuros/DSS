@@ -32,5 +32,13 @@ public class Admin {
         return servidor.getInventario();
     } // falta tabela
 
+    public String getGestor_Pedidos() {
+        return servidor.getGestor_Pedidos().toString();
+    }
+
+    public String getRobotsDisponiveis() {
+        return servidor.getRobotsDisponiveis().toString();
+    }
+
     // TEM METODOS QUE FALAM COM O SERVIDOR
 }
