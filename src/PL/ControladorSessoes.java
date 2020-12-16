@@ -106,6 +106,11 @@ public class ControladorSessoes implements Controlador{
         addRA(a.servidor.criaPalete(s));
     }
 
+    @Override
+    public List<String> listagem() {
+        return null;
+    }
+
     private void addRA (Palete p){
 
         int t = 1;
