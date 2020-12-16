@@ -46,15 +46,6 @@ public class ControladorSessoes implements Controlador{
         } else View.alert("ERRO", "Não existe nenhum Gesto com o código " + c + ".");
     }
 
-    @Override
-    public List<String> inventario() {
-        return null;
-    }
-
-    @Override
-    public List<String> robots() {
-        return null;
-    }
 
     public List<String> consultarListaPaletes() {
         return new ArrayList<String>((Collection<? extends String>) a.consultarListaPaletes());
@@ -103,10 +94,7 @@ public class ControladorSessoes implements Controlador{
         addRA(a.servidor.criaPalete(s));
     }
 
-    @Override
-    public List<String> listagem() {
-        return null;
-    }
+
 
     private void addRA (Palete p){
 
@@ -188,13 +176,27 @@ public class ControladorSessoes implements Controlador{
         } else View.alert("ERRO", "Falha ao iniciar a sessão, verifique os seus dados.");
 
     }
-
+    @Override
     public List<String> inventario (){
         List<String> s = new ArrayList<>();
         for(Palete p : a.servidor.getInventario().values()){
-            s.add(p.toStringInventario());
+            s.add(p.toStringFeitas());
         }
     return s;
+    }
+
+    @Override
+    public List<String> listagem (){
+        List<String> s = new ArrayList<>();
+        for(Palete p : a.servidor.getInventario().values()){
+            s.add(p.toStringListagem());
+        }
+        return s;
+    }
+
+    @Override
+    public List<String> robots() {
+        return null;
     }
 
     

@@ -103,7 +103,7 @@ public class Palete implements Dados<Palete> {
 
     }
 
-    public String toStringInventario(){
+    public String toStringListagem(){
         return "Palete: - " + codeID + " - " + toStringLocalizacao(localizacao);
 
     }
