@@ -89,12 +89,12 @@ public class Palete implements Dados<Palete> {
     }
 
     public String toStringAtivas(){
-        return "Palete: " + codeID + conteudo;
+        return "Palete: - " + codeID + " - " + conteudo;
 
     }
 
     public String toStringFeitas(){
-        return "Palete: " + codeID + localizacao + conteudo;
+        return "Palete: - " + codeID + " - " + " - " + localizacao.toString() + " - " + conteudo;
 
     }
 
