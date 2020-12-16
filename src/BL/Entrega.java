@@ -12,7 +12,7 @@ public class Entrega extends Pedido implements Dados<Entrega>{
         return codeID;
     }
 
-    protected Entrega(Palete p, String codID) {
+    public Entrega(Palete p, String codID) {
         this.codeID = codID;
         this.conteudo = p;
         this.estado = true;

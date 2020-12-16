@@ -15,7 +15,7 @@ public class Requisicao extends Pedido implements Dados<Requisicao> {
         return codeID;
     }
 
-    protected Requisicao(Palete p, String codID) {
+    public Requisicao(Palete p, String codID) {
         this.codeID = codID;
         this.conteudo = p;
         this.estado = true;
