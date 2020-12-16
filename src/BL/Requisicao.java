@@ -54,4 +54,10 @@ public class Requisicao extends Pedido implements Dados<Requisicao> {
         r.add(this.conteudo.toString());
         return r;
     }
+
+    public String toStingConteudoAtivas() { return conteudo.toStringAtivas();
+    }
+
+    public String toStringConteudoFeitas() { return conteudo.toStringFeitas();
+    }
 }

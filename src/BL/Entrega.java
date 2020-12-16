@@ -18,6 +18,12 @@ public class Entrega extends Pedido implements Dados<Entrega>{
         this.estado = true;
     }
 
+    public String toStingConteudoAtivas() { return conteudo.toStringAtivas();
+    }
+
+    public String toStringConteudoFeitas() { return conteudo.toStringFeitas();
+    }
+
     public Entrega(){
     }
 

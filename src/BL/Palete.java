@@ -88,6 +88,16 @@ public class Palete implements Dados<Palete> {
                 '}';
     }
 
+    public String toStringAtivas(){
+        return "Palete: " + codeID + conteudo;
+
+    }
+
+    public String toStringFeitas(){
+        return "Palete: " + codeID + localizacao + conteudo;
+
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -2,6 +2,7 @@ package BL;
 
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -110,6 +111,46 @@ public class Servidor {
 
     public GestorPedidos getGestor_Pedidos() {
         return gestor_Pedidos.Clone();
+    }
+
+    public List<String> getEntAtivas (){
+
+         ArrayList<Entrega> el = getGestor_Pedidos().listaEntrega_ATIVAS();
+         List<String> s = null;
+         for (Entrega e : el){
+            s.add(getGestor_Pedidos().EntToStringAtivas(e));
+         }
+         return s;
+    }
+
+    public List<String> getEntFeitas (){
+
+        ArrayList<Entrega> el = getGestor_Pedidos().listaEntrega_FEITAS();
+        List<String> s = null;
+        for (Entrega e : el){
+            s.add(getGestor_Pedidos().EntToStringFeitas(e));
+        }
+        return s;
+    }
+
+    public List<String> getReqFeitas (){
+
+        ArrayList<Requisicao> rl = getGestor_Pedidos().listaRequisicoes_FEITAS();
+        List<String> s = null;
+        for (Requisicao r : rl){
+            s.add(getGestor_Pedidos().ReqToStringFeitas(r));
+        }
+        return s;
+    }
+
+    public List<String> getReqAtivas (){
+
+        ArrayList<Requisicao> rl = getGestor_Pedidos().listaRequisicoes_ATIVAS();
+        List<String> s = null;
+        for (Requisicao r : rl){
+            s.add(getGestor_Pedidos().ReqToStringAtivas(r));
+        }
+        return s;
     }
 
     public Integer getParking() {

@@ -4,6 +4,7 @@ package PL;
 import BL.Palete;
 import BL.Servidor;
 
+import java.util.List;
 import java.util.Map;
 
 public class Admin {
@@ -33,5 +34,5 @@ public class Admin {
         return servidor.getRobotsDisponiveis().toString();
     }
 
-    // TEM METODOS QUE FALAM COM O SERVIDOR
+
 }

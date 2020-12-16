@@ -86,4 +86,20 @@ public class GestorPedidos {
                 ", entrega_ATIVAS=" + entrega_ATIVAS +
                 '}';
     }
+
+    public String EntToStringAtivas(Entrega e){
+        return "Entrega: " + e.getCodID() + e.toStingConteudoAtivas() + "\n";
+    }
+
+    public String EntToStringFeitas(Entrega e){
+        return "Entrega: " + e.getCodID() + e.toStringConteudoFeitas() + "\n";
+    }
+
+    public String ReqToStringAtivas(Requisicao r){
+        return "Requisição: " + r.getCodID() + r.toStingConteudoAtivas() + "\n";
+    }
+
+    public String ReqToStringFeitas(Requisicao r){
+        return "Requisição: " + r.getCodID() + r.toStringConteudoFeitas() + "\n";
+    }
 }
