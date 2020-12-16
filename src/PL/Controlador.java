@@ -37,11 +37,38 @@ public interface Controlador {
      * */
     void logOutGestor (String codID);
 
-    public List<String> lista_EA();
+    /**
+     * Função que
+     * */
+    public void painel_RG();
 
-    public List<String> lista_EF();
+    /**
+     * Função que
+     * */
+    public void painel_LogInG();
 
-    public List<String> lista_RA();
+    /**
+     * Função que
+     * */
+    public void painel_EA();
 
-    public List<String> lista_RF();
+    /**
+     * Função que
+     * */
+    public void painel_EF();
+
+    /**
+     * Função que
+     * */
+    public void painel_RA();
+
+    /**
+     * Função que
+     * */
+    public void painel_RF();
+
+    /**
+     * Função que
+     * */
+    public void painel_Robots();
 }

@@ -28,6 +28,11 @@ public class View implements GUI {
         c = new ControladorSessoes();
     }
 
+    public View(int it){
+        listView = new ListView<>();
+        listView.getItems().addAll("a");
+    }
+
     public static void alert(String titulo, String mensagem){
         Stage w = new Stage();
         w.initModality(Modality.APPLICATION_MODAL);
@@ -79,7 +84,7 @@ public class View implements GUI {
         return new Scene(layout, 400, 400);
     }
 
-    public void make_window(String title, Scene s){
+    public static void make_window(String title, Scene s){
         Stage w = new Stage();
         w.setTitle(title);
         w.setScene(s);
@@ -89,52 +94,31 @@ public class View implements GUI {
     private void escolher_menu(){
         String s = String.valueOf(listView.getSelectionModel().getSelectedItems());
         if(s.equals("[Registar Gestor]")){
-            Stage w = new Stage();
-            w.setTitle("Resgistar Gestor");
-            w.setScene(registar_gestor());
-            w.show();
+            c.painel_RG();
         }
 
         if(s.equals("[Login Gestor]")){
-            Stage w = new Stage();
-            w.setTitle("Login de Gestor");
-            w.setScene(login_gestor());
-            w.show();
+            c.painel_LogInG();
         }
 
         if(s.equals("[Painel de Robots]")){
-            Stage w = new Stage();
-            w.setTitle("Painel de Robots");
-            w.setScene(painel_robot());
-            w.show();
+            c.painel_Robots();
         }
 
         if(s.equals("[Entregas Ativas]")){
-            Stage w = new Stage();
-            w.setTitle("Painel das Entregas Ativas");
-            w.setScene(painel_pedido(c.lista_EA()));
-            w.show();
+            c.painel_EA();
         }
 
         if(s.equals("[Requisições Ativas]")){
-            Stage w = new Stage();
-            w.setTitle("Painel das Requisições Ativas");
-            w.setScene(painel_pedido(c.lista_RA()));
-            w.show();
+            c.painel_RA();
         }
 
         if(s.equals("[Entregas Feitas]")){
-            Stage w = new Stage();
-            w.setTitle("Painel das Entregas Feitas");
-            w.setScene(painel_pedido(c.lista_EF()));
-            w.show();
+            c.painel_EF();
         }
 
         if(s.equals("[Requisições Feitas]")){
-            Stage w = new Stage();
-            w.setTitle("Painel das Requisições Feitas");
-            w.setScene(painel_pedido(c.lista_RF()));
-            w.show();
+            c.painel_RF();
         }
     }
 
@@ -162,7 +146,7 @@ public class View implements GUI {
         return new Scene(layout, 400, 300);
     }
 
-    @Override
+
     public Scene registar_gestor() {
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(20, 20, 20, 20));

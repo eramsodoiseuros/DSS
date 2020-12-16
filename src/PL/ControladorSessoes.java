@@ -13,9 +13,11 @@ import java.util.List;
 public class ControladorSessoes implements Controlador{
 
     private Admin a;
+    private View v;
 
     public ControladorSessoes(){
         a = new Admin();
+        v = new View(0);
     }
 
     public boolean iniciaSessao(String codID, String password) throws NullPointerException{
@@ -64,6 +66,41 @@ public class ControladorSessoes implements Controlador{
 
     public List<String> lista_RF(){
         return a.servidor.getReqFeitas();
+    }
+
+    @Override
+    public void painel_RG() {
+        View.make_window("Resgistar Gestor", v.registar_gestor());
+    }
+
+    @Override
+    public void painel_LogInG() {
+        View.make_window("Login de Gestor", v.login_gestor());
+    }
+
+    @Override
+    public void painel_EA(){
+        View.make_window("Painel das Entregas Ativas", v.painel_pedido(a.servidor.getEntAtivas()));
+    }
+
+    @Override
+    public void painel_EF(){
+        View.make_window("Painel das Entregas Feitas", v.painel_pedido(a.servidor.getEntFeitas()));
+    }
+
+    @Override
+    public void painel_RA(){
+        View.make_window("Painel das Requisições Ativas", v.painel_pedido(a.servidor.getReqAtivas()));
+    }
+
+    @Override
+    public void painel_RF(){
+        View.make_window("Painel das Requisições Feitas", v.painel_pedido(a.servidor.getReqFeitas()));
+    }
+
+    @Override
+    public void painel_Robots(){
+        View.make_window("Painel das Requisições Feitas", v.painel_pedido(a.servidor.getReqFeitas()));
     }
 
     @Override
