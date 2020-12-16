@@ -42,7 +42,7 @@ public class Inventario {
     }
 
     protected HashMap<String, Pair> check_itens(ArrayList<String> lista){
-        return new HashMap<String, Pair>();
+        return new HashMap<>();
     }
 
     protected void add(Palete p){

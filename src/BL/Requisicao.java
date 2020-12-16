@@ -1,8 +1,12 @@
 package BL;
 
 import DL.Dados;
+import DL.InventarioDAO;
+import GUI.View;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 public class Requisicao extends Pedido implements Dados<Requisicao> {
@@ -22,7 +26,15 @@ public class Requisicao extends Pedido implements Dados<Requisicao> {
 
     public Requisicao(List<String> l){
         this.codeID = l.get(0);
-        this.conteudo = new Palete(l.get(1));
+        boolean preencheu = false;
+        for(Palete p : InventarioDAO.getInstance().values()) {
+            if (p.getConteudo().equals(l.get(1))) {
+                this.conteudo = new Palete(p);
+                preencheu = true;
+                break;
+            }
+        }
+        if(!preencheu) View.alert("ERRO", "Requisição inválida");
         this.estado = false;
     }
 

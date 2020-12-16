@@ -37,7 +37,7 @@ public class Servidor {
             }
 
             if (novaRecolha && robosEmProgresso.size()<3){
-                Future<Robot> futureTask = threadpool.submit(() -> recolherPalete(new Palete("yep")));
+                Future<Robot> futureTask = threadpool.submit(() -> recolherPalete(new Palete()));
                 robosEmProgresso.add(futureTask);
             }
             //maybe fazer um sleepzito aqui so we don't check robot constantly
@@ -64,6 +64,7 @@ public class Servidor {
             for(int j = 0; j < tamanho_lateral; j++)
                 mapa[i][j] = 0;
 
+
         for (Gestor g : GestorDAO.getInstance().values()) {
             listaGestores.put(g.getCodeID(), g);
         }
@@ -72,19 +73,22 @@ public class Servidor {
             listaRobots.put(r.getCodeID(), r);
         }
 
-        //this.robotsDisponiveis = RobotsDAO.getInstance().values();
+        /*
+        this.robotsDisponiveis = RobotsDAO.getInstance().values();
+        */
 
         for (Palete p : InventarioDAO.getInstance().values()) {
             inventario.add(p);
         }
 
         for (Entrega e : EntregaDAO.getInstance().values()) {
-            gestor_Pedidos.addEA(e);
+            gestor_Pedidos.addEF(e);
         }
 
         for (Requisicao r : RequisicaoDAO.getInstance().values()) {
-            gestor_Pedidos.addRA(r);
+            gestor_Pedidos.addRF(r);
         }
+
     }
 
 

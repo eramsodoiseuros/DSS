@@ -1,6 +1,7 @@
 package BL;
 
 import DL.Dados;
+import DL.InventarioDAO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ public class Entrega extends Pedido implements Dados<Entrega>{
 
     public Entrega(List<String> l){
         this.codeID = l.get(0);
-        this.conteudo = new Palete(l.get(1));
+        this.conteudo = new Palete(l.get(1), l.get(2));
         this.estado = false;
     }
 

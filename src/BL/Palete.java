@@ -1,10 +1,12 @@
 package BL;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Objects;
+import DL.Dados;
 
-public class Palete {
+import java.awt.*;
+import java.util.*;
+import java.util.List;
+
+public class Palete implements Dados<Palete> {
     private boolean refrigerado;
     private String conteudo;
     private boolean armazenado;
@@ -45,20 +47,34 @@ public class Palete {
         this.codeID = codID;
     }
 
-    public Palete Palete(String conteudo){
-        Palete p = new Palete();
-        p.codeID = "pedido";
-        p.conteudo = conteudo;
-        p.armazenado = true;
-        p.refrigerado = false;
-        return p;
+    public Palete(String codID, String c){
+        codeID = codID;
+        conteudo = c;
+        armazenado = true;
+        refrigerado = false;
+        localizacao = new Point(1,0);
+    }
+
+    public Palete(List<String> l){
+        this.codeID = l.get(0);
+        this.conteudo = l.get(1);
+        this.armazenado = true;
+        if(l.get(2).equals("1"))
+            refrigerado = true;
+        if(l.get(2).equals("0"))
+            refrigerado = false;
+        this.localizacao = new Point(Integer.parseInt(l.get(3)), Integer.parseInt(l.get(4)));
+    }
+
+    public Palete(Palete p){
+        codeID = p.codeID;
+        conteudo = p.conteudo;
+        armazenado = p.armazenado;
+        refrigerado = p.refrigerado;
+        localizacao = p.localizacao;
     }
 
     public Palete(){
-    }
-
-    protected Palete(String codID) {
-        this.codeID = codID;
     }
 
     @Override
@@ -89,4 +105,22 @@ public class Palete {
         return Objects.hash(refrigerado, conteudo, armazenado, codeID, localizacao);
     }
 
+    @Override
+    public Dados<Palete> fromRow(List<String> row) {
+        return new Palete(row);
+    }
+
+    @Override
+    public List<String> toRow() {
+        List<String> r = new ArrayList<>();
+        r.add(this.codeID);
+        r.add(this.conteudo);
+        if(this.refrigerado)
+            r.add("1");
+        if (!this.refrigerado)
+            r.add("0");
+        r.add(this.localizacao.x + "");
+        r.add(this.localizacao.y + "");
+        return r;
+    }
 }

@@ -33,7 +33,11 @@ public class InventarioDAO extends DataAcessObject<String, Palete>{
         return super.remove(key);
     }
 
-    public Set<Palete> search(final String value) {
-        return super.search(value, 0);
+    public List<Palete> find(final String value){
+        return (List<Palete>) super.find(value);
+    }
+
+    public HashSet<Palete> search(final String value) {
+        return (HashSet<Palete>) super.search(value, 0);
     }
 }
