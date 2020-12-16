@@ -72,7 +72,7 @@ public class Servidor {
             listaRobots.put(r.getCodeID(), r);
         }
 
-        this.robotsDisponiveis = RobotsDAO.getInstance().values();
+        //this.robotsDisponiveis = RobotsDAO.getInstance().values();
 
         for (Palete p : InventarioDAO.getInstance().values()) {
             inventario.add(p);

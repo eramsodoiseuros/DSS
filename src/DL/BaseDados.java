@@ -6,10 +6,10 @@ import java.sql.SQLException;
 
 public final class BaseDados {
     private static Connection connection;
-    private static String driver = System.getenv("SYM_DATABASE_DRIVER");
-    private static String url = System.getenv("SYM_DATABASE_URL");
-    private static String user = System.getenv("SYM_DATABASE_USER");
-    private static String password = System.getenv("SYM_DATABASE_PASSWORD");
+    private static String driver = "com.mysql.cj.jdbc.Driver";
+    private static String url = "jdbc:mysql://localhost:3306/Armazem";
+    private static String user = "root";
+    private static String password = "12345";
 
     static {
         BaseDados.startConnection();

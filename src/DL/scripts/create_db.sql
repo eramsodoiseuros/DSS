@@ -2,7 +2,7 @@
 -- Tue Dec 15 12:01:00 2020
 -- Model: New Model    Version: 1.0
 -- MySQL Workbench Forward Engineering
-
+SET GLOBAL time_zone = '+0:00';
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
@@ -14,13 +14,13 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema mydb
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
-USE `mydb` ;
+CREATE SCHEMA IF NOT EXISTS `armazem` DEFAULT CHARACTER SET utf8 ;
+USE `armazem` ;
 
 -- -----------------------------------------------------
 -- Table `mydb`.`Gestor`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Gestor` (
+CREATE TABLE IF NOT EXISTS `armazem`.`Gestor` (
   `codID` VARCHAR(5) NOT NULL,
   `nome` VARCHAR(45) NOT NULL,
   `password` VARCHAR(45) NOT NULL,
@@ -31,7 +31,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`Palete`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Palete` (
+CREATE TABLE IF NOT EXISTS `armazem`.`Palete` (
   `codID` VARCHAR(5) NOT NULL,
   `refrigerado` TINYINT NOT NULL,
   `conteudo` VARCHAR(45) NULL,
@@ -42,7 +42,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`Entrega`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Entrega` (
+CREATE TABLE IF NOT EXISTS `armazem`.`Entrega` (
   `codID` VARCHAR(5) NOT NULL,
   `conteudo` VARCHAR(90) NULL,
   PRIMARY KEY (`codID`))
@@ -51,7 +51,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`Palete`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Requisicao` (
+CREATE TABLE IF NOT EXISTS `armazem`.`Requisicao` (
   `codID` VARCHAR(5) NOT NULL,
   `conteudo` VARCHAR(90) NULL,
   PRIMARY KEY (`codID`))
@@ -62,7 +62,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`Robots`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Robots` (
+CREATE TABLE IF NOT EXISTS `armazem`.`Robots` (
   `codID` VARCHAR(5) NOT NULL,
   `ordens_feitas` INT ZEROFILL NULL,
   PRIMARY KEY (`codID`))

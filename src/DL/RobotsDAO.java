@@ -12,7 +12,7 @@ public class RobotsDAO extends DataAcessObject<String, Robot>{
     private static RobotsDAO singleton = new RobotsDAO();
 
     public RobotsDAO() {
-        super(new Robot(), "Robot", Arrays.asList("codID", "ordens_feitas"));
+        super(new Robot(), "Robots", Arrays.asList("codID", "ordens_feitas"));
     }
 
     public static RobotsDAO getInstance(){
@@ -23,9 +23,9 @@ public class RobotsDAO extends DataAcessObject<String, Robot>{
         return super.get(key);
     }
 
-    public PriorityQueue<Robot> values(){
+   /* public PriorityQueue<Robot> values(){
         return (PriorityQueue<Robot>) super.values();
-    }
+    }*/
 
     public ArrayList<Robot> values2(){
         return (ArrayList<Robot>) super.values();
