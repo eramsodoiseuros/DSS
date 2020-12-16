@@ -53,7 +53,7 @@ public class ControladorSessoes implements Controlador{
     private void addEA (Palete p){
         int t = 1;
         String s = "E1";
-        while(a.servidor.getEA().containsKey(s)){
+        while(a.servidor.getEA().containsKey(s) || a.servidor.getEF().containsKey(s)){
             s = "E" + t;
             t++;
         }
@@ -69,7 +69,7 @@ public class ControladorSessoes implements Controlador{
 
         int t = 1;
         String s = "P1";
-        while(a.servidor.getRA().containsKey(s)){
+        while(a.servidor.getRA().containsKey(s) || a.servidor.getRF().containsKey(s)){
             s = "P" + t;
             t++;
         }
