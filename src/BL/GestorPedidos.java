@@ -40,6 +40,22 @@ public class GestorPedidos {
         return new ArrayList<>(entrega_ATIVAS.values());
     }
 
+    protected HashMap<String,Requisicao> listaRequisicoes_FEITAS_MAP(){
+        return new HashMap<>(requisicoes_FEITAS);
+    }
+
+    protected HashMap<String,Requisicao> listaRequisicoes_Ativas_MAP(){
+        return new HashMap<>(requisicoes_ATIVAS);
+    }
+
+    protected HashMap<String,Entrega> listaEntrga_FEITAS_MAP(){
+        return new HashMap<>(entrega_FEITAS);
+    }
+
+    protected HashMap<String,Entrega> listaEntrga_Ativas_MAP(){
+        return new HashMap<>(entrega_ATIVAS);
+    }
+
     protected void removeRF(String codID){
         this.requisicoes_FEITAS.remove(codID);
     }

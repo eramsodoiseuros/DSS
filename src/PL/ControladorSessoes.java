@@ -1,7 +1,10 @@
 package PL;
 
 import BL.Gestor;
-import BL.Servidor;
+import BL.Entrega;
+import BL.Palete;
+import BL.Requisicao;
+
 import GUI.View;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
@@ -56,6 +59,81 @@ public class ControladorSessoes implements Controlador{
 
     public String getRobotsDisponiveis() {
         return a.getRobotsDisponiveis();
+    }
+
+    public List<String> lista_EA(){
+        return a.servidor.getEntAtivas();
+    }
+
+    public List<String> lista_EF(){
+        return a.servidor.getEntFeitas();
+    }
+
+    public List<String> lista_RA(){
+        return a.servidor.getReqAtivas();
+    }
+
+    public List<String> lista_RF(){
+        return a.servidor.getReqFeitas();
+    }
+
+    public Palete criaPalete (String c){
+        int t = 1;
+        String s = "p1";
+        while(a.servidor.getInventario().containsKey(s)){
+            s = "p" + t;
+            t++;
+        }
+
+        Palete p = new Palete(s,c);
+        return p;
+
+
+    }
+
+    public void addEA (Palete p){
+
+        int t = 1;
+        String s = "E1";
+        while(a.servidor.getEA().containsKey(s)){
+            s = "E" + t;
+            t++;
+        }
+        Entrega e = new Entrega(p,s);
+        a.servidor.addEA(e);
+
+    }
+
+    public void addEF (Entrega e){
+        a.servidor.addEF(e);
+
+    }
+    
+    public void remEA (Entrega e){
+        a.servidor.removeEA(e.getCodID());
+    }
+
+    public void remRA (Requisicao r){
+        a.servidor.removeRA(r.getCodID());
+    }
+
+    public void addRA (Palete p){
+
+        int t = 1;
+        String s = "P1";
+        while(a.servidor.getRA().containsKey(s)){
+            s = "P" + t;
+            t++;
+        }
+        Requisicao r = new Requisicao(p,s);
+        a.servidor.addRA(r);
+
+    }
+
+
+    public void addRF (Requisicao r){
+        a.servidor.addRF(r);
+
     }
 
     @Override

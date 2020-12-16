@@ -225,6 +225,54 @@ public class Servidor {
     }
 
 
+    public void removeRF(String codID){
+        this.gestor_Pedidos.removeRF(codID);
+    }
+
+    public void removeRA(String codID){
+        this.gestor_Pedidos.removeRA(codID);
+    }
+
+    public void removeEF(String codID){
+        this.gestor_Pedidos.removeEF(codID);
+    }
+
+    public void removeEA(String codID){
+        this.gestor_Pedidos.removeEA(codID);
+    }
+
+    public void addRF(Requisicao r){
+        this.gestor_Pedidos.addRF(r);
+    }
+
+    public void addRA(Requisicao r){
+        this.gestor_Pedidos.addRA(r);
+    }
+
+    public void addEF(Entrega e){
+        this.gestor_Pedidos.addEF(e);
+    }
+
+    public void addEA(Entrega e){
+        this.gestor_Pedidos.addEA(e);;
+    }
+
+    public HashMap<String,Requisicao> getRF(){
+        return getGestor_Pedidos().listaRequisicoes_FEITAS_MAP();
+    }
+
+    public HashMap<String,Requisicao> getRA(){
+        return getGestor_Pedidos().listaRequisicoes_Ativas_MAP();
+    }
+
+    public HashMap<String,Entrega> getEF(){
+        return getGestor_Pedidos().listaEntrga_FEITAS_MAP();
+    }
+
+    public HashMap<String,Entrega> getEA(){
+        return getGestor_Pedidos().listaEntrga_Ativas_MAP();
+    }
+
     public boolean isParkingAvailable(){
         return parking == 0;
     }
