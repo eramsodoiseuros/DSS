@@ -8,7 +8,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 import static java.lang.System.in;
 
-public class Menu {
+public class Menu implements UI {
     private ControladorSessoes cs;
 
     public Menu(){
@@ -172,5 +172,10 @@ public class Menu {
         System.out.println("CodID:");
         String c = lerString();
         cs.deleteUser(c);
+    }
+
+    @Override
+    public void notifica(String texto) {
+
     }
 }

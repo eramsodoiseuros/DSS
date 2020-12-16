@@ -1,10 +1,6 @@
 package UI;
 
-import javafx.scene.Scene;
-
 public interface UI {
-
-
 
     /**
      * Função que notifica o UI do Servidor (Terminal/Linha de comandos)
