@@ -167,14 +167,6 @@ public class Servidor {
         GestorDAO.getInstance().put(g);
     }
 
-    public Integer manageRobo(Robot robot){
-        Integer caso = 1;
-        if (caso == 1){
-            return caso++;
-        }
-        return caso;
-    }
-
     //so pode ser chamado se ouver espaço
     //corre do momento em que o robot é ligado até guardar a palete
     public Robot recolherPalete(Palete p) {
@@ -227,34 +219,43 @@ public class Servidor {
 
     public void removeRF(String codID){
         this.gestor_Pedidos.removeRF(codID);
+        RequisicaoDAO.getInstance().remove(codID);
     }
 
     public void removeRA(String codID){
         this.gestor_Pedidos.removeRA(codID);
+        RequisicaoDAO.getInstance().remove(codID);
+
     }
 
     public void removeEF(String codID){
         this.gestor_Pedidos.removeEF(codID);
+        EntregaDAO.getInstance().remove(codID);
     }
 
     public void removeEA(String codID){
         this.gestor_Pedidos.removeEA(codID);
+        EntregaDAO.getInstance().remove(codID);
     }
 
     public void addRF(Requisicao r){
         this.gestor_Pedidos.addRF(r);
+        RequisicaoDAO.getInstance().put(r);
     }
 
     public void addRA(Requisicao r){
         this.gestor_Pedidos.addRA(r);
+        RequisicaoDAO.getInstance().put(r);
     }
 
     public void addEF(Entrega e){
         this.gestor_Pedidos.addEF(e);
+        EntregaDAO.getInstance().put(e);
     }
 
     public void addEA(Entrega e){
-        this.gestor_Pedidos.addEA(e);;
+        this.gestor_Pedidos.addEA(e);
+        EntregaDAO.getInstance().put(e);
     }
 
     public HashMap<String,Requisicao> getRF(){
@@ -291,5 +292,16 @@ public class Servidor {
 
     public void online(String codID) {
         listaGestores.get(codID).setOnline(true);
+    }
+
+    public Palete criaPalete (String c){
+        int t = 1;
+        String s = "p1";
+        while(inventario.getInventario().containsKey(s)){
+            s = "p" + t;
+            t++;
+        }
+
+        return new Palete(s,c);
     }
 }
