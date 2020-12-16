@@ -1,17 +1,9 @@
 package PL;
 
 import javafx.event.ActionEvent;
-import javafx.scene.Scene;
-import javafx.scene.control.TextField;
-
 import java.util.List;
 
 public interface Controlador {
-
-    /* *
-     * Guarda o estado do Programa na Base de Dados
-     * */
-    void save();
 
     /* *
      * Fecha uma Scene do JavaFX

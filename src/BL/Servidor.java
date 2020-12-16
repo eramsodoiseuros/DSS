@@ -159,10 +159,11 @@ public class Servidor {
 
     public void removeGestor (String codID){
         listaGestores.remove(codID);
+        GestorDAO.getInstance().remove(codID);
     }
 
     public void addGestor (String codID, String nome, String pwd){
-        Gestor g = new Gestor(nome, codID, pwd, false);
+        Gestor g = new Gestor(nome, pwd, codID, false);
         listaGestores.put(codID, g);
         GestorDAO.getInstance().put(g);
     }

@@ -19,10 +19,6 @@ public class Admin {
         servidor.removeGestor(codID);
     }
 
-    public void addUser (String codID, String nome, String pwd) {
-        servidor.addGestor(codID,nome,pwd);
-    }
-
     public Map<String, Palete> consultarListaPaletes (){
         return servidor.getInventario();
     } // falta tabela
@@ -34,6 +30,5 @@ public class Admin {
     public String getRobotsDisponiveis() {
         return servidor.getRobotsDisponiveis().toString();
     }
-
 
 }

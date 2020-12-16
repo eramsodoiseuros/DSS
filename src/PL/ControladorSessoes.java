@@ -14,7 +14,7 @@ import java.util.List;
 public class ControladorSessoes implements Controlador{
 
     private Admin a;
-    private final View v;
+    private View v;
 
     public ControladorSessoes(){
         a = new Admin();
@@ -35,44 +35,15 @@ public class ControladorSessoes implements Controlador{
     }
 
     public void add(String c, String n, String p) {
-        a.addUser(c,n,p);
+        a.servidor.addGestor(c,n,p);
     }
 
     public void delete(String c) {
         if(a.servidor.getListaGestores().containsKey(c)) {
             Gestor g = a.servidor.getListaGestores().get(c);
             View.alert("Aviso", "Gestor " + g.getNome() + " foi permanentemente apagado do sistema." );
-            a.deleteUser(c);
-        } else View.alert("ERRO", "Não existe nenhum Gesto com o código " + c + ".");
-    }
-
-
-    public List<String> consultarListaPaletes() {
-        return new ArrayList<String>((Collection<? extends String>) a.consultarListaPaletes());
-    }
-
-    public String getGestor_Pedidos() {
-        return a.getGestor_Pedidos();
-    }
-
-    public String getRobotsDisponiveis() {
-        return a.getRobotsDisponiveis();
-    }
-
-    public List<String> lista_EA(){
-        return a.servidor.getEntAtivas();
-    }
-
-    public List<String> lista_EF(){
-        return a.servidor.getEntFeitas();
-    }
-
-    public List<String> lista_RA(){
-        return a.servidor.getReqAtivas();
-    }
-
-    public List<String> lista_RF(){
-        return a.servidor.getReqFeitas();
+            a.servidor.removeGestor(c);
+        } else View.alert("ERRO", "Não existe nenhum Gestor com o código " + c + ".");
     }
 
     public  void addEA (String s){
@@ -93,8 +64,6 @@ public class ControladorSessoes implements Controlador{
     public void addRA(String s){
         addRA(a.servidor.criaPalete(s));
     }
-
-
 
     private void addRA (Palete p){
 
@@ -128,29 +97,18 @@ public class ControladorSessoes implements Controlador{
         View.make_window("Painel das Requisições Feitas", v.painel_pedido(a.servidor.getReqFeitas()));
     }
 
-
-    @Override
-    public void save() {
-
-    }
-
-    @Override
-    public void end_scene(ActionEvent e) {
-        final Node source = (Node) e.getSource();
-        final Stage stage = (Stage) source.getScene().getWindow();
-        stage.close();
-    }
-
     @Override
     public void validaRegisto(String nome, String codID, String pwd){
         if(nome == null) {
             View.alert("ERRO","Não introduziu um Nome.");
             return;
         }
+
         if(codID == null) {
             View.alert("ERRO","Não introduziu um Código ID.");
             return;
         }
+
         if(pwd == null) {
             View.alert("ERRO","Não introduziu uma Password.");
             return;
@@ -158,10 +116,7 @@ public class ControladorSessoes implements Controlador{
 
         if (a.servidor.getListaGestores().containsKey(codID)) {
             View.alert("Erro.", "O Código ID introduzido já pertence a outro Gestor. Tente novamente com um novo ID.");
-            return;
         } else add(codID, nome, pwd);
-
-        // a.addGestor(nome, codID, pwd);
     }
 
     @Override
@@ -172,10 +127,11 @@ public class ControladorSessoes implements Controlador{
     @Override
     public void logInGestor(String codID, String pwd) {
         if(iniciaSessao(codID, pwd)){
-            v.make_window("Menu do Gestor", v.painel_gestor(this, a.servidor.getListaGestores().get(codID)));
+            View.make_window("Menu do Gestor", v.painel_gestor(this, a.servidor.getListaGestores().get(codID)));
         } else View.alert("ERRO", "Falha ao iniciar a sessão, verifique os seus dados.");
 
     }
+
     @Override
     public List<String> inventario (){
         List<String> s = new ArrayList<>();
@@ -199,8 +155,10 @@ public class ControladorSessoes implements Controlador{
         return null;
     }
 
-    
-
-    // TEM O MENU
-    // PERGUNTA INFOS AO ADMIN
+    @Override
+    public void end_scene(ActionEvent e) {
+        final Node source = (Node) e.getSource();
+        final Stage stage = (Stage) source.getScene().getWindow();
+        stage.close();
+    }
 }
