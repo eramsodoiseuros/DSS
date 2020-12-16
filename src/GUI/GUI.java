@@ -2,6 +2,8 @@ package GUI;
 
 import javafx.scene.Scene;
 
+import java.util.List;
+
 public interface GUI {
 
     /**
@@ -29,4 +31,15 @@ public interface GUI {
      * */
     Scene login_gestor();
 
+    /**
+     * Função que gera a Scene JavaFX representativa do
+     * @return Scene repesentativa do
+     * */
+    Scene painel_pedido(List<String> lista);
+
+    /**
+     * Função que gera a Scene JavaFX representativa do
+     * @return Scene repesentativa do
+     * */
+    Scene painel_robot();
 }

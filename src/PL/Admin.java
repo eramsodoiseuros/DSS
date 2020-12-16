@@ -18,6 +18,7 @@ public class Admin {
     public void deleteUser(String codID){
         servidor.removeGestor(codID);
     }
+
     public void addUser (String codID, String nome) {
         servidor.addGestor(codID,nome);
     }

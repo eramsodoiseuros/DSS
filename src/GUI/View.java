@@ -1,5 +1,6 @@
 package GUI;
 
+import BL.Requisicao;
 import PL.Controlador;
 import PL.ControladorSessoes;
 import javafx.application.Platform;
@@ -10,6 +11,9 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class View implements GUI {
 
@@ -51,7 +55,8 @@ public class View implements GUI {
         listView = new ListView<>();
         listView.getItems().addAll(
                 "Registar Gestor", "Login de Gestor", "Painel de Robots",
-                "Entregas Ativas", "Requisições Ativas"
+                "Entregas Ativas", "Requisições Ativas", "Requisições Feitas",
+                "Entregas Feitas"
         );
         listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
@@ -99,22 +104,36 @@ public class View implements GUI {
         if(s.equals("[Painel de Robots]")){
             Stage w = new Stage();
             w.setTitle("Painel de Robots");
-
-            //w.setScene(       );
-
+            w.setScene(painel_robot());
             w.show();
         }
 
         if(s.equals("[Entregas Ativas]")){
-
-            //
-
+            Stage w = new Stage();
+            w.setTitle("Painel das Entregas Ativas");
+            w.setScene(painel_pedido(c.lista_EA()));
+            w.show();
         }
 
         if(s.equals("[Requisições Ativas]")){
+            Stage w = new Stage();
+            w.setTitle("Painel das Requisições Ativas");
+            w.setScene(painel_pedido(c.lista_RA()));
+            w.show();
+        }
 
-            //
+        if(s.equals("[Entregas Feitas]")){
+            Stage w = new Stage();
+            w.setTitle("Painel das Entregas Feitas");
+            w.setScene(painel_pedido(c.lista_EF()));
+            w.show();
+        }
 
+        if(s.equals("[Requisições Feitas]")){
+            Stage w = new Stage();
+            w.setTitle("Painel das Requisições Feitas");
+            w.setScene(painel_pedido(c.lista_RF()));
+            w.show();
         }
     }
 
@@ -134,7 +153,7 @@ public class View implements GUI {
         b.setOnAction(e -> {
             String user = usertxt.getText();
             String pwd = passwordtxt.getText();
-            c.validaLogInGestor(user, pwd);
+            c.logInGestor(user, pwd);
             c.end_scene(e);
         });
 
@@ -173,5 +192,22 @@ public class View implements GUI {
 
         layout.getChildren().addAll(lblNome, txt, lblUser, usertxt, lblPassword, passwordtxt, b);
         return new Scene(layout, 500, 400);
+    }
+
+    @Override
+    public Scene painel_pedido(List<String> lista) {
+        VBox layout = new VBox(10);
+        layout.setPadding(new Insets(20, 20, 20, 20));
+
+        listView= new ListView<>();
+        listView.getItems().addAll(lista);
+
+        layout.getChildren().addAll(listView);
+        return new Scene(layout, 600, 500);
+    }
+
+    @Override
+    public Scene painel_robot() {
+        return null;
     }
 }

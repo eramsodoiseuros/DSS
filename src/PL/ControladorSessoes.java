@@ -50,6 +50,21 @@ public class ControladorSessoes implements Controlador{
         return a.getRobotsDisponiveis();
     }
 
+    public List<String> lista_EA(){
+        return a.servidor.getEntAtivas();
+    }
+
+    public List<String> lista_EF(){
+        return a.servidor.getEntFeitas();
+    }
+
+    public List<String> lista_RA(){
+        return a.servidor.getReqAtivas();
+    }
+
+    public List<String> lista_RF(){
+        return a.servidor.getReqFeitas();
+    }
 
     @Override
     public void save() {
@@ -69,7 +84,7 @@ public class ControladorSessoes implements Controlador{
             View.alert("ERRO","Não introduziu um Nome.");
             return;
         }
-        if(nome == null) {
+        if(codID == null) {
             View.alert("ERRO","Não introduziu um Código ID.");
             return;
         }
@@ -87,7 +102,12 @@ public class ControladorSessoes implements Controlador{
     }
 
     @Override
-    public void validaLogInGestor(String codID, String pwd) {
+    public void logInGestor(String codID, String pwd) {
+
+    }
+
+    @Override
+    public void logOutGestor(String codID) {
 
     }
     // TEM O MENU

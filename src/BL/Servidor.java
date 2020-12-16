@@ -113,40 +113,40 @@ public class Servidor {
         return gestor_Pedidos.Clone();
     }
 
-    public List<String> getEntAtivas (){
+    public List<String> getEntAtivas(){
 
          ArrayList<Entrega> el = getGestor_Pedidos().listaEntrega_ATIVAS();
-         List<String> s = null;
+         List<String> s = new ArrayList<>();
          for (Entrega e : el){
             s.add(getGestor_Pedidos().EntToStringAtivas(e));
          }
          return s;
     }
 
-    public List<String> getEntFeitas (){
+    public List<String> getEntFeitas(){
 
         ArrayList<Entrega> el = getGestor_Pedidos().listaEntrega_FEITAS();
-        List<String> s = null;
+        List<String> s = new ArrayList<>();
         for (Entrega e : el){
             s.add(getGestor_Pedidos().EntToStringFeitas(e));
         }
         return s;
     }
 
-    public List<String> getReqFeitas (){
+    public List<String> getReqFeitas(){
 
         ArrayList<Requisicao> rl = getGestor_Pedidos().listaRequisicoes_FEITAS();
-        List<String> s = null;
+        List<String> s = new ArrayList<>();
         for (Requisicao r : rl){
             s.add(getGestor_Pedidos().ReqToStringFeitas(r));
         }
         return s;
     }
 
-    public List<String> getReqAtivas (){
+    public List<String> getReqAtivas(){
 
         ArrayList<Requisicao> rl = getGestor_Pedidos().listaRequisicoes_ATIVAS();
-        List<String> s = null;
+        List<String> s = new ArrayList<>();
         for (Requisicao r : rl){
             s.add(getGestor_Pedidos().ReqToStringAtivas(r));
         }

@@ -2,6 +2,8 @@ package PL;
 
 import javafx.event.ActionEvent;
 
+import java.util.List;
+
 public interface Controlador {
 
     /* *
@@ -24,8 +26,22 @@ public interface Controlador {
 
     /**
      * Verifica as informações de Login de um Gestor
-     * @param codID Email do user
-     * @param pwd Pwd do user
+     * @param codID codeID do Gestor
+     * @param pwd Pwd do Gestor
      * */
-    void validaLogInGestor (String codID, String pwd);
+    void logInGestor (String codID, String pwd);
+
+    /**
+     * Verifica as informações de Login de um Gestor
+     * @param codID codeID do Gestor
+     * */
+    void logOutGestor (String codID);
+
+    public List<String> lista_EA();
+
+    public List<String> lista_EF();
+
+    public List<String> lista_RA();
+
+    public List<String> lista_RF();
 }
