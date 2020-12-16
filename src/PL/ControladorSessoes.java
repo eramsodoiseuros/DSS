@@ -1,9 +1,6 @@
 package PL;
 
-import BL.Gestor;
-import BL.Entrega;
-import BL.Palete;
-import BL.Requisicao;
+import BL.*;
 
 import GUI.View;
 import javafx.event.ActionEvent;
@@ -204,6 +201,16 @@ public class ControladorSessoes implements Controlador{
         } else View.alert("ERRO", "Falha ao iniciar a sessão, verifique os seus dados.");
 
     }
+
+    public List<String> inventario (){
+        List<String> s = new ArrayList<>();
+        for(Palete p : a.servidor.getInventario().values()){
+            s.add(p.toStringInventario());
+        }
+    return s;
+    }
+
+    
 
     // TEM O MENU
     // PERGUNTA INFOS AO ADMIN

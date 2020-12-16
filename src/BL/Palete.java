@@ -103,6 +103,11 @@ public class Palete implements Dados<Palete> {
 
     }
 
+    public String toStringInventario(){
+        return "Palete: - " + codeID + " - " + toStringLocalizacao(localizacao);
+
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
