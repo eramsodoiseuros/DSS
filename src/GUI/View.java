@@ -73,6 +73,7 @@ public class View implements GUI {
         b3.setOnAction(e -> {
             c.save();
             c.end_scene(e);
+            make_window("Menu Principal", menu());
         });
         layout.getChildren().addAll(listView,b1,b2,b3);
         return new Scene(layout, 400, 400);
