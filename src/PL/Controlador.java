@@ -22,30 +22,20 @@ public interface Controlador {
      * @param codID nome do utilizador a ser validado
      * @param pwd palavra-passe do utilizador a ser validado
      * */
-    void validaRegisto (String nome, String codID, String pwd);
-
-    /**
-     * Verifica as informações de Login de um Gestor
-     * @param codID codeID do Gestor
-     * @param pwd Pwd do Gestor
-     * */
-    void logInGestor (String codID, String pwd);
+    void validaRegisto(String nome, String codID, String pwd);
 
     /**
      * Verifica as informações de Login de um Gestor
      * @param codID codeID do Gestor
      * */
-    void logOutGestor (String codID);
+    void logOutGestor(String codID);
 
     /**
-     * Função que
+     * Verifica as informações de Login de um Gestor
+     * @param codID codeID do Gestor
+     * @param pwd password do Gestor
      * */
-    public void painel_RG();
-
-    /**
-     * Função que
-     * */
-    public void painel_LogInG();
+    public void logInGestor(String codID, String pwd);
 
     /**
      * Função que
@@ -70,5 +60,5 @@ public interface Controlador {
     /**
      * Função que
      * */
-    public void painel_Robots();
+    void delete(String user);
 }

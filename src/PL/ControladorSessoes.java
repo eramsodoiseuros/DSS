@@ -1,5 +1,6 @@
 package PL;
 
+import BL.Gestor;
 import BL.Servidor;
 import GUI.View;
 import javafx.event.ActionEvent;
@@ -13,16 +14,17 @@ import java.util.List;
 public class ControladorSessoes implements Controlador{
 
     private Admin a;
-    private View v;
+    private final View v;
 
     public ControladorSessoes(){
         a = new Admin();
         v = new View(0);
     }
 
-    public boolean iniciaSessao(String codID, String password) throws NullPointerException{
-        boolean b;
-        if (b = !(a.servidor.getListaGestores().get(codID).getPassword().equals(password) && a.servidor.getListaGestores().get(codID).getOnline()))
+    public boolean iniciaSessao(String codID, String password){
+        boolean b = false;
+        if(a.servidor.getListaGestores().containsKey(codID))
+            if (b = !(a.servidor.getListaGestores().get(codID).getPassword().equals(password) && a.servidor.getListaGestores().get(codID).getOnline()))
                 a.servidor.online(codID);
         return b;
     }
@@ -32,12 +34,16 @@ public class ControladorSessoes implements Controlador{
             a.servidor.offline(codID);
     }
 
-    public void addUser(String c, String n) {
-        a.addUser(c,n);
+    public void add(String c, String n, String p) {
+        a.addUser(c,n,p);
     }
 
-    public void deleteUser(String c) {
-        a.deleteUser(c);
+    public void delete(String c) {
+        if(a.servidor.getListaGestores().containsKey(c)) {
+            Gestor g = a.servidor.getListaGestores().get(c);
+            View.alert("Aviso", "Gestor " + g.getNome() + " foi permanentemente apagado do sistema." );
+            a.deleteUser(c);
+        } else View.alert("ERRO", "Não existe nenhum Gesto com o código " + c + ".");
     }
 
     public List<String> consultarListaPaletes() {
@@ -50,32 +56,6 @@ public class ControladorSessoes implements Controlador{
 
     public String getRobotsDisponiveis() {
         return a.getRobotsDisponiveis();
-    }
-
-    public List<String> lista_EA(){
-        return a.servidor.getEntAtivas();
-    }
-
-    public List<String> lista_EF(){
-        return a.servidor.getEntFeitas();
-    }
-
-    public List<String> lista_RA(){
-        return a.servidor.getReqAtivas();
-    }
-
-    public List<String> lista_RF(){
-        return a.servidor.getReqFeitas();
-    }
-
-    @Override
-    public void painel_RG() {
-        View.make_window("Resgistar Gestor", v.registar_gestor());
-    }
-
-    @Override
-    public void painel_LogInG() {
-        View.make_window("Login de Gestor", v.login_gestor());
     }
 
     @Override
@@ -98,10 +78,6 @@ public class ControladorSessoes implements Controlador{
         View.make_window("Painel das Requisições Feitas", v.painel_pedido(a.servidor.getReqFeitas()));
     }
 
-    @Override
-    public void painel_Robots(){
-        View.make_window("Painel das Requisições Feitas", v.painel_pedido(a.servidor.getReqFeitas()));
-    }
 
     @Override
     public void save() {
@@ -130,23 +106,27 @@ public class ControladorSessoes implements Controlador{
             return;
         }
 
-        if (false) {
+        if (a.servidor.getListaGestores().containsKey(codID)) {
             View.alert("Erro.", "O Código ID introduzido já pertence a outro Gestor. Tente novamente com um novo ID.");
             return;
-        }
+        } else add(codID, nome, pwd);
 
         // a.addGestor(nome, codID, pwd);
-    }
-
-    @Override
-    public void logInGestor(String codID, String pwd) {
-
     }
 
     @Override
     public void logOutGestor(String codID) {
 
     }
+
+    @Override
+    public void logInGestor(String codID, String pwd) {
+        if(iniciaSessao(codID, pwd)){
+            v.make_window("Menu do Gestor", v.painel_gestor(this, a.servidor.getListaGestores().get(codID)));
+        } else View.alert("ERRO", "Falha ao iniciar a sessão, verifique os seus dados.");
+
+    }
+
     // TEM O MENU
     // PERGUNTA INFOS AO ADMIN
 }

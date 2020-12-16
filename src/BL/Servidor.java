@@ -161,8 +161,10 @@ public class Servidor {
         listaGestores.remove(codID);
     }
 
-    public void addGestor (String codID, String nome){
-        listaGestores.put(codID, new Gestor(nome, codID, codID+"123", false));
+    public void addGestor (String codID, String nome, String pwd){
+        Gestor g = new Gestor(nome, codID, pwd, false);
+        listaGestores.put(codID, g);
+        GestorDAO.getInstance().put(g);
     }
 
     public Integer manageRobo(Robot robot){

@@ -1,5 +1,6 @@
 package GUI;
 
+import BL.Gestor;
 import BL.Requisicao;
 import PL.Controlador;
 import PL.ControladorSessoes;
@@ -18,7 +19,7 @@ import java.util.List;
 public class View implements GUI {
 
     private Controlador c;
-    private TextField usertxt, txt, txt2, txt3, txt4;
+    private TextField usertxt, txt;
     private PasswordField passwordtxt;
     private ListView<String> listView;
 
@@ -59,7 +60,7 @@ public class View implements GUI {
 
         listView = new ListView<>();
         listView.getItems().addAll(
-                "Registar Gestor", "Login de Gestor", "Painel de Robots",
+                "Registar Gestor", "Eliminar Gestor", "Login de Gestor", "Painel de Robots",
                 "Entregas Ativas", "Requisições Ativas", "Requisições Feitas",
                 "Entregas Feitas"
         );
@@ -94,15 +95,19 @@ public class View implements GUI {
     private void escolher_menu(){
         String s = String.valueOf(listView.getSelectionModel().getSelectedItems());
         if(s.equals("[Registar Gestor]")){
-            c.painel_RG();
+            make_window("Resgistar Gestor", registar_gestor());
         }
 
-        if(s.equals("[Login Gestor]")){
-            c.painel_LogInG();
+        if(s.equals("[Eliminar Gestor]")){
+            make_window("Eliminar Gestor", eliminar_gestor());
+        }
+
+        if(s.equals("[Login de Gestor]")){
+            make_window("Login de Gestor", login_gestor());
         }
 
         if(s.equals("[Painel de Robots]")){
-            c.painel_Robots();
+            make_window("Painel das Requisições Feitas", painel_robot());
         }
 
         if(s.equals("[Entregas Ativas]")){
@@ -122,32 +127,57 @@ public class View implements GUI {
         }
     }
 
-    @Override
-    public Scene login_gestor() {
+    private Scene eliminar_gestor() {
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(20, 20, 20, 20));
 
         usertxt = new TextField();
+        Label lblUser = new Label("Código ID");
 
-        Label lblUser = new Label("Código ID de Gestor");
+        Button b = new Button("Eliminar.");
+        b.setOnAction(e -> {
+            String user = usertxt.getText();
+
+            if(user.equals("")) alert("ERRO", "Precisa de inserir um Código ID, para apagar o Gestor.");
+            else {
+                c.delete(user);
+                c.end_scene(e);
+            }
+        });
+
+        layout.getChildren().addAll(lblUser, usertxt, b);
+        return new Scene(layout, 500, 400);
+    }
+
+    private Scene login_gestor() {
+        VBox layout = new VBox(10);
+        layout.setPadding(new Insets(20, 20, 20, 20));
+
+        usertxt = new TextField();
+        Label lblUser = new Label("Username");
 
         passwordtxt = new PasswordField();
         Label lblPassword = new Label("Password");
 
-        Button b = new Button("Login.");
+        Button b = new Button("LogIn.");
         b.setOnAction(e -> {
             String user = usertxt.getText();
             String pwd = passwordtxt.getText();
-            c.logInGestor(user, pwd);
-            c.end_scene(e);
+
+            if(user.equals("")) alert("ERRO", "Precisa de inserir um Código ID para se conectar.");
+            if(pwd.equals("")) alert("ERRO", "Precisa de inserir uma palavra-passe para se conectar.");
+            else {
+                c.logInGestor(user, pwd);
+                c.end_scene(e);
+            }
         });
 
         layout.getChildren().addAll(lblUser, usertxt, lblPassword, passwordtxt, b);
-        return new Scene(layout, 400, 300);
+        return new Scene(layout, 500, 400);
     }
 
 
-    public Scene registar_gestor() {
+    private Scene registar_gestor() {
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(20, 20, 20, 20));
 
@@ -194,5 +224,67 @@ public class View implements GUI {
     @Override
     public Scene painel_robot() {
         return null;
+    }
+
+    @Override
+    public Scene painel_gestor(Controlador c1 , Gestor g) {
+        c = c1;
+        VBox layout = new VBox(10);
+        layout.setPadding(new Insets(20, 20, 20, 20));
+
+        listView = new ListView<>();
+        listView.getItems().addAll(
+                "Consultar Inventário", "Adicionar Requisição", "Adicionar Entrega",
+                "Consultar Robots disponiveis", "Entregas Ativas", "Requisições Ativas",
+                "Requisições Feitas", "Entregas Feitas"
+        );
+        listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
+        Button b1 = new Button("Escolher.");
+        b1.setOnAction(e -> gestor_menu());
+
+        Button b2 = new Button("Terminar Sessão.");
+        b2.setOnAction(e -> {
+            c1.logOutGestor(g.getCodeID());
+            Platform.exit();
+        });
+
+        layout.getChildren().addAll(listView,b1,b2);
+        return new Scene(layout, 400, 400);
+    }
+
+    private void gestor_menu() {
+        String s = String.valueOf(listView.getSelectionModel().getSelectedItems());
+        if(s.equals("[Consultar Inventário]")){
+            make_window("Inventário Disponivel", registar_gestor());
+        }
+
+        if(s.equals("[Adicionar Requisição]")){
+            make_window("Criar Nova Requisição", registar_gestor());
+        }
+
+        if(s.equals("[Adicionar Entrega]")){
+            make_window("Criar Nova Entrega", registar_gestor());
+        }
+
+        if(s.equals("[Consultar Robots disponiveis]")){
+            make_window("Lista de Robots disponiveis", registar_gestor());
+        }
+
+        if(s.equals("[Entregas Ativas]")){
+            c.painel_EA();
+        }
+
+        if(s.equals("[Requisições Ativas]")){
+            c.painel_RA();
+        }
+
+        if(s.equals("[Entregas Feitas]")){
+            c.painel_EF();
+        }
+
+        if(s.equals("[Requisições Feitas]")){
+            c.painel_RF();
+        }
     }
 }

@@ -1,5 +1,7 @@
 package GUI;
 
+import BL.Gestor;
+import PL.Controlador;
 import javafx.scene.Scene;
 
 import java.util.List;
@@ -13,18 +15,6 @@ public interface GUI {
     Scene menu();
 
     /**
-     * Função que gera a Scene JavaFX representativa do Registo de Gestor
-     * @return Scene repesentativa do Registo de Gestor
-     * */
-    Scene registar_gestor();
-
-    /**
-     * Função que gera a Scene JavaFX representativa do Login de Gestor
-     * @return Scene repesentativa do Login de Gestor
-     * */
-    Scene login_gestor();
-
-    /**
      * Função que gera a Scene JavaFX representativa do
      * @return Scene repesentativa do
      * */
@@ -35,4 +25,6 @@ public interface GUI {
      * @return Scene repesentativa do
      * */
     Scene painel_robot();
+
+    Scene painel_gestor(Controlador c1, Gestor g);
 }
