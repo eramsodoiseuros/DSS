@@ -64,6 +64,7 @@ public class View implements GUI {
                 "Entregas Ativas", "Requisições Ativas", "Requisições Feitas",
                 "Entregas Feitas"
         );
+
         listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
         Button b1 = new Button("Escolher.");
@@ -81,6 +82,7 @@ public class View implements GUI {
             c.end_scene(e);
             make_window("Menu Principal", menu());
         });
+
         layout.getChildren().addAll(listView,b1,b2,b3);
         return new Scene(layout, 400, 400);
     }
@@ -94,6 +96,7 @@ public class View implements GUI {
 
     private void escolher_menu(){
         String s = String.valueOf(listView.getSelectionModel().getSelectedItems());
+
         if(s.equals("[Registar Gestor]")){
             make_window("Resgistar Gestor", registar_gestor());
         }
@@ -236,8 +239,9 @@ public class View implements GUI {
         listView.getItems().addAll(
                 "Consultar Inventário", "Adicionar Requisição", "Adicionar Entrega",
                 "Consultar Robots disponiveis", "Entregas Ativas", "Requisições Ativas",
-                "Requisições Feitas", "Entregas Feitas"
+                "Requisições Feitas", "Entregas Feitas", "Consultar Listagem de Localizações"
         );
+
         listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
         Button b1 = new Button("Escolher.");
@@ -246,7 +250,7 @@ public class View implements GUI {
         Button b2 = new Button("Terminar Sessão.");
         b2.setOnAction(e -> {
             c1.logOutGestor(g.getCodeID());
-            Platform.exit();
+            c.end_scene(e);
         });
 
         layout.getChildren().addAll(listView,b1,b2);
@@ -256,19 +260,23 @@ public class View implements GUI {
     private void gestor_menu() {
         String s = String.valueOf(listView.getSelectionModel().getSelectedItems());
         if(s.equals("[Consultar Inventário]")){
-            make_window("Inventário Disponivel", registar_gestor());
+            make_window("Inventário Disponivel", painel_pedido(c.inventario()));
+        }
+
+        if(s.equals("[Consultar Listagem de Localizações]")){
+            make_window("Listagem de Localizações", painel_pedido(c.listagem()));
         }
 
         if(s.equals("[Adicionar Requisição]")){
-            make_window("Criar Nova Requisição", registar_gestor());
+            make_window("Criar Nova Requisição", criar_req());
         }
 
         if(s.equals("[Adicionar Entrega]")){
-            make_window("Criar Nova Entrega", registar_gestor());
+            make_window("Criar Nova Entrega", criar_ent());
         }
 
         if(s.equals("[Consultar Robots disponiveis]")){
-            make_window("Lista de Robots disponiveis", registar_gestor());
+            make_window("Lista de Robots disponiveis", painel_pedido(c.robots()));
         }
 
         if(s.equals("[Entregas Ativas]")){
@@ -286,5 +294,49 @@ public class View implements GUI {
         if(s.equals("[Requisições Feitas]")){
             c.painel_RF();
         }
+    }
+
+    private Scene criar_ent() {
+        VBox layout = new VBox(10);
+        layout.setPadding(new Insets(20, 20, 20, 20));
+
+        txt = new TextField();
+        Label lblNome = new Label("Conteudo");
+
+        Button b = new Button("Criar Entrega.");
+        b.setOnAction(e -> {
+            String cod = txt.getText();
+
+            if(cod.equals("")) alert("ERRO", "Precisa de inserir o conteudo da Entrega.");
+            else {
+                c.addEA(cod);
+                c.end_scene(e);
+            }
+        });
+
+        layout.getChildren().addAll(lblNome, txt, b);
+        return new Scene(layout, 500, 400);
+    }
+
+    private Scene criar_req() {
+        VBox layout = new VBox(10);
+        layout.setPadding(new Insets(20, 20, 20, 20));
+
+        txt = new TextField();
+        Label lblNome = new Label("Conteudo");
+
+        Button b = new Button("Criar Entrega.");
+        b.setOnAction(e -> {
+            String cod = txt.getText();
+
+            if(cod.equals("")) alert("ERRO", "Precisa de inserir o conteudo da Entrega.");
+            else {
+                c.addRA(cod);
+                c.end_scene(e);
+            }
+        });
+
+        layout.getChildren().addAll(lblNome, txt, b);
+        return new Scene(layout, 500, 400);
     }
 }

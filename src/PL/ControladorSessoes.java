@@ -49,6 +49,16 @@ public class ControladorSessoes implements Controlador{
         } else View.alert("ERRO", "Não existe nenhum Gesto com o código " + c + ".");
     }
 
+    @Override
+    public List<String> inventario() {
+        return null;
+    }
+
+    @Override
+    public List<String> robots() {
+        return null;
+    }
+
     public List<String> consultarListaPaletes() {
         return new ArrayList<String>((Collection<? extends String>) a.consultarListaPaletes());
     }
@@ -77,22 +87,11 @@ public class ControladorSessoes implements Controlador{
         return a.servidor.getReqFeitas();
     }
 
-    public Palete criaPalete (String c){
-        int t = 1;
-        String s = "p1";
-        while(a.servidor.getInventario().containsKey(s)){
-            s = "p" + t;
-            t++;
-        }
-
-        Palete p = new Palete(s,c);
-        return p;
-
-
+    public  void addEA (String s){
+        addEA(a.servidor.criaPalete(s));
     }
 
-    public void addEA (Palete p){
-
+    private void addEA (Palete p){
         int t = 1;
         String s = "E1";
         while(a.servidor.getEA().containsKey(s)){
@@ -101,23 +100,13 @@ public class ControladorSessoes implements Controlador{
         }
         Entrega e = new Entrega(p,s);
         a.servidor.addEA(e);
-
     }
 
-    public void addEF (Entrega e){
-        a.servidor.addEF(e);
-
-    }
-    
-    public void remEA (Entrega e){
-        a.servidor.removeEA(e.getCodID());
+    public void addRA(String s){
+        addRA(a.servidor.criaPalete(s));
     }
 
-    public void remRA (Requisicao r){
-        a.servidor.removeRA(r.getCodID());
-    }
-
-    public void addRA (Palete p){
+    private void addRA (Palete p){
 
         int t = 1;
         String s = "P1";
@@ -127,13 +116,6 @@ public class ControladorSessoes implements Controlador{
         }
         Requisicao r = new Requisicao(p,s);
         a.servidor.addRA(r);
-
-    }
-
-
-    public void addRF (Requisicao r){
-        a.servidor.addRF(r);
-
     }
 
     @Override
