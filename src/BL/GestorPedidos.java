@@ -88,18 +88,18 @@ public class GestorPedidos {
     }
 
     public String EntToStringAtivas(Entrega e){
-        return "Entrega: " + e.getCodID() + e.toStingConteudoAtivas() + "\n";
+        return "Entrega: " + e.getCodID() + " - " + e.toStingConteudoAtivas();
     }
 
     public String EntToStringFeitas(Entrega e){
-        return "Entrega: " + e.getCodID() + e.toStringConteudoFeitas() + "\n";
+        return "Entrega: " + e.getCodID() + " - " + e.toStringConteudoFeitas();
     }
 
     public String ReqToStringAtivas(Requisicao r){
-        return "Requisição: " + r.getCodID() + r.toStingConteudoAtivas() + "\n";
+        return "Requisição: " + r.getCodID() + " - " + r.toStingConteudoAtivas();
     }
 
     public String ReqToStringFeitas(Requisicao r){
-        return "Requisição: " + r.getCodID() + r.toStringConteudoFeitas() + "\n";
+        return "Requisição: " + r.getCodID() + " - " + r.toStringConteudoFeitas();
     }
 }
