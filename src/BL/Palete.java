@@ -94,12 +94,12 @@ public class Palete implements Dados<Palete> {
     }
 
     public String toStringLocalizacao(Point p){
-        return "Localização: " + "X: " + p.x + "Y: " + p.y;
+        return "Localização: " + "(" + p.x + ", " + p.y + ")";
 
     }
 
     public String toStringFeitas(){
-        return "Palete: - " + codeID + " - " + " - " + toStringLocalizacao(localizacao) + " - " + conteudo;
+        return "Palete: - " + codeID + " - " + toStringLocalizacao(localizacao) + " - " + conteudo;
 
     }
 
