@@ -13,12 +13,13 @@ INSERT INTO `Armazem`.`Requisicao` (`codID`, `conteudo`) VALUES ('P0005', 'EEE')
 INSERT INTO `Armazem`.`Requisicao` (`codID`, `conteudo`) VALUES ('P0006', 'FFF');
 
 
-INSERT INTO `Armazem`.`Palete` (`codID`, `refrigerado`, `conteudo`) VALUES ('p0001', 0, 'AAA');
-INSERT INTO `Armazem`.`Palete` (`codID`, `refrigerado`, `conteudo`) VALUES ('p0002', 0, 'BBB');
-INSERT INTO `Armazem`.`Palete` (`codID`, `refrigerado`, `conteudo`) VALUES ('p0003', 0, 'CCC');
-INSERT INTO `Armazem`.`Palete` (`codID`, `refrigerado`, `conteudo`) VALUES ('p0004', 1, 'DDD');
-INSERT INTO `Armazem`.`Palete` (`codID`, `refrigerado`, `conteudo`) VALUES ('p0005', 1, 'EEE');
-INSERT INTO `Armazem`.`Palete` (`codID`, `refrigerado`, `conteudo`) VALUES ('p0006', 1, 'FFF');
+INSERT INTO `Armazem`.`Palete` (`codID`, `refrigerado`, `conteudo`, `LocalizaçaoX`, `LocalizaçaoY`) VALUES ('p0001', 0, 'AAA', 0, 2);
+INSERT INTO `Armazem`.`Palete` (`codID`, `refrigerado`, `conteudo`, `LocalizaçaoX`, `LocalizaçaoY`) VALUES ('p0002', 0, 'BBB', 0, 3);
+INSERT INTO `Armazem`.`Palete` (`codID`, `refrigerado`, `conteudo`, `LocalizaçaoX`, `LocalizaçaoY`) VALUES ('p0003', 0, 'CCC', 0, 4);
+INSERT INTO `Armazem`.`Palete` (`codID`, `refrigerado`, `conteudo`, `LocalizaçaoX`, `LocalizaçaoY`) VALUES ('p0004', 1, 'DDD', 5, 3);
+INSERT INTO `Armazem`.`Palete` (`codID`, `refrigerado`, `conteudo`, `LocalizaçaoX`, `LocalizaçaoY`) VALUES ('p0005', 1, 'EEE', 5, 2);
+INSERT INTO `Armazem`.`Palete` (`codID`, `refrigerado`, `conteudo`, `LocalizaçaoX`, `LocalizaçaoY`) VALUES ('p0006', 1, 'FFF', 0, 1);
+
 
 INSERT INTO `Armazem`.`Robots` (`codID`, `ordens_feitas`) VALUES ('R0001', 0);
 INSERT INTO `Armazem`.`Robots` (`codID`, `ordens_feitas`) VALUES ('R0002', 0);
