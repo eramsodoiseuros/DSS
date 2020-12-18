@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,14 +73,13 @@ public class View implements GUI {
                 "Entregas Feitas", "Requisitar Palete", "Requisitar Entrega", "Ler Código QR"
         );
 
-        listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         Button b1 = new Button("Escolher.");
         b1.setOnAction(e -> escolher_menu());
 
         Button b2 = new Button("Sair.");
         b2.setOnAction(e -> {
-            c.shutdown();
             Platform.exit();
         });
 
@@ -153,8 +153,6 @@ public class View implements GUI {
                 "Consultar Robots disponiveis", "Entregas Ativas", "Requisições Ativas",
                 "Requisições Feitas", "Entregas Feitas", "Consultar Listagem de Localizações"
         );
-
-        listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
         Button b1 = new Button("Escolher.");
         b1.setOnAction(e -> gestor_menu());
@@ -329,7 +327,7 @@ public class View implements GUI {
         cb.setPromptText("Requisições a necessitar de aprovação: ");
         cb.setOnAction(e -> {
             String[] split = cb.getValue().split(" ", 8);
-            c.addRA(split[7]);
+            c.addR(split[7]);
             c.end_scene(e);
         });
 
@@ -338,7 +336,7 @@ public class View implements GUI {
         cb2.setPromptText("Entregas a necessitar de aprovação: ");
         cb2.setOnAction(e -> {
             String[] split = cb2.getValue().split(" ", 8);
-            c.addEA(split[7]);
+            c.addE(split[7]);
             c.end_scene(e);
         });
 
@@ -359,7 +357,7 @@ public class View implements GUI {
 
             if(cod.equals("")) alert("ERRO", "Precisa de inserir o conteudo da Entrega.");
             else {
-                c.addEA(cod);
+                c.addE(cod);
                 c.end_scene(e);
             }
         });
@@ -375,13 +373,13 @@ public class View implements GUI {
         txt = new TextField();
         Label lblNome = new Label("Conteudo");
 
-        Button b = new Button("Criar Entrega.");
+        Button b = new Button("Criar Requisição.");
         b.setOnAction(e -> {
             String cod = txt.getText();
 
-            if(cod.equals("")) alert("ERRO", "Precisa de inserir o conteudo da Entrega.");
+            if(cod.equals("")) alert("ERRO", "Precisa de inserir o conteudo da Requisição.");
             else {
-                c.addRA(cod);
+                c.addR(cod);
                 c.end_scene(e);
             }
         });

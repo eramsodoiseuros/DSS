@@ -39,12 +39,12 @@ public interface Controlador {
     /**
      * Função que
      * */
-    void addEA(String s);
+    void addE(String s);
 
     /**
      * Função que
      * */
-    void addRA(String s);
+    void addR(String s);
 
     /**
      * Função que
@@ -80,10 +80,6 @@ public interface Controlador {
      * Função que
      * */
     void aceitou();
-
-    void run();
-
-    void shutdown();
 
     List<String> getReqFeitas();
 

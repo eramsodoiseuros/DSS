@@ -145,4 +145,12 @@ public class GestorPedidos {
     public boolean searchEF(String codID) {
         return entrega_FEITAS.containsKey(codID);
     }
+
+    public boolean searchRA(String s) {
+        return requisicoes_ATIVAS.containsKey(s);
+    }
+
+    public boolean searchRF(String s) {
+        return requisicoes_FEITAS.containsKey(s);
+    }
 }

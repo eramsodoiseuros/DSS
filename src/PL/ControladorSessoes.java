@@ -15,7 +15,7 @@ public class ControladorSessoes implements Controlador{
     private Servidor servidor;
 
     public ControladorSessoes(){
-        servidor  = new Servidor();
+        servidor = new Servidor();
     }
 
     @Override
@@ -45,15 +45,15 @@ public class ControladorSessoes implements Controlador{
         } else View.alert("ERRO", "Não existe nenhum Gestor com o código " + c + ".");
     }
 
-    public  void addEA (String s){
-        addEA(servidor.criaPalete(s));
+    public  void addE (String s){
+        addE(servidor.criaPalete(s));
     }
 
-    private void addEA (Palete p){
+    private void addE (Palete p){
         if(servidor.isParkingAvailable()){
             int t = 1;
             String s = "E1";
-            while(servidor.searchEA(p.getCodID()) || servidor.searchEF(p.getCodID())){
+            while(servidor.searchEA(s) || servidor.searchEF(s)){
                 s = "E" + t;
                 t++;
             }
@@ -63,9 +63,15 @@ public class ControladorSessoes implements Controlador{
         }
     }
 
-    public void addRA(String s){
+    public void addR(String s){
         Palete p = servidor.search(s);
         if(p != null && servidor.isParkingAvailable()){
+            int t = 1;
+            String s1 = "P1";
+            while(servidor.searchRA(s1) || servidor.searchRF(s1)){
+                s = "P" + t;
+                t++;
+            }
             Requisicao r = new Requisicao(p,s);
             servidor.addRequisicao(r);
             aceitou();
@@ -136,20 +142,6 @@ public class ControladorSessoes implements Controlador{
         final Node source = (Node) e.getSource();
         final Stage stage = (Stage) source.getScene().getWindow();
         stage.close();
-    }
-
-    @Override
-    public void run(){
-        try {
-            servidor.run();
-        } catch (InterruptedException | ExecutionException e) {
-            View.alert("INFORMAÇÃO DRAMATICA!", "Algo de errado não está certo (?)");
-        }
-    }
-
-    @Override
-    public void shutdown() {
-        servidor.shutdown();
     }
 
     @Override

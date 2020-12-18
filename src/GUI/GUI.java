@@ -27,4 +27,5 @@ public interface GUI {
     Scene painel_robot();
 
     Scene painel_gestor(String codID);
+
 }

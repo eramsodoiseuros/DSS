@@ -64,8 +64,7 @@ public class Inventario {
         Palete pal = null;
         for(Palete p : inventario.values())
             if(p.getConteudo().equals(s)) {
-                pal = new Palete(p);
-                break;
+                return p;
             }
         return pal;
     }

@@ -6,13 +6,24 @@ public class Armazem extends Application {
     Stage window;
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
-
+    public void start(Stage primaryStage){
         GUI view = new View();
+
         window = primaryStage;
         window.setScene(view.menu());
         window.setTitle("Menu de Admin");
         window.show();
+
+        /*
+        Thread task = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                view.start();
+            }
+        });
+
+        task.start();
+        */
     }
 
 
