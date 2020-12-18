@@ -1,6 +1,7 @@
 package BL;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 public class Inventario {
@@ -40,6 +41,10 @@ public class Inventario {
     protected void setSize_t2(int size_t2) {
         this.size_t2 = size_t2;
     }
+
+    protected  int size(){return this.inventario.size();}
+
+    protected Collection<Palete> values(){return this.inventario.values();}
 
     protected HashMap<String, Pair> check_itens(ArrayList<String> lista){
         return new HashMap<>();

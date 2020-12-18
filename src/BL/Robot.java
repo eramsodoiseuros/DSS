@@ -113,28 +113,27 @@ public class Robot implements Dados<Robot>{
     //move o robot para a proxima posição, se nao estiver ocupada
     private void moveState(Integer[][] mapa, Integer newPosX, Integer newPosY){
         if (mapa[newPosX][newPosY] != 1){
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             mapa[getPosX()][getPosY()]  = 0;
             mapa[newPosX][newPosY]      = 1;
             setPos(newPosX,newPosY);
+            System.out.println(this.getCodeID()+": esta na pos x->"+this.posX+" y->"+this.posY);
+
+
         }
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
     }
 
     //liga o robo para começar a trabalhar, se a posição inicial nao estiver ocupada
     protected boolean startWork(Integer[][] mapa) {
-
+        System.out.println("o senhor "+this.getCodeID()+" esta a tentar começar a trabalhar");
         if (mapa[1][1]!= 1){
             setAtivo(true);
             moveState(mapa, 1,1);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             return true;
         }
         return false;
