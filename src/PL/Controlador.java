@@ -79,13 +79,23 @@ public interface Controlador {
     /**
      * Função que
      * */
-    void aceitou();
-
     List<String> getReqFeitas();
 
+    /**
+     * Função que
+     * */
     List<String> getReqAtivas();
 
+    /**
+     * Função que
+     * */
     List<String> getEntFeitas();
 
+    /**
+     * Função que
+     * */
     List<String> getEntAtivas();
+
+    void addRA(String s);
+    void addEA(String s);
 }

@@ -10,7 +10,8 @@ import UI.UI;
 
 public class Servidor {
     private Map<String, Gestor> listaGestores;
-    private Map<String, Robot> robots;
+    private Map<String, Robot> robots_r; // par
+    private Map<String, Robot> robots_e; // impar
     private Inventario inventario;
     private GestorPedidos gestor_Pedidos;
     private Integer parking;
@@ -22,7 +23,8 @@ public class Servidor {
 
     public Servidor(){
         this.listaGestores = new HashMap<>();
-        this.robots = new HashMap<>();
+        this.robots_r = new HashMap<>();
+        this.robots_e = new HashMap<>();
         this.inventario = new Inventario();
         this.gestor_Pedidos = new GestorPedidos();
         this.parking = 2;
@@ -46,7 +48,13 @@ public class Servidor {
         }
 
         for (Robot r : RobotsDAO.getInstance().values()) {
-            robots.put(r.getCodeID(), r);
+            if( Integer.parseInt(r.getCodeID().substring(1,r.getCodeID().length())) % 2 != 0 ){
+                robots_e.put(r.getCodeID(), r);
+            }
+
+            if( Integer.parseInt(r.getCodeID().substring(1,r.getCodeID().length())) % 2 == 0 ){
+                robots_r.put(r.getCodeID(), r);
+            }
         }
 
         for (Palete p : InventarioDAO.getInstance().values()) {
@@ -75,12 +83,31 @@ public class Servidor {
 
         return new Robot();
     }
-    public List<Robot> robotsDisponiveis() {
+    public List<Robot> RobotsDisponiveis(Map<String, Robot> robots) {
         ArrayList<Robot> disponiveis = new ArrayList<>();
         for(Robot r : robots.values()){
             disponiveis.add(r.clone());
         }
         return disponiveis;
+    }
+
+
+    public void giveWork(Entrega e){
+        Robot wallie = getAvailable(robots_e);
+        Palete p = e.conteudo;
+        UI.notifica("O Robot " + wallie.getCodeID()
+                + " vai agora iniciar a recolha da Palete " + p.getCodID() + " na localização (0,1).");
+        // vai de (0,1) a (x,y)
+        gestor_Pedidos.removeEA(e.codeID);
+    }
+
+    public void giveWork(Requisicao r){
+        Robot wallie = getAvailable(robots_r);
+        Palete p = r.conteudo;
+        UI.notifica("O Robot " + wallie.getCodeID() + " vai agora iniciar a recolha da Palete "
+                + p.getCodID() + " na localização (" + p.getLocalizacao().x + ", " + p.getLocalizacao().y + ").");
+        // vai de (x,y) a (7,2)
+        gestor_Pedidos.removeRA(r.codeID);
     }
 
     public List<String> getEntAtivas(){
@@ -112,15 +139,10 @@ public class Servidor {
         return s;
     }
 
-    public Integer getParking() {
-        return parking;
-    }
-
     public void removeGestor (String codID){
         listaGestores.remove(codID);
         GestorDAO.getInstance().remove(codID);
     }
-
     public void addGestor (String codID, String nome, String pwd){
         Gestor g = new Gestor(nome, pwd, codID, false);
         listaGestores.put(codID, g);
@@ -141,10 +163,10 @@ public class Servidor {
     public void removeEA(String codID){
         this.gestor_Pedidos.removeEA(codID);
     }
-    public void removeEntrega(Entrega e){
+    public void removeEntrega(String e){
         this.gestor_Pedidos.removeEntrega(e);
     }
-    public void removeRequisicao(Requisicao r){
+    public void removeRequisicao(String r){
         this.gestor_Pedidos.removeRequisicao(r);
     }
 
@@ -153,20 +175,6 @@ public class Servidor {
     }
     public void addRequisicao(Requisicao r){
         this.gestor_Pedidos.addRequisicao(r);
-    }
-    public void addRF(Requisicao r){
-        this.gestor_Pedidos.addRF(r);
-        RequisicaoDAO.getInstance().put(r);
-    }
-    public void addEF(Entrega e){
-        this.gestor_Pedidos.addEF(e);
-        EntregaDAO.getInstance().put(e);
-    }
-    public void addRA(Requisicao r){
-        this.gestor_Pedidos.addRA(r);
-    }
-    public void addEA(Entrega e){
-        gestor_Pedidos.addEA(e);
     }
 
     public boolean isParkingAvailable(){
@@ -178,11 +186,13 @@ public class Servidor {
     public void plusSpot(){
         parking++;
     }
+    public Integer getParking() {
+        return parking;
+    }
 
     public void offline(String codID) {
         listaGestores.get(codID).setOnline(false);
     }
-
     public void online(String codID) {
         listaGestores.get(codID).setOnline(true);
     }
@@ -194,7 +204,6 @@ public class Servidor {
             s = "p" + t;
             t++;
         }
-
         return new Palete(s,c);
     }
 
@@ -205,7 +214,6 @@ public class Servidor {
         }
         return s;
     }
-
     public List<String> listagem (){
         List<String> s = new ArrayList<>();
         for(Palete p : inventario.values()){
@@ -213,7 +221,6 @@ public class Servidor {
         }
         return s;
     }
-
     public List<String> listar_entregas() {
         ArrayList<Entrega> rl = gestor_Pedidos.listaEntregas();
         List<String> s = new ArrayList<>();
@@ -222,7 +229,6 @@ public class Servidor {
         }
         return s;
     }
-
     public List<String> listar_requisicoes() {
         ArrayList<Requisicao> rl = gestor_Pedidos.listaRequisicoes();
         List<String> s = new ArrayList<>();
@@ -239,15 +245,12 @@ public class Servidor {
     public boolean searchEA(String codID) {
         return gestor_Pedidos.searchEA(codID);
     }
-
     public boolean searchEF(String codID) {
         return gestor_Pedidos.searchEF(codID);
     }
-
     public boolean searchRA(String s) {
         return gestor_Pedidos.searchRA(s);
     }
-
     public boolean searchRF(String s) {
         return gestor_Pedidos.searchRF(s);
     }
@@ -255,17 +258,20 @@ public class Servidor {
     public boolean containsGestor(String codID) {
         return listaGestores.containsKey(codID);
     }
-
     public String getGP(String s) {
         return listaGestores.get(s).getPassword();
     }
-
     public boolean getGO(String s) {
         return listaGestores.get(s).getOnline();
     }
-
     public Gestor getGestor(String c) {
         return listaGestores.get(c);
     }
 
+    public Requisicao getRA(String s) {
+        return gestor_Pedidos.getRA(s);
+    }
+    public Entrega getEA(String s) {
+        return gestor_Pedidos.getEA(s);
+    }
 }

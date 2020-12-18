@@ -1,5 +1,9 @@
 package BL;
 
+import DL.EntregaDAO;
+import DL.RequisicaoDAO;
+import UI.UI;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,65 +31,39 @@ public class GestorPedidos {
     protected ArrayList<Requisicao> listaRequisicoes_FEITAS(){
         return new ArrayList<>(requisicoes_FEITAS.values());
     }
-
     protected ArrayList<Requisicao> listaRequisicoes_ATIVAS(){
         return new ArrayList<>(requisicoes_ATIVAS.values());
     }
-
     protected ArrayList<Entrega> listaEntrega_FEITAS(){
         return new ArrayList<>(entrega_FEITAS.values());
     }
-
     protected ArrayList<Entrega> listaEntrega_ATIVAS(){
         return new ArrayList<>(entrega_ATIVAS.values());
-    }
-
-    protected HashMap<String,Requisicao> listaRequisicoes_FEITAS_MAP(){
-        return new HashMap<>(requisicoes_FEITAS);
-    }
-
-    protected HashMap<String,Requisicao> listaRequisicoes_Ativas_MAP(){
-        return new HashMap<>(requisicoes_ATIVAS);
-    }
-
-    protected HashMap<String,Entrega> listaEntrga_FEITAS_MAP(){
-        return new HashMap<>(entrega_FEITAS);
-    }
-
-    protected HashMap<String,Entrega> listaEntrga_Ativas_MAP(){
-        return new HashMap<>(entrega_ATIVAS);
     }
 
     protected void removeRF(String codID){
         this.requisicoes_FEITAS.remove(codID);
     }
-
     protected void removeRA(String codID){
+        this.requisicoes_FEITAS.putIfAbsent(codID, requisicoes_ATIVAS.get(codID));
+        UI.notifica("NOTIFICAÇÃO DE MUDANÇA DE ESTADO: " + "R->" + codID + "    ||      C->" + requisicoes_FEITAS.get(codID).conteudo + " de momento está FEITA.");
+        RequisicaoDAO.getInstance().put(requisicoes_ATIVAS.get(codID));
         this.requisicoes_ATIVAS.remove(codID);
     }
-
     protected void removeEF(String codID){
         this.entrega_FEITAS.remove(codID);
     }
-
     protected void removeEA(String codID){
+        this.entrega_FEITAS.putIfAbsent(codID, entrega_ATIVAS.get(codID));
+        UI.notifica("NOTIFICAÇÃO DE MUDANÇA DE ESTADO: " + "E->" + codID + "    ||      C->" + entrega_FEITAS.get(codID).conteudo + " de momento está FEITA.");
+        EntregaDAO.getInstance().put(entrega_ATIVAS.get(codID));
         this.entrega_ATIVAS.remove(codID);
     }
-
-    protected void addRF(Requisicao r){
-        this.requisicoes_FEITAS.putIfAbsent(r.getCodID(), r);
+    protected void addEF(Entrega e) {
+        entrega_FEITAS.putIfAbsent(e.codeID,e);
     }
-
-    protected void addRA(Requisicao r){
-        this.requisicoes_ATIVAS.putIfAbsent(r.getCodID(), r);
-    }
-
-    protected void addEF(Entrega e){
-        this.entrega_FEITAS.putIfAbsent(e.getCodID(), e);
-    }
-
-    protected void addEA(Entrega e){
-        this.entrega_ATIVAS.putIfAbsent(e.getCodID(), e);
+    protected void addRF(Requisicao r) {
+        requisicoes_FEITAS.putIfAbsent(r.codeID,r);
     }
 
     @Override
@@ -101,56 +79,59 @@ public class GestorPedidos {
     public String EntToStringAtivas(Entrega e){
         return "Entrega: " + e.getCodID() + " - " + e.toStingConteudoAtivas();
     }
-
     public String EntToStringFeitas(Entrega e){
         return "Entrega: " + e.getCodID() + " - " + e.toStringConteudoFeitas();
     }
-
     public String ReqToStringAtivas(Requisicao r){
         return "Requisição: " + r.getCodID() + " - " + r.toStingConteudoAtivas();
     }
-
     public String ReqToStringFeitas(Requisicao r){
         return "Requisição: " + r.getCodID() + " - " + r.toStringConteudoFeitas();
     }
 
-    public void addEntrega(Entrega e) {
+    protected void addEntrega(Entrega e) {
+        System.out.println("NOTIFICAÇÃO DE MUDANÇA DE ESTADO: " + "Entrega ->" + e.codeID + "     ||      C->" + e.conteudo + " de momento está NÃO PROCESSADA.");
         entrega.putIfAbsent(e.codeID,e);
     }
-
-    public void addRequisicao(Requisicao r) {
+    protected void addRequisicao(Requisicao r) {
+        UI.notifica("NOTIFICAÇÃO DE MUDANÇA DE ESTADO: " + "Requisição ->" + r.codeID + "     ||      C->" + r.conteudo + " de momento está NÃO PROCESSADA.");
         requisicoes.putIfAbsent(r.codeID, r);
     }
-
-    public void removeEntrega(Entrega e) {
-        entrega.remove(e);
+    protected void removeEntrega(String e) {
+        this.entrega_ATIVAS.putIfAbsent(e, entrega.get(e));
+        UI.notifica("NOTIFICAÇÃO DE MUDANÇA DE ESTADO: " + "E->" + e + "    ||      C->" + entrega.get(e).conteudo + " de momento está ATIVA.");
+        this.entrega.remove(e);
+    }
+    protected void removeRequisicao(String r) {
+        this.requisicoes_ATIVAS.putIfAbsent(r, requisicoes.get(r));
+        UI.notifica("NOTIFICAÇÃO DE MUDANÇA DE ESTADO: " + "R->" + r + "    ||      C->" + requisicoes.get(r).conteudo + " de momento está ATIVA.");
+        this.requisicoes.remove(r);
     }
 
-    public void removeRequisicao(Requisicao r) {
-        requisicoes.remove(r);
-    }
-
-    public ArrayList<Requisicao> listaRequisicoes() {
+    protected ArrayList<Requisicao> listaRequisicoes() {
         return new ArrayList<>(requisicoes.values());
     }
-
-    public ArrayList<Entrega> listaEntregas() {
+    protected ArrayList<Entrega> listaEntregas() {
         return new ArrayList<>(entrega.values());
     }
 
-    public boolean searchEA(String codID) {
+    protected boolean searchEA(String codID) {
         return entrega_ATIVAS.containsKey(codID);
     }
-
-    public boolean searchEF(String codID) {
-        return entrega_FEITAS.containsKey(codID);
-    }
-
-    public boolean searchRA(String s) {
+    protected boolean searchRA(String s) {
         return requisicoes_ATIVAS.containsKey(s);
     }
-
-    public boolean searchRF(String s) {
+    protected boolean searchEF(String codID) {
+        return entrega_FEITAS.containsKey(codID);
+    }
+    protected boolean searchRF(String s) {
         return requisicoes_FEITAS.containsKey(s);
+    }
+
+    public Requisicao getRA(String s) {
+        return requisicoes_ATIVAS.get(s);
+    }
+    public Entrega getEA(String s) {
+        return entrega_ATIVAS.get(s);
     }
 }

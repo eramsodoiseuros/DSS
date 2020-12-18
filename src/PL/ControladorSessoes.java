@@ -13,18 +13,14 @@ import java.util.concurrent.ExecutionException;
 public class ControladorSessoes implements Controlador{
 
     private Servidor servidor;
-
     public ControladorSessoes(){
         servidor = new Servidor();
     }
 
-    @Override
     public void logOutGestor(String codID){
         if(servidor.getGO(codID))
             servidor.offline(codID);
     }
-
-    @Override
     public boolean iniciaSessao(String codID, String password){
         boolean b = false;
         if(servidor.containsGestor(codID))
@@ -36,7 +32,6 @@ public class ControladorSessoes implements Controlador{
     public void add(String c, String n, String p) {
         servidor.addGestor(c,n,p);
     }
-
     public void delete(String c) {
         if(servidor.containsGestor(c)) {
             Gestor g = servidor.getGestor(c);
@@ -46,23 +41,18 @@ public class ControladorSessoes implements Controlador{
     }
 
     public  void addE (String s){
-        addE(servidor.criaPalete(s));
-    }
-
-    private void addE (Palete p){
+        Palete p = servidor.criaPalete(s);
         if(servidor.isParkingAvailable()){
             int t = 1;
-            String s = "E1";
-            while(servidor.searchEA(s) || servidor.searchEF(s)){
-                s = "E" + t;
+            String s1 = "E1";
+            while(servidor.searchEA(s1) || servidor.searchEF(s1)){
+                s1 = "E" + t;
                 t++;
             }
-            Entrega e = new Entrega(p,s);
+            Entrega e = new Entrega(p,s1);
             servidor.addEntrega(e);
-            aceitou();
         }
     }
-
     public void addR(String s){
         Palete p = servidor.search(s);
         if(p != null && servidor.isParkingAvailable()){
@@ -74,12 +64,63 @@ public class ControladorSessoes implements Controlador{
             }
             Requisicao r = new Requisicao(p,s1);
             servidor.addRequisicao(r);
-            aceitou();
         }
         else View.alert("ERRO", "Tentou requisitar algo não existente no armazem.");
     }
 
-    @Override
+    public void addRA(String s) {
+        servidor.removeRequisicao(s);
+        aceitou(servidor.getRA(s));
+    }
+
+    public void addEA(String s) {
+        servidor.removeEntrega(s);
+        aceitou(servidor.getEA(s));
+    }
+
+    public List<String> inventario (){
+    return servidor.inventario();
+    }
+    public List<String> listagem (){
+        return servidor.listagem();
+    }
+    public List<String> robots() {
+        return null;
+    }
+    public List<String> lista_requisicoes() {
+        return servidor.listar_requisicoes();
+    }
+    public List<String> lista_entregas() {
+        return servidor.listar_entregas();
+    }
+
+    public int parking() {
+        return servidor.getParking();
+    }
+    public void aceitou(Requisicao r) {
+        servidor.minusSpot();
+        servidor.giveWork(r);
+        servidor.plusSpot();
+    }
+    public void aceitou(Entrega e) {
+        servidor.minusSpot();
+        servidor.giveWork(e);
+        servidor.plusSpot();
+    }
+
+    public List<String> getReqFeitas() {
+        return servidor.getReqFeitas();
+    }
+    public List<String> getReqAtivas() {
+        return servidor.getReqAtivas();
+    }
+    public List<String> getEntFeitas() {
+        return servidor.getEntFeitas();
+    }
+    public List<String> getEntAtivas() {
+        return servidor.getEntAtivas();
+    }
+
     public void validaRegisto(String nome, String codID, String pwd){
         if(nome == null) {
             View.alert("ERRO","Não introduziu um Nome.");
@@ -101,66 +142,9 @@ public class ControladorSessoes implements Controlador{
         } else add(codID, nome, pwd);
     }
 
-    @Override
-    public List<String> inventario (){
-    return servidor.inventario();
-    }
-
-    @Override
-    public List<String> listagem (){
-        return servidor.listagem();
-    }
-
-    @Override
-    public List<String> robots() {
-        return null;
-    }
-
-    @Override
-    public List<String> lista_requisicoes() {
-        return servidor.listar_requisicoes();
-    }
-
-    @Override
-    public List<String> lista_entregas() {
-        return servidor.listar_entregas();
-    }
-
-    @Override
-    public int parking() {
-        return servidor.getParking();
-    }
-
-    @Override
-    public void aceitou() {
-        servidor.minusSpot();
-        servidor.plusSpot();
-    }
-
-    @Override
     public void end_scene(ActionEvent e) {
         final Node source = (Node) e.getSource();
         final Stage stage = (Stage) source.getScene().getWindow();
         stage.close();
-    }
-
-    @Override
-    public List<String> getReqFeitas() {
-        return servidor.getReqFeitas();
-    }
-
-    @Override
-    public List<String> getReqAtivas() {
-        return servidor.getReqAtivas();
-    }
-
-    @Override
-    public List<String> getEntFeitas() {
-        return servidor.getEntFeitas();
-    }
-
-    @Override
-    public List<String> getEntAtivas() {
-        return servidor.getEntAtivas();
     }
 }
