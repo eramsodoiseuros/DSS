@@ -7,39 +7,25 @@ import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 public class ControladorSessoes implements Controlador{
 
     private Servidor servidor;
-    private View v;
 
     public ControladorSessoes(){
         servidor  = new Servidor();
-        v = new View(0);
     }
 
     @Override
-    public void logOutGestor(String codID) {
-        terminaSessao(codID);
-    }
-
-    private void terminaSessao (String codID){
+    public void logOutGestor(String codID){
         if(servidor.getGO(codID))
             servidor.offline(codID);
     }
 
     @Override
-    public void logInGestor(String codID, String pwd) {
-        if(iniciaSessao(codID, pwd)){
-            View.make_window("Menu do Gestor", v.painel_gestor(this, servidor.getGestor(codID)));
-        } else View.alert("ERRO", "Falha ao iniciar a sessão, verifique os seus dados.");
-    }
-
-    private boolean iniciaSessao(String codID, String password){
+    public boolean iniciaSessao(String codID, String password){
         boolean b = false;
         if(servidor.containsGestor(codID))
             if (b = !(servidor.getGP(codID).equals(password) && servidor.getGO(codID)))
@@ -85,26 +71,6 @@ public class ControladorSessoes implements Controlador{
             aceitou();
         }
         else View.alert("ERRO", "Tentou requisitar algo não existente no armazem.");
-    }
-
-    @Override
-    public void painel_EA(){
-        View.make_window("Painel das Entregas Ativas", v.painel_pedido(servidor.getEntAtivas()));
-    }
-
-    @Override
-    public void painel_EF(){
-        View.make_window("Painel das Entregas Feitas", v.painel_pedido(servidor.getEntFeitas()));
-    }
-
-    @Override
-    public void painel_RA(){
-        View.make_window("Painel das Requisições Ativas", v.painel_pedido(servidor.getReqAtivas()));
-    }
-
-    @Override
-    public void painel_RF(){
-        View.make_window("Painel das Requisições Feitas", v.painel_pedido(servidor.getReqFeitas()));
     }
 
     @Override
@@ -162,11 +128,6 @@ public class ControladorSessoes implements Controlador{
     @Override
     public void aceitou() {
         servidor.minusSpot();
-        try {
-            servidor.run();
-        } catch (ExecutionException | InterruptedException e) {
-            View.alert("Erro", "Instruction unclear, duck stuck on toaster!");
-        }
         servidor.plusSpot();
     }
 
@@ -175,5 +136,39 @@ public class ControladorSessoes implements Controlador{
         final Node source = (Node) e.getSource();
         final Stage stage = (Stage) source.getScene().getWindow();
         stage.close();
+    }
+
+    @Override
+    public void run(){
+        try {
+            servidor.run();
+        } catch (InterruptedException | ExecutionException e) {
+            View.alert("INFORMAÇÃO DRAMATICA!", "Algo de errado não está certo (?)");
+        }
+    }
+
+    @Override
+    public void shutdown() {
+        servidor.shutdown();
+    }
+
+    @Override
+    public List<String> getReqFeitas() {
+        return servidor.getReqFeitas();
+    }
+
+    @Override
+    public List<String> getReqAtivas() {
+        return servidor.getReqAtivas();
+    }
+
+    @Override
+    public List<String> getEntFeitas() {
+        return servidor.getEntFeitas();
+    }
+
+    @Override
+    public List<String> getEntAtivas() {
+        return servidor.getEntAtivas();
     }
 }

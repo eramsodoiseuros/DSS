@@ -3,17 +3,14 @@ package BL;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 import DL.*;
+import UI.UI;
 
 public class Servidor {
     private Map<String, Gestor> listaGestores;
-    private Queue<Robot> robotsDisponiveis;
-    private Map<String, Robot> listaRobots;
+    private Map<String, Robot> robots;
     private Inventario inventario;
     private GestorPedidos gestor_Pedidos;
     private Integer parking;
@@ -24,9 +21,8 @@ public class Servidor {
     private ArrayList<Future<Robot>> robosEmProgresso;
 
     public Servidor(){
-        this.listaGestores = new HashMap<String, Gestor>();
-        this.robotsDisponiveis = new PriorityQueue<Robot>();
-        this.listaRobots = new HashMap<String, Robot>();
+        this.listaGestores = new HashMap<>();
+        this.robots = new HashMap<>();
         this.inventario = new Inventario();
         this.gestor_Pedidos = new GestorPedidos();
         this.parking = 2;
@@ -49,13 +45,9 @@ public class Servidor {
             listaGestores.put(g.getCodeID(), g);
         }
 
-        for (Robot r : RobotsDAO.getInstance().values2()) {
-            listaRobots.put(r.getCodeID(), r);
+        for (Robot r : RobotsDAO.getInstance().values()) {
+            robots.put(r.getCodeID(), r);
         }
-
-        /*
-        this.robotsDisponiveis = RobotsDAO.getInstance().values();
-        */
 
         for (Palete p : InventarioDAO.getInstance().values()) {
             inventario.add(p);
@@ -71,79 +63,81 @@ public class Servidor {
 
     }
 
+    private Robot getAvailable(Map<String, Robot> robots){
+        boolean b = true;
+        while (b){
+            for (Robot r1 : robots.values()) {
+                if (!r1.getAtivo()) {
+                    return r1;
+                }
+            }
+        }
+
+        return new Robot();
+    }
+
+    public void shutdown(){
+        threadpool.shutdown();
+    }
 
     public void run() throws ExecutionException, InterruptedException {
-        int i = 2;
-        boolean needToWork = true;
-        while (needToWork) {
-            //ver se algum dos robôs terminou o que está em progresso
-            robosEmProgresso.removeIf(Future::isDone);
-
-            if (i > 0){
-                while (inventario.size() > 0 && robotsDisponiveis.size() > 0){
+        while (true) {
+            while(listar_requisicoes().size() + listar_entregas().size() > 0){
+                UI.notifica("bro im working i swear " + "||R:" + listar_requisicoes().size() + "||E" + listar_entregas().size());
+                //ver se algum dos robôs terminou o que está em progresso
+                robosEmProgresso.removeIf(Future::isDone);
+                while (inventario.size() > 0 && robotsDisponiveis().size() > 0){
                     for (Palete p: inventario.values()){
                         if (!p.isArmazenado() && mapa[1][0] == 0) {
-                            Future<Robot> futureTask = threadpool.submit(() -> recolherPalete(p,this.robotsDisponiveis.poll() ));
+                            Future<Robot> futureTask = threadpool.submit(() -> recolherPalete(p, getAvailable(robots) ));
                             inventario.remove(p.getCodID());
                             robosEmProgresso.add(futureTask);
-                            i--;
                             break;
                         }
                     }
                 }
             }
-            if (robosEmProgresso.size() == 0) needToWork = false;
             //maybe fazer um sleepzito aqui so we don't check robot constantly
-            //menu
         }
-        threadpool.shutdown();
     }
 
-    public Queue getRobotsDisponiveis() {
-        Queue robosDisponiveisReturn = new PriorityQueue<Robot>();
-        for(Robot r : robotsDisponiveis){
-            robosDisponiveisReturn.add(r.clone());
+    public List<Robot> robotsDisponiveis() {
+        ArrayList<Robot> disponiveis = new ArrayList<>();
+        for(Robot r : robots.values()){
+            disponiveis.add(r.clone());
         }
-        return robosDisponiveisReturn;
+        return disponiveis;
     }
 
     public List<String> getEntAtivas(){
-
          ArrayList<Entrega> el = gestor_Pedidos.listaEntrega_ATIVAS();
          List<String> s = new ArrayList<>();
-         for (Entrega e : el){
+         for (Entrega e : el)
             s.add(gestor_Pedidos.EntToStringAtivas(e));
-         }
          return s;
     }
 
     public List<String> getEntFeitas(){
-
         ArrayList<Entrega> el = gestor_Pedidos.listaEntrega_FEITAS();
         List<String> s = new ArrayList<>();
-        for (Entrega e : el){
+        for (Entrega e : el)
             s.add(gestor_Pedidos.EntToStringFeitas(e));
-        }
         return s;
     }
 
     public List<String> getReqFeitas(){
-
         ArrayList<Requisicao> rl = gestor_Pedidos.listaRequisicoes_FEITAS();
         List<String> s = new ArrayList<>();
-        for (Requisicao r : rl){
+        for (Requisicao r : rl)
             s.add(gestor_Pedidos.ReqToStringFeitas(r));
-        }
         return s;
     }
 
     public List<String> getReqAtivas(){
-
         ArrayList<Requisicao> rl = gestor_Pedidos.listaRequisicoes_ATIVAS();
         List<String> s = new ArrayList<>();
-        for (Requisicao r : rl){
+        for (Requisicao r : rl)
             s.add(gestor_Pedidos.ReqToStringAtivas(r));
-        }
         return s;
     }
 
@@ -166,24 +160,20 @@ public class Servidor {
     public Robot recolherPalete(Palete p, Robot robot) {
 
         Point destino = getEspacoLivre();
-        System.out.println("destino = "+ destino);
-        System.out.println(robot.getCodeID());
-        System.out.println(p.getCodID());
+
         boolean iniciado = false;
         boolean entregou = false;
 
         while (!iniciado) iniciado = robot.startWork(this.mapa);
-
-        robotsDisponiveis.remove(robot);
-
         while (!entregou) entregou = robot.andaParaPalete(mapa, destino.x, destino.y);
-        System.out.println(robot.getCodeID()+" acabou a entrega e vai voltar pa casa");
+
+        UI.notifica("O robot: " + robot.getCodeID() + " acabou de movimentar a Palete " + p.getCodID() + " e vai cessar atividade.");
+
         p.setArmazenado(true);
         p.setLocalizacao(destino);
         inventario.add(p);
         mapa[destino.x][destino.y]++;
         if (mapa[destino.x][destino.y] == 10) mapa[destino.x][destino.y] = 3;
-
         recolherRobo(robot);
 
         return robot;
@@ -196,13 +186,11 @@ public class Servidor {
         boolean entregouPalete = false;
 
         while (!iniciado) iniciado = r.startWork(this.mapa);
-        robotsDisponiveis.remove(r);
-
         while(!temPalete) temPalete = r.andaParaPalete(mapa, destino.x, destino.y);
+
         inventario.remove(p.getCodID());
 
         while(!entregouPalete) entregouPalete = r.entregaPalete(mapa);
-
         recolherRobo(r);
 
         return r;
@@ -212,7 +200,6 @@ public class Servidor {
     public void recolherRobo(Robot robot){
         boolean voltou = false;
         while (!voltou) voltou = robot.takeBreak(mapa);
-        robotsDisponiveis.add(robot);
     }
 
     public Point getEspacoLivre(){

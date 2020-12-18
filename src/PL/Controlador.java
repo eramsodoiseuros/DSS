@@ -27,29 +27,9 @@ public interface Controlador {
     /**
      * Verifica as informações de Login de um Gestor
      * @param codID codeID do Gestor
-     * @param pwd password do Gestor
+     * @param password password do Gestor
      * */
-    void logInGestor(String codID, String pwd);
-
-    /**
-     * Função que
-     * */
-    void painel_EA();
-
-    /**
-     * Função que
-     * */
-    void painel_EF();
-
-    /**
-     * Função que
-     * */
-    void painel_RA();
-
-    /**
-     * Função que
-     * */
-    void painel_RF();
+    boolean iniciaSessao(String codID, String password);
 
     /**
      * Função que
@@ -100,4 +80,16 @@ public interface Controlador {
      * Função que
      * */
     void aceitou();
+
+    void run();
+
+    void shutdown();
+
+    List<String> getReqFeitas();
+
+    List<String> getReqAtivas();
+
+    List<String> getEntFeitas();
+
+    List<String> getEntAtivas();
 }

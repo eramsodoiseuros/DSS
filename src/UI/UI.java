@@ -1,17 +1,9 @@
 package UI;
 
-public interface UI {
+import PL.ControladorSessoes;
 
-    /**
-     * Função que notifica o UI do Servidor (Terminal/Linha de comandos)
-     * @param texto String a imprimir no terminal
-     * */
-    void notifica(String texto);
-
-    /**
-     * Função que
-     * @param
-     *
-    void n();
-     */
+public class UI {
+    public static void notifica(String texto) {
+        System.out.println(texto);
+    }
 }

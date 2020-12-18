@@ -79,11 +79,13 @@ public class View implements GUI {
 
         Button b2 = new Button("Sair.");
         b2.setOnAction(e -> {
+            c.shutdown();
             Platform.exit();
         });
 
         Button b3 = new Button("Atualizar.");
         b3.setOnAction(e -> {
+            c = new ControladorSessoes();
             c.end_scene(e);
             make_window("Menu Principal", menu());
         });
@@ -112,19 +114,19 @@ public class View implements GUI {
         }
 
         if(s.equals("[Entregas Ativas]")){
-            c.painel_EA();
+            painel_EA();
         }
 
         if(s.equals("[Requisições Ativas]")){
-            c.painel_RA();
+            painel_RA();
         }
 
         if(s.equals("[Entregas Feitas]")){
-            c.painel_EF();
+            painel_EF();
         }
 
         if(s.equals("[Requisições Feitas]")){
-            c.painel_RF();
+            painel_RF();
         }
 
         if(s.equals("[Requisitar Palete]")){
@@ -141,8 +143,7 @@ public class View implements GUI {
     }
 
     @Override
-    public Scene painel_gestor(Controlador c1 , Gestor g) {
-        c = c1;
+    public Scene painel_gestor(String codID) {
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(20, 20, 20, 20));
 
@@ -160,14 +161,14 @@ public class View implements GUI {
 
         Button b2 = new Button("Terminar Sessão.");
         b2.setOnAction(e -> {
-            c1.logOutGestor(g.getCodeID());
+            c.logOutGestor(codID);
             c.end_scene(e);
         });
 
         Button b3 = new Button("Atualizar.");
         b3.setOnAction(e -> {
             c.end_scene(e);
-            make_window("Menu do Gestor", painel_gestor(c1,g));
+            make_window("Menu do Gestor", painel_gestor(codID));
         });
 
         layout.getChildren().addAll(listView,b1,b2,b3);
@@ -193,19 +194,19 @@ public class View implements GUI {
         }
 
         if(s.equals("[Entregas Ativas]")){
-            c.painel_EA();
+            painel_EA();
         }
 
         if(s.equals("[Requisições Ativas]")){
-            c.painel_RA();
+            painel_RA();
         }
 
         if(s.equals("[Entregas Feitas]")){
-            c.painel_EF();
+            painel_EF();
         }
 
         if(s.equals("[Requisições Feitas]")){
-            c.painel_RF();
+            painel_RF();
         }
     }
 
@@ -281,7 +282,7 @@ public class View implements GUI {
             if(user.equals("")) alert("ERRO", "Precisa de inserir um Código ID para se conectar.");
             if(pwd.equals("")) alert("ERRO", "Precisa de inserir uma palavra-passe para se conectar.");
             else {
-                c.logInGestor(user, pwd);
+                logInGestor(user, pwd);
                 c.end_scene(e);
             }
         });
@@ -387,5 +388,27 @@ public class View implements GUI {
 
         layout.getChildren().addAll(lblNome, txt, b);
         return new Scene(layout, 500, 400);
+    }
+
+    public void painel_EA(){
+        make_window("Painel das Entregas Ativas", painel_pedido(c.getEntAtivas()));
+    }
+
+    public void painel_EF(){
+        make_window("Painel das Entregas Feitas", painel_pedido(c.getEntFeitas()));
+    }
+
+    public void painel_RA(){
+        make_window("Painel das Requisições Ativas", painel_pedido(c.getReqAtivas()));
+    }
+
+    public void painel_RF(){
+        make_window("Painel das Requisições Feitas", painel_pedido(c.getReqFeitas()));
+    }
+
+    public void logInGestor(String codID, String pwd) {
+        if(c.iniciaSessao(codID, pwd)){
+            View.make_window("Menu do Gestor", painel_gestor(codID));
+        } else View.alert("ERRO", "Falha ao iniciar a sessão, verifique os seus dados.");
     }
 }
