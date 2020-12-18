@@ -5,12 +5,12 @@ INSERT INTO `Armazem`.`Palete` (`codID`, `conteudo`, `refrigerado`, `Localizaça
 INSERT INTO `Armazem`.`Palete` (`codID`, `conteudo`, `refrigerado`, `LocalizaçaoX`, `LocalizaçaoY`) VALUES ('p5', 'EEE', 1, 5, 2);
 INSERT INTO `Armazem`.`Palete` (`codID`, `conteudo`, `refrigerado`, `LocalizaçaoX`, `LocalizaçaoY`) VALUES ('p6', 'FFF', 1, 0, 1);
 
-INSERT INTO `Armazem`.`Entrega` (`codID`, `Palete_codID`, `Palete_conteudo`) VALUES ('E1', 'p1', 'AAA');
-INSERT INTO `Armazem`.`Entrega` (`codID`, `Palete_codID`, `Palete_conteudo`) VALUES ('E2', 'p2', 'BBB');
-INSERT INTO `Armazem`.`Entrega` (`codID`, `Palete_codID`, `Palete_conteudo`) VALUES ('E3', 'p3', 'CCC');
-INSERT INTO `Armazem`.`Entrega` (`codID`, `Palete_codID`, `Palete_conteudo`) VALUES ('E4', 'p4', 'DDD');
-INSERT INTO `Armazem`.`Entrega` (`codID`, `Palete_codID`, `Palete_conteudo`) VALUES ('E5', 'p5', 'EEE');
-INSERT INTO `Armazem`.`Entrega` (`codID`, `Palete_codID`, `Palete_conteudo`) VALUES ('E6', 'p6', 'FFF');
+INSERT INTO `Armazem`.`Entrega` (`codID`, `palete`, `conteudo`) VALUES ('E1', 'p1', 'AAA');
+INSERT INTO `Armazem`.`Entrega` (`codID`, `palete`, `conteudo`) VALUES ('E2', 'p2', 'BBB');
+INSERT INTO `Armazem`.`Entrega` (`codID`, `palete`, `conteudo`) VALUES ('E3', 'p3', 'CCC');
+INSERT INTO `Armazem`.`Entrega` (`codID`, `palete`, `conteudo`) VALUES ('E4', 'p4', 'DDD');
+INSERT INTO `Armazem`.`Entrega` (`codID`, `palete`, `conteudo`) VALUES ('E5', 'p5', 'EEE');
+INSERT INTO `Armazem`.`Entrega` (`codID`, `palete`, `conteudo`) VALUES ('E6', 'p6', 'FFF');
 
 
 INSERT INTO `Armazem`.`Requisicao` (`codID`, `conteudo`) VALUES ('P1', 'AAA');

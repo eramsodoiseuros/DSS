@@ -51,7 +51,7 @@ public class Requisicao extends Pedido implements Dados<Requisicao> {
     public List<String> toRow() {
         List<String> r = new ArrayList<>();
         r.add(this.codeID);
-        r.add(this.conteudo.toStringFeitas());
+        r.add(this.conteudo.conteudo());
         return r;
     }
 

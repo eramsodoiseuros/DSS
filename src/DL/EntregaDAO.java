@@ -9,7 +9,7 @@ public class EntregaDAO extends DataAcessObject<String, Entrega>{
     private static EntregaDAO singleton = new EntregaDAO();
 
     public EntregaDAO() {
-        super(new Entrega(), "Entrega", Arrays.asList("codID", "Palete_codID", "Palete_conteudo"));
+        super(new Entrega(), "Entrega", Arrays.asList("codID", "palete", "conteudo"));
     }
 
     public static EntregaDAO getInstance(){
@@ -25,7 +25,7 @@ public class EntregaDAO extends DataAcessObject<String, Entrega>{
     }
 
     public Entrega put(final Entrega value) {
-        return super.put(value, value.getCodID());
+        return super.put(value, value.getCodID(), value.conteudo().getCodID(), value.conteudo().conteudo());
     }
 
     public Entrega remove(final String key) {

@@ -90,24 +90,23 @@ public class Palete implements Dados<Palete> {
 
     public String toStringAtivas(){
         return "Palete: - " + codeID + " - " + conteudo;
-
     }
 
     public String toStringLocalizacao(Point p){
         return "Localização: " + "(" + p.x + ", " + p.y + ")";
-
     }
 
     public String toStringFeitas(){
         return "Palete: - " + codeID + " - " + toStringLocalizacao(localizacao) + " - " + conteudo;
-
     }
 
     public String toStringListagem(){
         return "Palete: - " + codeID + " - " + toStringLocalizacao(localizacao);
-
     }
 
+    public String conteudo(){
+        return conteudo;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

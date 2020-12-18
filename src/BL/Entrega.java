@@ -35,6 +35,10 @@ public class Entrega extends Pedido implements Dados<Entrega>{
         this.estado = false;
     }
 
+    public Palete conteudo(){
+        return conteudo;
+    }
+
     @Override
     boolean estado() {
         this.estado = !this.estado;
@@ -47,8 +51,9 @@ public class Entrega extends Pedido implements Dados<Entrega>{
 
     public List<String> toRow() {
         List<String> r = new ArrayList<>();
-        r.add(this.codeID);
-        r.add(this.conteudo.toString());
+        r.add(codeID);
+        r.add(conteudo.getCodID());
+        r.add(conteudo.conteudo());
         return r;
     }
 }

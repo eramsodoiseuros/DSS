@@ -204,7 +204,9 @@ public class Servidor {
             s = "p" + t;
             t++;
         }
-        return new Palete(s,c);
+        Palete p = new Palete(s,c);
+        inventario.add(p);
+        return p;
     }
 
     public List<String> inventario (){
