@@ -50,7 +50,7 @@ public class Palete implements Dados<Palete> {
     public Palete(String codID, String c){
         codeID = codID;
         conteudo = c;
-        armazenado = true;
+        armazenado = false;
         refrigerado = false;
         localizacao = new Point(1,0);
     }

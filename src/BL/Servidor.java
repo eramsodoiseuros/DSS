@@ -112,15 +112,10 @@ public class Servidor {
         return s;
     }
 
-    public Integer getParking() {
-        return parking;
-    }
-
     public void removeGestor (String codID){
         listaGestores.remove(codID);
         GestorDAO.getInstance().remove(codID);
     }
-
     public void addGestor (String codID, String nome, String pwd){
         Gestor g = new Gestor(nome, pwd, codID, false);
         listaGestores.put(codID, g);
@@ -141,10 +136,10 @@ public class Servidor {
     public void removeEA(String codID){
         this.gestor_Pedidos.removeEA(codID);
     }
-    public void removeEntrega(Entrega e){
+    public void removeEntrega(String e){
         this.gestor_Pedidos.removeEntrega(e);
     }
-    public void removeRequisicao(Requisicao r){
+    public void removeRequisicao(String r){
         this.gestor_Pedidos.removeRequisicao(r);
     }
 
@@ -153,20 +148,6 @@ public class Servidor {
     }
     public void addRequisicao(Requisicao r){
         this.gestor_Pedidos.addRequisicao(r);
-    }
-    public void addRF(Requisicao r){
-        this.gestor_Pedidos.addRF(r);
-        RequisicaoDAO.getInstance().put(r);
-    }
-    public void addEF(Entrega e){
-        this.gestor_Pedidos.addEF(e);
-        EntregaDAO.getInstance().put(e);
-    }
-    public void addRA(Requisicao r){
-        this.gestor_Pedidos.addRA(r);
-    }
-    public void addEA(Entrega e){
-        gestor_Pedidos.addEA(e);
     }
 
     public boolean isParkingAvailable(){
@@ -178,11 +159,13 @@ public class Servidor {
     public void plusSpot(){
         parking++;
     }
+    public Integer getParking() {
+        return parking;
+    }
 
     public void offline(String codID) {
         listaGestores.get(codID).setOnline(false);
     }
-
     public void online(String codID) {
         listaGestores.get(codID).setOnline(true);
     }
@@ -194,7 +177,6 @@ public class Servidor {
             s = "p" + t;
             t++;
         }
-
         return new Palete(s,c);
     }
 
@@ -205,7 +187,6 @@ public class Servidor {
         }
         return s;
     }
-
     public List<String> listagem (){
         List<String> s = new ArrayList<>();
         for(Palete p : inventario.values()){
@@ -213,7 +194,6 @@ public class Servidor {
         }
         return s;
     }
-
     public List<String> listar_entregas() {
         ArrayList<Entrega> rl = gestor_Pedidos.listaEntregas();
         List<String> s = new ArrayList<>();
@@ -222,7 +202,6 @@ public class Servidor {
         }
         return s;
     }
-
     public List<String> listar_requisicoes() {
         ArrayList<Requisicao> rl = gestor_Pedidos.listaRequisicoes();
         List<String> s = new ArrayList<>();
@@ -239,15 +218,12 @@ public class Servidor {
     public boolean searchEA(String codID) {
         return gestor_Pedidos.searchEA(codID);
     }
-
     public boolean searchEF(String codID) {
         return gestor_Pedidos.searchEF(codID);
     }
-
     public boolean searchRA(String s) {
         return gestor_Pedidos.searchRA(s);
     }
-
     public boolean searchRF(String s) {
         return gestor_Pedidos.searchRF(s);
     }
@@ -255,15 +231,12 @@ public class Servidor {
     public boolean containsGestor(String codID) {
         return listaGestores.containsKey(codID);
     }
-
     public String getGP(String s) {
         return listaGestores.get(s).getPassword();
     }
-
     public boolean getGO(String s) {
         return listaGestores.get(s).getOnline();
     }
-
     public Gestor getGestor(String c) {
         return listaGestores.get(c);
     }

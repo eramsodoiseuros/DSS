@@ -327,7 +327,7 @@ public class View implements GUI {
         cb.setPromptText("Requisições a necessitar de aprovação: ");
         cb.setOnAction(e -> {
             String[] split = cb.getValue().split(" ", 8);
-            c.addR(split[7]);
+            c.addRA(split[1]);
             c.end_scene(e);
         });
 
@@ -336,7 +336,7 @@ public class View implements GUI {
         cb2.setPromptText("Entregas a necessitar de aprovação: ");
         cb2.setOnAction(e -> {
             String[] split = cb2.getValue().split(" ", 8);
-            c.addE(split[7]);
+            c.addEA(split[1]);
             c.end_scene(e);
         });
 
