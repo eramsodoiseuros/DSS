@@ -29,42 +29,32 @@ public interface Controlador {
      * @param codID codeID do Gestor
      * @param pwd password do Gestor
      * */
-    public void logInGestor(String codID, String pwd);
+    void logInGestor(String codID, String pwd);
 
     /**
      * Função que
      * */
-    public void painel_EA();
+    void painel_EA();
 
     /**
      * Função que
      * */
-    public void painel_EF();
+    void painel_EF();
 
     /**
      * Função que
      * */
-    public void painel_RA();
+    void painel_RA();
 
     /**
      * Função que
      * */
-    public void painel_RF();
+    void painel_RF();
 
     /**
      * Função que
      * */
     void delete(String user);
-
-    /**
-     * Função que
-     * */
-    List<String> inventario();
-
-    /**
-     * Função que
-     * */
-    List<String> robots();
 
     /**
      * Função que
@@ -80,4 +70,34 @@ public interface Controlador {
      * Função que
      * */
     List<String> listagem();
+
+    /**
+     * Função que
+     * */
+    List<String> inventario();
+
+    /**
+     * Função que
+     * */
+    List<String> robots();
+
+    /**
+     * Função que
+     * */
+    List<String> lista_requisicoes();
+
+    /**
+     * Função que
+     * */
+    List<String> lista_entregas();
+
+    /**
+     * Função que
+     * */
+    int parking();
+
+    /**
+     * Função que
+     * */
+    void aceitou();
 }

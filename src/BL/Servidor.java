@@ -23,41 +23,13 @@ public class Servidor {
     private ExecutorService threadpool;
     private ArrayList<Future<Robot>> robosEmProgresso;
 
-    public void run() throws ExecutionException, InterruptedException {
-        int i = 2;
-        boolean needToWork = true;
-        while (needToWork) {
-            //ver se algum dos robôs terminou o que está em progresso
-            robosEmProgresso.removeIf(Future::isDone);
-
-            if (i > 0){
-                while (inventario.size() > 0 && robotsDisponiveis.size() > 0){
-                    for (Palete p: inventario.values()){
-                        if (!p.isArmazenado() && mapa[1][0] == 0) {
-                            Future<Robot> futureTask = threadpool.submit(() -> recolherPalete(p,this.robotsDisponiveis.poll() ));
-                            inventario.remove(p.getCodID());
-                            robosEmProgresso.add(futureTask);
-                            i--;
-                            break;
-                        }
-                    }
-                }
-            }
-            if (robosEmProgresso.size() == 0) needToWork = false;
-            //maybe fazer um sleepzito aqui so we don't check robot constantly
-            //menu
-        }
-        threadpool.shutdown();
-    }
-
-
     public Servidor(){
         this.listaGestores = new HashMap<String, Gestor>();
         this.robotsDisponiveis = new PriorityQueue<Robot>();
         this.listaRobots = new HashMap<String, Robot>();
         this.inventario = new Inventario();
         this.gestor_Pedidos = new GestorPedidos();
-        this.parking = 1;
+        this.parking = 2;
         this.robosEmProgresso = new ArrayList<>();
         this.threadpool = Executors.newCachedThreadPool();
 
@@ -69,8 +41,8 @@ public class Servidor {
                 mapa[i][j] = 0;
 
         for(int a = 2; a <=6;a++ ) {
-            mapa[0][a] = 4;
-            mapa[5][a] = 4;
+            mapa[0][a] = 2;
+            mapa[5][a] = 2;
         }
 
         for (Gestor g : GestorDAO.getInstance().values()) {
@@ -100,8 +72,31 @@ public class Servidor {
     }
 
 
-    public Map<String, Gestor> getListaGestores() {
-        return new HashMap<String, Gestor>(listaGestores);
+    public void run() throws ExecutionException, InterruptedException {
+        int i = 2;
+        boolean needToWork = true;
+        while (needToWork) {
+            //ver se algum dos robôs terminou o que está em progresso
+            robosEmProgresso.removeIf(Future::isDone);
+
+            if (i > 0){
+                while (inventario.size() > 0 && robotsDisponiveis.size() > 0){
+                    for (Palete p: inventario.values()){
+                        if (!p.isArmazenado() && mapa[1][0] == 0) {
+                            Future<Robot> futureTask = threadpool.submit(() -> recolherPalete(p,this.robotsDisponiveis.poll() ));
+                            inventario.remove(p.getCodID());
+                            robosEmProgresso.add(futureTask);
+                            i--;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (robosEmProgresso.size() == 0) needToWork = false;
+            //maybe fazer um sleepzito aqui so we don't check robot constantly
+            //menu
+        }
+        threadpool.shutdown();
     }
 
     public Queue getRobotsDisponiveis() {
@@ -112,50 +107,42 @@ public class Servidor {
         return robosDisponiveisReturn;
     }
 
-    public HashMap<String, Palete> getInventario() {
-        return inventario.getInventario();
-    }
-
-    public GestorPedidos getGestor_Pedidos() {
-        return gestor_Pedidos.Clone();
-    }
-
     public List<String> getEntAtivas(){
 
-         ArrayList<Entrega> el = getGestor_Pedidos().listaEntrega_ATIVAS();
+         ArrayList<Entrega> el = gestor_Pedidos.listaEntrega_ATIVAS();
          List<String> s = new ArrayList<>();
          for (Entrega e : el){
-            s.add(getGestor_Pedidos().EntToStringAtivas(e));
+            s.add(gestor_Pedidos.EntToStringAtivas(e));
          }
          return s;
     }
 
     public List<String> getEntFeitas(){
 
-        ArrayList<Entrega> el = getGestor_Pedidos().listaEntrega_FEITAS();
+        ArrayList<Entrega> el = gestor_Pedidos.listaEntrega_FEITAS();
         List<String> s = new ArrayList<>();
         for (Entrega e : el){
-            s.add(getGestor_Pedidos().EntToStringFeitas(e));
+            s.add(gestor_Pedidos.EntToStringFeitas(e));
         }
         return s;
     }
 
     public List<String> getReqFeitas(){
 
-        ArrayList<Requisicao> rl = getGestor_Pedidos().listaRequisicoes_FEITAS();
+        ArrayList<Requisicao> rl = gestor_Pedidos.listaRequisicoes_FEITAS();
         List<String> s = new ArrayList<>();
         for (Requisicao r : rl){
-            s.add(getGestor_Pedidos().ReqToStringFeitas(r));
+            s.add(gestor_Pedidos.ReqToStringFeitas(r));
         }
         return s;
     }
 
     public List<String> getReqAtivas(){
 
-        ArrayList<Requisicao> rl = getGestor_Pedidos().listaRequisicoes_ATIVAS();
+        ArrayList<Requisicao> rl = gestor_Pedidos.listaRequisicoes_ATIVAS();
         List<String> s = new ArrayList<>();
         for (Requisicao r : rl){
-            s.add(getGestor_Pedidos().ReqToStringAtivas(r));
+            s.add(gestor_Pedidos.ReqToStringAtivas(r));
         }
         return s;
     }
@@ -249,7 +236,6 @@ public class Servidor {
         return pointReturn;
     }
 
-
     public void removeRF(String codID){
         this.gestor_Pedidos.removeRF(codID);
         RequisicaoDAO.getInstance().remove(codID);
@@ -257,8 +243,6 @@ public class Servidor {
 
     public void removeRA(String codID){
         this.gestor_Pedidos.removeRA(codID);
-        RequisicaoDAO.getInstance().remove(codID);
-
     }
 
     public void removeEF(String codID){
@@ -268,7 +252,20 @@ public class Servidor {
 
     public void removeEA(String codID){
         this.gestor_Pedidos.removeEA(codID);
-        EntregaDAO.getInstance().remove(codID);
+    }
+
+    public void addEntrega(Entrega e){
+        this.gestor_Pedidos.addEntrega(e);
+    }
+    public void addRequisicao(Requisicao r){
+        this.gestor_Pedidos.addRequisicao(r);
+    }
+
+    public void removeEntrega(Entrega e){
+        this.gestor_Pedidos.removeEntrega(e);
+    }
+    public void removeRequisicao(Requisicao r){
+        this.gestor_Pedidos.removeRequisicao(r);
     }
 
     public void addRF(Requisicao r){
@@ -278,7 +275,6 @@ public class Servidor {
 
     public void addRA(Requisicao r){
         this.gestor_Pedidos.addRA(r);
-        RequisicaoDAO.getInstance().put(r);
     }
 
     public void addEF(Entrega e){
@@ -288,27 +284,10 @@ public class Servidor {
 
     public void addEA(Entrega e){
         this.gestor_Pedidos.addEA(e);
-        EntregaDAO.getInstance().put(e);
-    }
-
-    public HashMap<String,Requisicao> getRF(){
-        return getGestor_Pedidos().listaRequisicoes_FEITAS_MAP();
-    }
-
-    public HashMap<String,Requisicao> getRA(){
-        return getGestor_Pedidos().listaRequisicoes_Ativas_MAP();
-    }
-
-    public HashMap<String,Entrega> getEF(){
-        return getGestor_Pedidos().listaEntrga_FEITAS_MAP();
-    }
-
-    public HashMap<String,Entrega> getEA(){
-        return getGestor_Pedidos().listaEntrga_Ativas_MAP();
     }
 
     public boolean isParkingAvailable(){
-        return parking == 0;
+        return parking != 0;
     }
 
     public void minusSpot(){
@@ -330,11 +309,73 @@ public class Servidor {
     public Palete criaPalete (String c){
         int t = 1;
         String s = "p1";
-        while(inventario.getInventario().containsKey(s)){
+        while(inventario.contains(s)){
             s = "p" + t;
             t++;
         }
 
         return new Palete(s,c);
+    }
+
+    public List<String> inventario (){
+        List<String> s = new ArrayList<>();
+        for(Palete p : inventario.values()){
+            s.add(p.toStringFeitas());
+        }
+        return s;
+    }
+
+    public List<String> listagem (){
+        List<String> s = new ArrayList<>();
+        for(Palete p : inventario.values()){
+            s.add(p.toStringListagem());
+        }
+        return s;
+    }
+
+    public List<String> listar_entregas() {
+        ArrayList<Entrega> rl = gestor_Pedidos.listaEntregas();
+        List<String> s = new ArrayList<>();
+        for (Entrega r : rl){
+            s.add(gestor_Pedidos.EntToStringAtivas(r));
+        }
+        return s;
+    }
+
+    public List<String> listar_requisicoes() {
+        ArrayList<Requisicao> rl = gestor_Pedidos.listaRequisicoes();
+        List<String> s = new ArrayList<>();
+        for (Requisicao r : rl){
+            s.add(gestor_Pedidos.ReqToStringAtivas(r));
+        }
+        return s;
+    }
+
+    public Palete search(String s) {
+        return inventario.search(s);
+    }
+
+    public boolean searchEA(String codID) {
+        return gestor_Pedidos.searchEA(codID);
+    }
+
+    public boolean searchEF(String codID) {
+        return gestor_Pedidos.searchEF(codID);
+    }
+
+    public boolean containsGestor(String codID) {
+        return listaGestores.containsKey(codID);
+    }
+
+    public String getGP(String s) {
+        return listaGestores.get(s).getPassword();
+    }
+
+    public boolean getGO(String s) {
+        return listaGestores.get(s).getOnline();
+    }
+
+    public Gestor getGestor(String c) {
+        return listaGestores.get(c);
     }
 }

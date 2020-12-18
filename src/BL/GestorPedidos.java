@@ -2,26 +2,26 @@ package BL;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class GestorPedidos {
-    private HashMap<String, Requisicao> requisicoes_FEITAS;
-    private HashMap<String, Entrega> entrega_FEITAS;
+
+    private HashMap<String, Requisicao> requisicoes;
+    private HashMap<String, Entrega> entrega;
 
     private HashMap<String, Requisicao> requisicoes_ATIVAS;
     private HashMap<String, Entrega> entrega_ATIVAS;
 
+    private HashMap<String, Requisicao> requisicoes_FEITAS;
+    private HashMap<String, Entrega> entrega_FEITAS;
+
     protected GestorPedidos(){
+        this.requisicoes = new HashMap<>();
+        this.entrega = new HashMap<>();
         this.requisicoes_FEITAS = new HashMap<>();
         this.entrega_FEITAS = new HashMap<>();
         this.requisicoes_ATIVAS = new HashMap<>();
         this.entrega_ATIVAS = new HashMap<>();
-    }
-
-    protected GestorPedidos(HashMap<String, Requisicao> requisicoes_FEITAS, HashMap<String, Entrega> entrega_FEITAS, HashMap<String, Requisicao> requisicoes_ATIVAS, HashMap<String, Entrega> entrega_ATIVAS) {
-        this.requisicoes_FEITAS = requisicoes_FEITAS;
-        this.entrega_FEITAS = entrega_FEITAS;
-        this.requisicoes_ATIVAS = requisicoes_ATIVAS;
-        this.entrega_ATIVAS = entrega_ATIVAS;
     }
 
     protected ArrayList<Requisicao> listaRequisicoes_FEITAS(){
@@ -88,11 +88,6 @@ public class GestorPedidos {
         this.entrega_ATIVAS.putIfAbsent(e.getCodID(), e);
     }
 
-    // NOT WELL DONE BTW
-    protected GestorPedidos Clone() {
-        return new GestorPedidos(this.requisicoes_FEITAS, this.entrega_FEITAS, this.requisicoes_ATIVAS, this.entrega_ATIVAS);
-    }
-
     @Override
     public String toString() {
         return "GestorPedidos{" +
@@ -117,5 +112,37 @@ public class GestorPedidos {
 
     public String ReqToStringFeitas(Requisicao r){
         return "Requisição: " + r.getCodID() + " - " + r.toStringConteudoFeitas();
+    }
+
+    public void addEntrega(Entrega e) {
+        entrega.putIfAbsent(e.codeID,e);
+    }
+
+    public void addRequisicao(Requisicao r) {
+        requisicoes.putIfAbsent(r.codeID, r);
+    }
+
+    public void removeEntrega(Entrega e) {
+        entrega.remove(e);
+    }
+
+    public void removeRequisicao(Requisicao r) {
+        requisicoes.remove(r);
+    }
+
+    public ArrayList<Requisicao> listaRequisicoes() {
+        return new ArrayList<>(requisicoes.values());
+    }
+
+    public ArrayList<Entrega> listaEntregas() {
+        return new ArrayList<>(entrega.values());
+    }
+
+    public boolean searchEA(String codID) {
+        return entrega_ATIVAS.containsKey(codID);
+    }
+
+    public boolean searchEF(String codID) {
+        return entrega_FEITAS.containsKey(codID);
     }
 }

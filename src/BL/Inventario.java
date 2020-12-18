@@ -22,13 +22,7 @@ public class Inventario {
         this.size_t2 = size_t2;
     }
 
-    protected HashMap<String, Palete> getInventario() {
-        return new HashMap<String, Palete>(inventario);
-    }
 
-    protected void setInventario(HashMap<String, Palete> inventario) {
-        this.inventario = inventario;
-    }
     protected int getSize_t1() {
         return size_t1;
     }
@@ -41,10 +35,6 @@ public class Inventario {
     protected void setSize_t2(int size_t2) {
         this.size_t2 = size_t2;
     }
-
-    protected  int size(){return this.inventario.size();}
-
-    protected Collection<Palete> values(){return this.inventario.values();}
 
     protected HashMap<String, Pair> check_itens(ArrayList<String> lista){
         return new HashMap<>();
@@ -62,7 +52,21 @@ public class Inventario {
         return inventario.containsKey(codID);
     }
 
-    protected Inventario Clone() {
-        return new Inventario(this.getInventario(), this.size_t1, this.size_t2);
+    protected boolean contains(String s) {
+        return inventario.containsKey(s);
+    }
+
+    protected  int size(){return this.inventario.size();}
+
+    protected Collection<Palete> values(){return this.inventario.values();}
+
+    public Palete search(String s) {
+        Palete pal = null;
+        for(Palete p : inventario.values())
+            if(p.getConteudo().equals(s)) {
+                pal = new Palete(p);
+                break;
+            }
+        return pal;
     }
 }

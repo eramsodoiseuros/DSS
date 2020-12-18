@@ -69,7 +69,7 @@ public class View implements GUI {
         listView.getItems().addAll(
                 "Registar Gestor", "Eliminar Gestor", "Login de Gestor", "Painel de Robots",
                 "Entregas Ativas", "Requisições Ativas", "Requisições Feitas",
-                "Entregas Feitas", "Ler Código QR"
+                "Entregas Feitas", "Requisitar Palete", "Requisitar Entrega", "Ler Código QR"
         );
 
         listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -127,6 +127,14 @@ public class View implements GUI {
             c.painel_RF();
         }
 
+        if(s.equals("[Requisitar Palete]")){
+            make_window("Requisitar Palete", criar_req());
+        }
+
+        if(s.equals("[Requisitar Entrega]")){
+            make_window("Requisitar Entrega", criar_ent());
+        }
+
         if(s.equals("[Ler Código QR]")){
             make_window("A ler vários códigos QR", leitor_QR());
         }
@@ -140,7 +148,7 @@ public class View implements GUI {
 
         listView = new ListView<>();
         listView.getItems().addAll(
-                "Consultar Inventário", "Adicionar Requisição", "Adicionar Entrega",
+                "Consultar Inventário", "Aceitar Pedidos",
                 "Consultar Robots disponiveis", "Entregas Ativas", "Requisições Ativas",
                 "Requisições Feitas", "Entregas Feitas", "Consultar Listagem de Localizações"
         );
@@ -176,12 +184,8 @@ public class View implements GUI {
             make_window("Listagem de Localizações", painel_pedido(c.listagem()));
         }
 
-        if(s.equals("[Adicionar Requisição]")){
-            make_window("Criar Nova Requisição", criar_req());
-        }
-
-        if(s.equals("[Adicionar Entrega]")){
-            make_window("Criar Nova Entrega", criar_ent());
+        if(s.equals("[Aceitar Pedidos]")){
+            make_window("Pedidos não processados", menu_pedidos(c.lista_requisicoes(), c.lista_entregas(), c.parking()));
         }
 
         if(s.equals("[Consultar Robots disponiveis]")){
@@ -204,7 +208,6 @@ public class View implements GUI {
             c.painel_RF();
         }
     }
-
 
     private Scene registar_gestor() {
         VBox layout = new VBox(10);
@@ -312,6 +315,34 @@ public class View implements GUI {
 
         layout.getChildren().addAll(    );
         return new Scene(layout, 500, 500);
+    }
+
+    private Scene menu_pedidos(List<String> req, List<String> ent, int p) {
+        VBox layout = new VBox(10);
+        layout.setPadding(new Insets(20, 20, 20, 20));
+
+        Label lblUser = new Label("Parking disponivel: " + p);
+
+        ComboBox<String> cb = new ComboBox<>();
+        cb.getItems().addAll(req);
+        cb.setPromptText("Requisições a necessitar de aprovação: ");
+        cb.setOnAction(e -> {
+            String[] split = cb.getValue().split(" ", 8);
+            c.addRA(split[7]);
+            c.end_scene(e);
+        });
+
+        ComboBox<String> cb2 = new ComboBox<>();
+        cb2.getItems().addAll(ent);
+        cb2.setPromptText("Entregas a necessitar de aprovação: ");
+        cb2.setOnAction(e -> {
+            String[] split = cb2.getValue().split(" ", 8);
+            c.addEA(split[7]);
+            c.end_scene(e);
+        });
+
+        layout.getChildren().addAll(lblUser,cb, cb2);
+        return new Scene(layout, 400, 300);
     }
 
     private Scene criar_ent() {
