@@ -25,7 +25,7 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="8192cda7-80cf-48a7-a685-3f5d94ffb899">
-        <schema name="armazem" object-types="view, function, table, procedure" />
+        <schema name="armazem" object-types="procedure, function, view, table" />
       </connection>
     </loaded-nodes>
   </component>

@@ -7,9 +7,9 @@ import java.sql.SQLException;
 public final class BaseDados {
     private static Connection connection;
     private static String driver = "com.mysql.cj.jdbc.Driver";
-    private static String url = "jdbc:mysql://localhost:3306/Armazem";
-    private static String user = "root";
-    private static String password = "12345";
+    private static String url = "jdbc:mysql://dss2020.cbnnlyhvpnb7.eu-west-3.rds.amazonaws.com:3306/Armazem";
+    private static String user = "admin";
+    private static String password = "?dss2020";
 
     static {
         BaseDados.startConnection();

@@ -69,10 +69,10 @@ public class ControladorSessoes implements Controlador{
             int t = 1;
             String s1 = "P1";
             while(servidor.searchRA(s1) || servidor.searchRF(s1)){
-                s = "P" + t;
+                s1 = "P" + t;
                 t++;
             }
-            Requisicao r = new Requisicao(p,s);
+            Requisicao r = new Requisicao(p,s1);
             servidor.addRequisicao(r);
             aceitou();
         }
