@@ -90,11 +90,11 @@ public class GestorPedidos {
     }
 
     protected void addEntrega(Entrega e) {
-        System.out.println("NOTIFICAÇÃO DE MUDANÇA DE ESTADO: " + "E->" + e.codeID + "\\C->" + e.conteudo + " de momento está NÃO PROCESSADA.");
+        System.out.println("NOTIFICAÇÃO DE MUDANÇA DE ESTADO: " + "Entrega ->" + e.codeID + "     ||      C->" + e.conteudo + " de momento está NÃO PROCESSADA.");
         entrega.putIfAbsent(e.codeID,e);
     }
     protected void addRequisicao(Requisicao r) {
-        System.out.println("NOTIFICAÇÃO DE MUDANÇA DE ESTADO: " + "R->" + r.codeID + "\\C->" + r.conteudo + " de momento está NÃO PROCESSADA.");
+        UI.notifica("NOTIFICAÇÃO DE MUDANÇA DE ESTADO: " + "Requisição ->" + r.codeID + "     ||      C->" + r.conteudo + " de momento está NÃO PROCESSADA.");
         requisicoes.putIfAbsent(r.codeID, r);
     }
     protected void removeEntrega(String e) {
@@ -103,9 +103,7 @@ public class GestorPedidos {
         this.entrega.remove(e);
     }
     protected void removeRequisicao(String r) {
-        System.out.println(requisicoes_ATIVAS);
         this.requisicoes_ATIVAS.putIfAbsent(r, requisicoes.get(r));
-        System.out.println(requisicoes_ATIVAS);
         UI.notifica("NOTIFICAÇÃO DE MUDANÇA DE ESTADO: " + "R->" + r + "    ||      C->" + requisicoes.get(r).conteudo + " de momento está ATIVA.");
         this.requisicoes.remove(r);
     }
@@ -128,5 +126,12 @@ public class GestorPedidos {
     }
     protected boolean searchRF(String s) {
         return requisicoes_FEITAS.containsKey(s);
+    }
+
+    public Requisicao getRA(String s) {
+        return requisicoes_ATIVAS.get(s);
+    }
+    public Entrega getEA(String s) {
+        return entrega_ATIVAS.get(s);
     }
 }

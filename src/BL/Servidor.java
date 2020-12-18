@@ -10,7 +10,8 @@ import UI.UI;
 
 public class Servidor {
     private Map<String, Gestor> listaGestores;
-    private Map<String, Robot> robots;
+    private Map<String, Robot> robots_r; // par
+    private Map<String, Robot> robots_e; // impar
     private Inventario inventario;
     private GestorPedidos gestor_Pedidos;
     private Integer parking;
@@ -22,7 +23,8 @@ public class Servidor {
 
     public Servidor(){
         this.listaGestores = new HashMap<>();
-        this.robots = new HashMap<>();
+        this.robots_r = new HashMap<>();
+        this.robots_e = new HashMap<>();
         this.inventario = new Inventario();
         this.gestor_Pedidos = new GestorPedidos();
         this.parking = 2;
@@ -46,7 +48,13 @@ public class Servidor {
         }
 
         for (Robot r : RobotsDAO.getInstance().values()) {
-            robots.put(r.getCodeID(), r);
+            if( Integer.parseInt(r.getCodeID().substring(1,r.getCodeID().length())) % 2 != 0 ){
+                robots_e.put(r.getCodeID(), r);
+            }
+
+            if( Integer.parseInt(r.getCodeID().substring(1,r.getCodeID().length())) % 2 == 0 ){
+                robots_r.put(r.getCodeID(), r);
+            }
         }
 
         for (Palete p : InventarioDAO.getInstance().values()) {
@@ -75,12 +83,31 @@ public class Servidor {
 
         return new Robot();
     }
-    public List<Robot> robotsDisponiveis() {
+    public List<Robot> RobotsDisponiveis(Map<String, Robot> robots) {
         ArrayList<Robot> disponiveis = new ArrayList<>();
         for(Robot r : robots.values()){
             disponiveis.add(r.clone());
         }
         return disponiveis;
+    }
+
+
+    public void giveWork(Entrega e){
+        Robot wallie = getAvailable(robots_e);
+        Palete p = e.conteudo;
+        UI.notifica("O Robot " + wallie.getCodeID()
+                + " vai agora iniciar a recolha da Palete " + p.getCodID() + " na localização (0,1).");
+        // vai de (0,1) a (x,y)
+        gestor_Pedidos.removeEA(e.codeID);
+    }
+
+    public void giveWork(Requisicao r){
+        Robot wallie = getAvailable(robots_r);
+        Palete p = r.conteudo;
+        UI.notifica("O Robot " + wallie.getCodeID() + " vai agora iniciar a recolha da Palete "
+                + p.getCodID() + " na localização (" + p.getLocalizacao().x + ", " + p.getLocalizacao().y + ").");
+        // vai de (x,y) a (7,2)
+        gestor_Pedidos.removeRA(r.codeID);
     }
 
     public List<String> getEntAtivas(){
@@ -241,4 +268,10 @@ public class Servidor {
         return listaGestores.get(c);
     }
 
+    public Requisicao getRA(String s) {
+        return gestor_Pedidos.getRA(s);
+    }
+    public Entrega getEA(String s) {
+        return gestor_Pedidos.getEA(s);
+    }
 }

@@ -51,7 +51,6 @@ public class ControladorSessoes implements Controlador{
             }
             Entrega e = new Entrega(p,s1);
             servidor.addEntrega(e);
-            aceitou();
         }
     }
     public void addR(String s){
@@ -65,17 +64,18 @@ public class ControladorSessoes implements Controlador{
             }
             Requisicao r = new Requisicao(p,s1);
             servidor.addRequisicao(r);
-            aceitou();
         }
         else View.alert("ERRO", "Tentou requisitar algo não existente no armazem.");
     }
 
     public void addRA(String s) {
         servidor.removeRequisicao(s);
+        aceitou(servidor.getRA(s));
     }
 
     public void addEA(String s) {
         servidor.removeEntrega(s);
+        aceitou(servidor.getEA(s));
     }
 
     public List<String> inventario (){
@@ -97,8 +97,14 @@ public class ControladorSessoes implements Controlador{
     public int parking() {
         return servidor.getParking();
     }
-    public void aceitou() {
+    public void aceitou(Requisicao r) {
         servidor.minusSpot();
+        servidor.giveWork(r);
+        servidor.plusSpot();
+    }
+    public void aceitou(Entrega e) {
+        servidor.minusSpot();
+        servidor.giveWork(e);
         servidor.plusSpot();
     }
 

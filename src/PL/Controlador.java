@@ -79,11 +79,6 @@ public interface Controlador {
     /**
      * Função que
      * */
-    void aceitou();
-
-    /**
-     * Função que
-     * */
     List<String> getReqFeitas();
 
     /**
