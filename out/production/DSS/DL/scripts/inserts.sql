@@ -3,7 +3,7 @@ INSERT INTO `Armazem`.`Palete` (`codID`, `conteudo`, `refrigerado`, `Localizaça
 INSERT INTO `Armazem`.`Palete` (`codID`, `conteudo`, `refrigerado`, `LocalizaçaoX`, `LocalizaçaoY`) VALUES ('p3', 'CCC', 0, 0, 4);
 INSERT INTO `Armazem`.`Palete` (`codID`, `conteudo`, `refrigerado`, `LocalizaçaoX`, `LocalizaçaoY`) VALUES ('p4', 'DDD', 1, 5, 3);
 INSERT INTO `Armazem`.`Palete` (`codID`, `conteudo`, `refrigerado`, `LocalizaçaoX`, `LocalizaçaoY`) VALUES ('p5', 'EEE', 1, 5, 2);
-INSERT INTO `Armazem`.`Palete` (`codID`, `conteudo`, `refrigerado`, `LocalizaçaoX`, `LocalizaçaoY`) VALUES ('p6', 'FFF', 1, 0, 1);
+INSERT INTO `Armazem`.`Palete` (`codID`, `conteudo`, `refrigerado`, `LocalizaçaoX`, `LocalizaçaoY`) VALUES ('p6', 'FFF', 1, 0, 4);
 
 INSERT INTO `Armazem`.`Entrega` (`codID`, `palete`, `conteudo`) VALUES ('E1', 'p1', 'AAA');
 INSERT INTO `Armazem`.`Entrega` (`codID`, `palete`, `conteudo`) VALUES ('E2', 'p2', 'BBB');

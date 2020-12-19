@@ -59,6 +59,7 @@ public class Servidor {
 
         for (Palete p : InventarioDAO.getInstance().values()) {
             inventario.add(p);
+            addToMap(p);
         }
 
         for (Entrega e : EntregaDAO.getInstance().values()) {
@@ -69,6 +70,12 @@ public class Servidor {
             gestor_Pedidos.addRF(r);
         }
 
+    }
+
+    private void addToMap(Palete p) {
+        if(p.isArmazenado()){
+            mapa[p.getLocalizacao().x][p.getLocalizacao().y]++;
+        }
     }
 
     private Robot getAvailable(Map<String, Robot> robots){
@@ -90,24 +97,93 @@ public class Servidor {
         }
         return disponiveis;
     }
+    public Point getEspacoLivre(){
+        int i = 2;
+        Point pointReturn = new Point();
 
+        for(; i < 7; i++){
+            if (mapa[0][i] < 10 && mapa[0][i] >= 2) {
+                pointReturn.setLocation(0,i);
+                return pointReturn;
+            }
+        }
+
+        for(i = 2; i < 7; i++){
+            if (mapa[5][i] < 10 && mapa[5][i] >= 2) {
+                pointReturn.setLocation(5,i);
+                return pointReturn;
+            }
+        }
+
+        return pointReturn;
+    }
+    public Robot entregaPalete(Palete p, Robot robot) {
+
+        Point destino = getEspacoLivre();
+
+        boolean iniciado = false;
+        boolean entregou = false;
+
+        while (!iniciado) iniciado = robot.startWork(this.mapa);
+        while (!entregou) entregou = robot.andaParaPalete(mapa, destino.x, destino.y);
+
+        UI.notifica("O robot: " + robot.getCodeID() + " acabou de movimentar a Palete " + p.getCodID() + " e vai cessar atividade.");
+
+        p.setArmazenado(true);
+        p.setLocalizacao(destino);
+        if(mapa[destino.x][destino.y] > 2) mapa[destino.x][destino.y]++;
+        recolherRobo(robot);
+
+        return robot;
+    }
+    public Robot requisicaoPalete (Palete p, Robot r){
+        Point destino = p.getLocalizacao();
+        boolean temPalete = false;
+        boolean iniciado = false;
+        boolean entregouPalete = false;
+
+        while (!iniciado) iniciado = r.startWork(this.mapa);
+        while(!temPalete) temPalete = r.andaParaPalete(mapa, destino.x, destino.y);
+
+        if(mapa[destino.x][destino.y] > 2)mapa[destino.x][destino.y]--;
+        inventario.remove(p.getCodID());
+
+        while(!entregouPalete) entregouPalete = r.entregaPalete(mapa);
+        UI.notifica("O robot: " + r.getCodeID() + " acabou de movimentar a Palete " + p.getCodID() + " e vai cessar atividade.");
+        recolherRobo(r);
+
+        return r;
+    }
+
+    public void recolherRobo(Robot robot){
+        boolean voltou = false;
+        while (!voltou) voltou = robot.takeBreak(mapa);
+    }
 
     public void giveWork(Entrega e){
+        UI.print_mapa(mapa, 6, 8);
         Robot wallie = getAvailable(robots_e);
         Palete p = e.conteudo;
         UI.notifica("O Robot " + wallie.getCodeID()
                 + " vai agora iniciar a recolha da Palete " + p.getCodID() + " na localização (0,1).");
-        // vai de (0,1) a (x,y)
+
+        entregaPalete(p, wallie); // vai de (0,1) a (x,y)
+        InventarioDAO.getInstance().put(p);
         gestor_Pedidos.removeEA(e.codeID);
+        UI.print_mapa(mapa, 6, 8);
     }
 
     public void giveWork(Requisicao r){
+        UI.print_mapa(mapa, 6, 8);
         Robot wallie = getAvailable(robots_r);
         Palete p = r.conteudo;
         UI.notifica("O Robot " + wallie.getCodeID() + " vai agora iniciar a recolha da Palete "
                 + p.getCodID() + " na localização (" + p.getLocalizacao().x + ", " + p.getLocalizacao().y + ").");
-        // vai de (x,y) a (7,2)
+
+        requisicaoPalete (p, wallie); // vai de (x,y) a (7,2)
+        InventarioDAO.getInstance().remove(p.getCodID());
         gestor_Pedidos.removeRA(r.codeID);
+        UI.print_mapa(mapa, 6, 8);
     }
 
     public List<String> getEntAtivas(){
@@ -149,20 +225,6 @@ public class Servidor {
         GestorDAO.getInstance().put(g);
     }
 
-    public void removeRF(String codID){
-        this.gestor_Pedidos.removeRF(codID);
-        RequisicaoDAO.getInstance().remove(codID);
-    }
-    public void removeEF(String codID){
-        this.gestor_Pedidos.removeEF(codID);
-        EntregaDAO.getInstance().remove(codID);
-    }
-    public void removeRA(String codID){
-        this.gestor_Pedidos.removeRA(codID);
-    }
-    public void removeEA(String codID){
-        this.gestor_Pedidos.removeEA(codID);
-    }
     public void removeEntrega(String e){
         this.gestor_Pedidos.removeEntrega(e);
     }

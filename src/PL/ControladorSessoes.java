@@ -53,6 +53,7 @@ public class ControladorSessoes implements Controlador{
             servidor.addEntrega(e);
         }
     }
+
     public void addR(String s){
         Palete p = servidor.search(s);
         if(p != null && servidor.isParkingAvailable()){

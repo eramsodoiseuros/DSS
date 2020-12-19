@@ -66,7 +66,7 @@ public class Robot implements Dados<Robot>{
     public boolean takeBreak(Integer[][] mapa){
         boolean did_it  = false;
         if (getPosX() == 1 && getPosY() == 1){
-            moveState(mapa, 0, 1);
+            mapa[1][1] = 0;
             setAtivo(false);
             this.ordensFeitas++; //assumir que robot acaba ordem sempre que retorna ao estado default
             did_it = true;
@@ -98,6 +98,16 @@ public class Robot implements Dados<Robot>{
             setPos(newPosX,newPosY);
             UI.notifica("O Robot " + codeID + " está na posição (" + posX + ", " + posY + ").");
         }
+    }
+
+    //liga o robo para começar a trabalhar, se a posição inicial nao estiver ocupada
+    protected boolean startWork(Integer[][] mapa) {
+        if (mapa[1][1]!= 1){
+            setAtivo(true);
+            moveState(mapa, 1,1);
+            return true;
+        }
+        return false;
     }
 
     public String getCodeID() {
