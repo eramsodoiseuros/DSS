@@ -100,4 +100,6 @@ public interface Controlador {
     void addEA(String s);
 
     List<String> lista_robots();
+
+    void map();
 }

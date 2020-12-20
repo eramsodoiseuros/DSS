@@ -82,7 +82,6 @@ public class ControladorSessoes implements Controlador{
     public List<String> lista_robots() {
         return servidor.lista_robots();
     }
-
     public List<String> inventario (){
     return servidor.inventario();
     }
@@ -98,6 +97,7 @@ public class ControladorSessoes implements Controlador{
     public List<String> lista_entregas() {
         return servidor.listar_entregas();
     }
+    public void map(){servidor.print_map();}
 
     public int parking() {
         return servidor.getParking();

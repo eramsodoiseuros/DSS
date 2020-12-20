@@ -14,11 +14,13 @@ public class UI {
         List<String> linha = new ArrayList<>();
         for (int i = 0; i < l; i++){
             for(int j = 0; j < c; j++){
-                linha.add(mapa[i][j]+"");
+                if(mapa[i][j]==-1)
+                    linha.add("X");
+                else linha.add(mapa[i][j]+"");
             }
             System.out.println(linha);
             linha.removeAll(linha);
         }
     }
-    
+
 }

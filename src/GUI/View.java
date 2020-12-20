@@ -146,7 +146,9 @@ public class View implements GUI {
         listView.getItems().addAll(
                 "Consultar Inventário", "Aceitar Pedidos",
                 "Consultar Robots disponiveis", "Entregas Ativas", "Requisições Ativas",
-                "Requisições Feitas", "Entregas Feitas", "Consultar Listagem de Localizações"
+                "Requisições Feitas", "Entregas Feitas", "Consultar Listagem de Localizações",
+                "Consultar Mapa"
+
         );
 
         Button b1 = new Button("Escolher.");
@@ -200,6 +202,9 @@ public class View implements GUI {
 
         if(s.equals("[Requisições Feitas]")){
             painel_RF();
+        }
+        if(s.equals("[Consultar Mapa]")){
+            c.map();
         }
     }
 

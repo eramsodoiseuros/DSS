@@ -37,13 +37,13 @@ public class Servidor {
         for(int i = 0; i < tamanho_altura; i++)
             for(int j = 0; j < tamanho_lateral; j++){
                 if (j == 0) mapa[i][j] = -1;
-                if (j == 7) mapa[i][j] = -1;
-                if (j == 1 && (i == 0 || i == 5)) mapa[i][j] = -1;
-                if ((i==2 || i ==3) && j>= 2 && j <= 6) mapa[i][j] = -1;
+                else if (j == 7) mapa[i][j] = -1;
+                else if (j == 1 && (i == 0 || i == 5)) mapa[i][j] = -1;
+                else if ((i == 2 || i == 3) && j >= 2 && j < 6) mapa[i][j] = -1;
                 else mapa[i][j] = 0;
             }
-
-
+        mapa[0][1] = 0;
+        mapa[2][7] = 0;
         for(int a = 2; a <=6;a++ ) {
             mapa[0][a] = 2;
             mapa[5][a] = 2;
@@ -168,7 +168,6 @@ public class Servidor {
     }
 
     public void giveWork(Entrega e){
-        UI.print_mapa(mapa, 6, 8);
         Robot wallie = getAvailable(robots_e);
         Palete p = e.conteudo;
 
@@ -178,13 +177,11 @@ public class Servidor {
         entregaPalete(p, wallie); // vai de (0,1) a (x,y)
         InventarioDAO.getInstance().put(p);
         gestor_Pedidos.removeEA(e.codeID);
-        UI.print_mapa(mapa, 6, 8);
         RobotsDAO.getInstance().remove(wallie.getCodeID());
         RobotsDAO.getInstance().put(wallie);
     }
 
     public void giveWork(Requisicao r){
-        UI.print_mapa(mapa, 6, 8);
         Robot wallie = getAvailable(robots_r);
         Palete p = r.conteudo;
 
@@ -194,7 +191,6 @@ public class Servidor {
         requisicaoPalete (p, wallie); // vai de (x,y) a (7,2)
         InventarioDAO.getInstance().remove(p.getCodID());
         gestor_Pedidos.removeRA(r.codeID);
-        UI.print_mapa(mapa, 6, 8);
         RobotsDAO.getInstance().remove(wallie.getCodeID());
         RobotsDAO.getInstance().put(wallie);
     }
@@ -373,5 +369,10 @@ public class Servidor {
             disponiveis.add(r.toString());
         }
         return disponiveis;
+    }
+
+    public void print_map(){
+        UI.notifica("Mapa atual do armazem: ");
+        UI.print_mapa(mapa, 6, 8);
     }
 }
