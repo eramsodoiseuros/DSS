@@ -89,14 +89,14 @@ public class Robot implements Dados<Robot>{
     private void moveState(Integer[][] mapa, Integer newPosX, Integer newPosY){
         if (mapa[newPosX][newPosY] != 1){
             try {
-                Thread.sleep(500);
+                Thread.sleep(250);
             } catch (InterruptedException e) {
-                View.alert("ERRO", "O Robot falhou em ficar quito... Thread Interrupted.");
+                View.alert("ERRO", "O Robot falhou em ficar quieto... Thread Interrupted.");
             }
             mapa[getPosX()][getPosY()]  = 0;
             mapa[newPosX][newPosY]      = 1;
             setPos(newPosX,newPosY);
-            UI.notifica("O Robot " + codeID + " está na posição (" + posX + ", " + posY + ").");
+            // UI.notifica("O Robot " + codeID + " está na posição (" + posX + ", " + posY + ").");
         }
     }
 
@@ -135,25 +135,13 @@ public class Robot implements Dados<Robot>{
         setPosY(y);
     }
 
-    protected void setCodeID(String id) {
-        this.codeID = id;
-    }
-
     protected void setAtivo(Boolean ativo) {
         this.ativo = ativo;
     }
 
-    protected void setOrdensFeitas(Integer ordensFeitas) {
-        this.ordensFeitas = ordensFeitas;
-    }
-
     @Override
     public String toString() {
-        return "Robot{" +
-                "codeId='" + codeID + '\'' +
-                ", ativo=" + ativo +
-                ", ordensFeitas=" + ordensFeitas +
-                '}';
+        return "Robot:" + codeID + " -> já realizou " + ordensFeitas + " pedidos.";
     }
 
     public boolean equals(Robot robo){

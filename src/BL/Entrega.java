@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Entrega extends Pedido implements Dados<Entrega>{
-
+    // estado == ATIVA
     public String getCodID(){
         return codeID;
     }
@@ -16,14 +16,6 @@ public class Entrega extends Pedido implements Dados<Entrega>{
         this.codeID = codID;
         this.conteudo = p;
         this.estado = true;
-    }
-
-    public String toStingConteudoAtivas() {
-        return conteudo.toStringAtivas();
-    }
-
-    public String toStringConteudoFeitas() {
-        return conteudo.toStringFeitas();
     }
 
     public Entrega(){
@@ -39,7 +31,6 @@ public class Entrega extends Pedido implements Dados<Entrega>{
         return conteudo;
     }
 
-    @Override
     boolean estado() {
         this.estado = !this.estado;
         return this.estado;
@@ -55,5 +46,13 @@ public class Entrega extends Pedido implements Dados<Entrega>{
         r.add(conteudo.getCodID());
         r.add(conteudo.conteudo());
         return r;
+    }
+
+    public String toStingConteudoAtivas() {
+        return conteudo.toStringAtivas();
+    }
+
+    public String toStringConteudoFeitas() {
+        return conteudo.toStringFeitas();
     }
 }

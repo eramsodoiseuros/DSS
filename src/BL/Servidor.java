@@ -97,6 +97,7 @@ public class Servidor {
         }
         return disponiveis;
     }
+
     public Point getEspacoLivre(){
         int i = 2;
         Point pointReturn = new Point();
@@ -164,6 +165,7 @@ public class Servidor {
         UI.print_mapa(mapa, 6, 8);
         Robot wallie = getAvailable(robots_e);
         Palete p = e.conteudo;
+
         UI.notifica("O Robot " + wallie.getCodeID()
                 + " vai agora iniciar a recolha da Palete " + p.getCodID() + " na localização (0,1).");
 
@@ -171,12 +173,15 @@ public class Servidor {
         InventarioDAO.getInstance().put(p);
         gestor_Pedidos.removeEA(e.codeID);
         UI.print_mapa(mapa, 6, 8);
+        RobotsDAO.getInstance().remove(wallie.getCodeID());
+        RobotsDAO.getInstance().put(wallie);
     }
 
     public void giveWork(Requisicao r){
         UI.print_mapa(mapa, 6, 8);
         Robot wallie = getAvailable(robots_r);
         Palete p = r.conteudo;
+
         UI.notifica("O Robot " + wallie.getCodeID() + " vai agora iniciar a recolha da Palete "
                 + p.getCodID() + " na localização (" + p.getLocalizacao().x + ", " + p.getLocalizacao().y + ").");
 
@@ -184,6 +189,8 @@ public class Servidor {
         InventarioDAO.getInstance().remove(p.getCodID());
         gestor_Pedidos.removeRA(r.codeID);
         UI.print_mapa(mapa, 6, 8);
+        RobotsDAO.getInstance().remove(wallie.getCodeID());
+        RobotsDAO.getInstance().put(wallie);
     }
 
     public List<String> getEntAtivas(){
@@ -213,6 +220,18 @@ public class Servidor {
         for (Requisicao r : rl)
             s.add(gestor_Pedidos.ReqToStringAtivas(r));
         return s;
+    }
+    public List<String> RobotsDisponiveis() {
+        ArrayList<String> disponiveis = new ArrayList<>();
+        for(Robot r : robots_r.values()){
+            if(!r.getAtivo())
+                disponiveis.add(r.toString());
+        }
+        for(Robot r : robots_e.values()){
+            if(!r.getAtivo())
+                disponiveis.add(r.toString());
+        }
+        return disponiveis;
     }
 
     public void removeGestor (String codID){
@@ -337,5 +356,16 @@ public class Servidor {
     }
     public Entrega getEA(String s) {
         return gestor_Pedidos.getEA(s);
+    }
+
+    public List<String> lista_robots() {
+        ArrayList<String> disponiveis = new ArrayList<>();
+        for(Robot r : robots_r.values()){
+            disponiveis.add(r.toString());
+        }
+        for(Robot r : robots_e.values()){
+            disponiveis.add(r.toString());
+        }
+        return disponiveis;
     }
 }

@@ -79,6 +79,10 @@ public class ControladorSessoes implements Controlador{
         aceitou(servidor.getEA(s));
     }
 
+    public List<String> lista_robots() {
+        return servidor.lista_robots();
+    }
+
     public List<String> inventario (){
     return servidor.inventario();
     }
@@ -86,7 +90,7 @@ public class ControladorSessoes implements Controlador{
         return servidor.listagem();
     }
     public List<String> robots() {
-        return null;
+        return servidor.RobotsDisponiveis();
     }
     public List<String> lista_requisicoes() {
         return servidor.listar_requisicoes();

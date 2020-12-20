@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UI {
+
     public static void notifica(String texto) {
         System.out.println(texto);
     }
@@ -19,4 +20,5 @@ public class UI {
             linha.removeAll(linha);
         }
     }
+    
 }

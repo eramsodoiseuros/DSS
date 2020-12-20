@@ -20,12 +20,6 @@ public interface GUI {
      * */
     Scene painel_pedido(List<String> lista);
 
-    /**
-     * Função que gera a Scene JavaFX representativa do
-     * @return Scene repesentativa do
-     * */
-    Scene painel_robot();
-
     Scene painel_gestor(String codID);
 
 }

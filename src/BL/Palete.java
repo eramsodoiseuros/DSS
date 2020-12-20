@@ -13,17 +13,8 @@ public class Palete implements Dados<Palete> {
     private String codeID;
     private Point localizacao;
 
-    protected boolean isRefrigerado() {
-        return refrigerado;
-    }
-    protected void setRefrigerado(boolean refrigerado) {
-        this.refrigerado = refrigerado;
-    }
     protected String getConteudo() {
         return conteudo;
-    }
-    protected void setConteudo(String conteudo) {
-        this.conteudo = conteudo;
     }
     protected boolean isArmazenado() {
         return armazenado;
@@ -34,11 +25,7 @@ public class Palete implements Dados<Palete> {
     public String getCodID() {
         return codeID;
     }
-    protected void setCodID(String codID) {
-        this.codeID = codID;
-    }
     protected void setLocalizacao(Point l) {this.localizacao = l;}
-
     protected Point getLocalizacao(){return this.localizacao;}
 
     protected Palete(boolean refrigerado, String conteudo, String codID) {

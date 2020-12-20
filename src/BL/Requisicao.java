@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Requisicao extends Pedido implements Dados<Requisicao> {
-
+    // estado == ATIVA
     public String getCodID(){
         return codeID;
     }
@@ -26,19 +26,10 @@ public class Requisicao extends Pedido implements Dados<Requisicao> {
 
     public Requisicao(List<String> l){
         this.codeID = l.get(0);
-        boolean preencheu = false;
-        for(Palete p : InventarioDAO.getInstance().values()) {
-            if (p.getConteudo().equals(l.get(1))) {
-                this.conteudo = new Palete(p);
-                preencheu = true;
-                break;
-            }
-        }
-        if(!preencheu) View.alert("ERRO", "Requisição inválida");
+        this.conteudo = new Palete("palete_outOfStock",l.get(1));
         this.estado = false;
     }
 
-    @Override
     boolean estado() {
         this.estado = !this.estado;
         return this.estado;
@@ -55,9 +46,11 @@ public class Requisicao extends Pedido implements Dados<Requisicao> {
         return r;
     }
 
-    public String toStingConteudoAtivas() { return conteudo.toStringAtivas();
+    public String toStingConteudoAtivas() {
+        return conteudo.toStringAtivas();
     }
 
-    public String toStringConteudoFeitas() { return conteudo.toStringFeitas();
+    public String toStringConteudoFeitas() {
+        return conteudo.toStringFeitas();
     }
 }

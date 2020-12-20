@@ -30,11 +30,6 @@ public class View implements GUI {
         c = new ControladorSessoes();
     }
 
-    public View(int it){
-        listView = new ListView<>();
-        listView.getItems().addAll("a");
-    }
-
     public static void make_window(String title, Scene s){
         Stage w = new Stage();
         w.setTitle(title);
@@ -110,7 +105,7 @@ public class View implements GUI {
         }
 
         if(s.equals("[Painel de Robots]")){
-            make_window("Painel das Requisições Feitas", painel_robot());
+            make_window("Painel das Requisições Feitas", painel_pedido(c.lista_robots()));
         }
 
         if(s.equals("[Entregas Ativas]")){
@@ -287,11 +282,6 @@ public class View implements GUI {
 
         layout.getChildren().addAll(lblUser, usertxt, lblPassword, passwordtxt, b);
         return new Scene(layout, 500, 400);
-    }
-
-    @Override
-    public Scene painel_robot() {
-        return null;
     }
 
     @Override

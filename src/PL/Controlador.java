@@ -98,4 +98,6 @@ public interface Controlador {
 
     void addRA(String s);
     void addEA(String s);
+
+    List<String> lista_robots();
 }
