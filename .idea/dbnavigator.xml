@@ -23,11 +23,7 @@
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
-    <loaded-nodes>
-      <connection connection-id="8192cda7-80cf-48a7-a685-3f5d94ffb899">
-        <schema name="armazem" object-types="procedure, function, view, table" />
-      </connection>
-    </loaded-nodes>
+    <loaded-nodes />
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="8192cda7-80cf-48a7-a685-3f5d94ffb899">
