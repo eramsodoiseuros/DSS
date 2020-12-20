@@ -96,13 +96,6 @@ public class Servidor {
 
         return new Robot();
     }
-    public List<Robot> RobotsDisponiveis(Map<String, Robot> robots) {
-        ArrayList<Robot> disponiveis = new ArrayList<>();
-        for(Robot r : robots.values()){
-            disponiveis.add(r.clone());
-        }
-        return disponiveis;
-    }
 
     public Point getEspacoLivre(){
         int i = 2;

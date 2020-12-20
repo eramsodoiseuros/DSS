@@ -1,3 +1,8 @@
+truncate table Palete;
+truncate table Gestor;
+truncate table Entrega;
+truncate table Requisicao;
+truncate table Robots;
 INSERT INTO `Armazem`.`Palete` (`codID`, `conteudo`, `refrigerado`, `LocalizaçaoX`, `LocalizaçaoY`) VALUES ('p1', 'AAA', 0, 0, 2);
 INSERT INTO `Armazem`.`Palete` (`codID`, `conteudo`, `refrigerado`, `LocalizaçaoX`, `LocalizaçaoY`) VALUES ('p2', 'BBB', 0, 0, 3);
 INSERT INTO `Armazem`.`Palete` (`codID`, `conteudo`, `refrigerado`, `LocalizaçaoX`, `LocalizaçaoY`) VALUES ('p3', 'CCC', 0, 0, 4);
