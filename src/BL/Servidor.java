@@ -35,8 +35,14 @@ public class Servidor {
         tamanho_altura = 6;
         this.mapa = new Integer[tamanho_altura][tamanho_lateral];
         for(int i = 0; i < tamanho_altura; i++)
-            for(int j = 0; j < tamanho_lateral; j++)
-                mapa[i][j] = 0;
+            for(int j = 0; j < tamanho_lateral; j++){
+                if (j == 0) mapa[i][j] = -1;
+                if (j == 7) mapa[i][j] = -1;
+                if (j == 1 && (i == 0 || i == 5)) mapa[i][j] = -1;
+                if ((i==2 || i ==3) && j>= 2 && j <= 6) mapa[i][j] = -1;
+                else mapa[i][j] = 0;
+            }
+
 
         for(int a = 2; a <=6;a++ ) {
             mapa[0][a] = 2;
