@@ -87,6 +87,10 @@ public class Palete implements Dados<Palete> {
         return "Palete: - " + codeID + " - " + toStringLocalizacao(localizacao) + " - " + conteudo;
     }
 
+    public String toStringEF(){
+        return "Palete: - " + codeID + " - " + conteudo;
+    }
+
     public String toStringListagem(){
         return "Palete: - " + codeID + " - " + toStringLocalizacao(localizacao);
     }

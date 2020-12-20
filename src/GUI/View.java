@@ -65,7 +65,7 @@ public class View implements GUI {
         listView.getItems().addAll(
                 "Registar Gestor", "Eliminar Gestor", "Login de Gestor", "Painel de Robots",
                 "Entregas Ativas", "Requisições Ativas", "Requisições Feitas",
-                "Entregas Feitas", "Requisitar Palete", "Requisitar Entrega", "Ler Código QR"
+                "Entregas Feitas", "Requisitar Palete", "Requisitar Entrega", "Correr X"
         );
 
         listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -132,8 +132,8 @@ public class View implements GUI {
             make_window("Requisitar Entrega", criar_ent());
         }
 
-        if(s.equals("[Ler Código QR]")){
-            make_window("A ler vários códigos QR", leitor_QR());
+        if(s.equals("[Correr X]")){
+            make_window("RUNNING", correr_X());
         }
     }
 
@@ -301,13 +301,34 @@ public class View implements GUI {
         return new Scene(layout, 600, 500);
     }
 
-    private Scene leitor_QR() {
+    private Scene correr_X() {
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(20, 20, 20, 20));
 
+        usertxt = new TextField();
+        Label lbl1 = new Label("Número de Entregas: ");
 
+        txt = new TextField();
+        Label lbl2 = new Label("Número de Requisições: ");
 
-        layout.getChildren().addAll(    );
+        Button b = new Button("Processar.");
+        b.setOnAction(e -> {
+            String ent = usertxt.getText();
+            String req = txt.getText();
+
+            if(Integer.parseInt(ent) < 0) alert("ERRO", "Precisa de inserir um número positivo.");
+            if(Integer.parseInt(req) < 0) alert("ERRO", "Precisa de inserir um número positivo.");
+
+            int e1 = Integer.parseInt(ent);
+            int r1 = Integer.parseInt(req);
+
+            if(e1 >= 0 && r1 >= 0){
+                c.both(e1,r1);
+            } else alert("ERRO", "Erro ao inserir números inteiros positivos.");
+            c.end_scene(e);
+        });
+
+        layout.getChildren().addAll(lbl1, usertxt, lbl2, txt, b);
         return new Scene(layout, 500, 500);
     }
 
@@ -360,7 +381,6 @@ public class View implements GUI {
         layout.getChildren().addAll(lblNome, txt, b);
         return new Scene(layout, 500, 400);
     }
-
     private Scene criar_req() {
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(20, 20, 20, 20));
@@ -386,20 +406,16 @@ public class View implements GUI {
     public void painel_EA(){
         make_window("Painel das Entregas Ativas", painel_pedido(c.getEntAtivas()));
     }
-
     public void painel_EF(){
         make_window("Painel das Entregas Feitas", painel_pedido(c.getEntFeitas()));
     }
-
     public void painel_RA(){
         make_window("Painel das Requisições Ativas", painel_pedido(c.getReqAtivas()));
     }
-
     public void painel_RF(){
         make_window("Painel das Requisições Feitas", painel_pedido(c.getReqFeitas()));
     }
-
-    public void logInGestor(String codID, String pwd) {
+    public void logInGestor(String codID, String pwd){
         if(c.iniciaSessao(codID, pwd)){
             View.make_window("Menu do Gestor", painel_gestor(codID));
         } else View.alert("ERRO", "Falha ao iniciar a sessão, verifique os seus dados.");

@@ -53,6 +53,6 @@ public class Entrega extends Pedido implements Dados<Entrega>{
     }
 
     public String toStringConteudoFeitas() {
-        return conteudo.toStringFeitas();
+        return conteudo.toStringEF();
     }
 }

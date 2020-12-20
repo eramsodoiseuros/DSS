@@ -3,6 +3,8 @@ package BL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Inventario {
 
@@ -36,10 +38,6 @@ public class Inventario {
         this.size_t2 = size_t2;
     }
 
-    protected HashMap<String, Pair> check_itens(ArrayList<String> lista){
-        return new HashMap<>();
-    }
-
     protected void add(Palete p){
         this.inventario.putIfAbsent(p.getCodID(),p);
     }
@@ -67,5 +65,9 @@ public class Inventario {
                 return p;
             }
         return pal;
+    }
+
+    protected List<Palete> listar(int n){
+        return inventario.values().stream().limit(n).collect(Collectors.toList());
     }
 }

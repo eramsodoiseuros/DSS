@@ -113,6 +113,10 @@ public class ControladorSessoes implements Controlador{
         servidor.plusSpot();
     }
 
+    public void both(int e, int r){
+        servidor.run_both(e,r);
+    }
+
     public List<String> getReqFeitas() {
         return servidor.getReqFeitas();
     }

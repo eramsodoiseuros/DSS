@@ -96,7 +96,7 @@ public class Robot implements Dados<Robot>{
             mapa[getPosX()][getPosY()]  = 0;
             mapa[newPosX][newPosY]      = 1;
             setPos(newPosX,newPosY);
-            // UI.notifica("O Robot " + codeID + " está na posição (" + posX + ", " + posY + ").");
+            UI.notifica("|->" + codeID + " está na posição (" + posX + ", " + posY + ").");
         }
     }
 

@@ -167,34 +167,6 @@ public class Servidor {
         while (!voltou) voltou = robot.takeBreak(mapa);
     }
 
-    public void giveWork(Entrega e){
-        Robot wallie = getAvailable(robots_e);
-        Palete p = e.conteudo;
-
-        UI.notifica("O Robot " + wallie.getCodeID()
-                + " vai agora iniciar a recolha da Palete " + p.getCodID() + " na localização (0,1).");
-
-        entregaPalete(p, wallie); // vai de (0,1) a (x,y)
-        InventarioDAO.getInstance().put(p);
-        gestor_Pedidos.removeEA(e.codeID);
-        RobotsDAO.getInstance().remove(wallie.getCodeID());
-        RobotsDAO.getInstance().put(wallie);
-    }
-
-    public void giveWork(Requisicao r){
-        Robot wallie = getAvailable(robots_r);
-        Palete p = r.conteudo;
-
-        UI.notifica("O Robot " + wallie.getCodeID() + " vai agora iniciar a recolha da Palete "
-                + p.getCodID() + " na localização (" + p.getLocalizacao().x + ", " + p.getLocalizacao().y + ").");
-
-        requisicaoPalete (p, wallie); // vai de (x,y) a (7,2)
-        InventarioDAO.getInstance().remove(p.getCodID());
-        gestor_Pedidos.removeRA(r.codeID);
-        RobotsDAO.getInstance().remove(wallie.getCodeID());
-        RobotsDAO.getInstance().put(wallie);
-    }
-
     public List<String> getEntAtivas(){
          ArrayList<Entrega> el = gestor_Pedidos.listaEntrega_ATIVAS();
          List<String> s = new ArrayList<>();
@@ -323,33 +295,33 @@ public class Servidor {
         return s;
     }
 
-    public Palete search(String s) {
+    public Palete search(String s){
         return inventario.search(s);
     }
 
-    public boolean searchEA(String codID) {
+    public boolean searchEA(String codID){
         return gestor_Pedidos.searchEA(codID);
     }
-    public boolean searchEF(String codID) {
+    public boolean searchEF(String codID){
         return gestor_Pedidos.searchEF(codID);
     }
-    public boolean searchRA(String s) {
+    public boolean searchRA(String s){
         return gestor_Pedidos.searchRA(s);
     }
-    public boolean searchRF(String s) {
+    public boolean searchRF(String s){
         return gestor_Pedidos.searchRF(s);
     }
 
-    public boolean containsGestor(String codID) {
+    public boolean containsGestor(String codID){
         return listaGestores.containsKey(codID);
     }
-    public String getGP(String s) {
+    public String getGP(String s){
         return listaGestores.get(s).getPassword();
     }
-    public boolean getGO(String s) {
+    public boolean getGO(String s){
         return listaGestores.get(s).getOnline();
     }
-    public Gestor getGestor(String c) {
+    public Gestor getGestor(String c){
         return listaGestores.get(c);
     }
 
@@ -370,9 +342,132 @@ public class Servidor {
         }
         return disponiveis;
     }
-
     public void print_map(){
         UI.notifica("Mapa atual do armazem: ");
         UI.print_mapa(mapa, 6, 8);
     }
+    private List<Palete> getNPaletes(int n) {
+        List<Palete> lista = inventario.listar(n);
+        return lista;
+    }
+
+    private List<Entrega> automatico_e(int n){
+        List<Entrega> eL = new ArrayList<>();
+        List<String> lista = new ArrayList<>(Automatico.create(n));
+        int t = 1;
+
+        String s1 = "E1";
+
+        while (searchEA(s1) || searchEF(s1)) {
+            s1 = "E" + t;
+            t++;
+        }
+
+        for(int i = 0; i < n; i++) {
+            Palete p = criaPalete(lista.get(i));
+            String s2 = "E" + t;
+            t++;
+            eL.add(new Entrega(p, s2));
+        }
+        return eL;
+    }
+
+    private List<Requisicao> automatico_r(int n){
+        List<Requisicao> rL = new ArrayList<>();
+        List<Palete> lista = getNPaletes(n);
+        int t = 1;
+        String s1 = "P1";
+        while(searchRA(s1) || searchRF(s1)){
+            s1 = "P" + t;
+            t++;
+        }
+
+        for(int i = 0; i < n; i++){
+            String s2 = "P" + t;
+            t++;
+            rL.add(new Requisicao(lista.get(i),s2));
+        }
+
+        return rL;
+    }
+
+    public void giveWork(Entrega e){
+        Robot wallie = getAvailable(robots_e);
+        Palete p = e.conteudo;
+
+        UI.notifica("O Robot " + wallie.getCodeID()
+                + " vai agora iniciar a recolha da Palete " + p.getCodID() + " na localização (0,1).");
+
+        entregaPalete(p, wallie); // vai de (0,1) a (x,y)
+        InventarioDAO.getInstance().put(p);
+        gestor_Pedidos.removeEA(e.codeID);
+        RobotsDAO.getInstance().remove(wallie.getCodeID());
+        RobotsDAO.getInstance().put(wallie);
+    }
+
+    public void giveWork(Requisicao r){
+        Robot wallie = getAvailable(robots_r);
+        Palete p = r.conteudo;
+
+        UI.notifica("O Robot " + wallie.getCodeID() + " vai agora iniciar a recolha da Palete "
+                + p.getCodID() + " na localização (" + p.getLocalizacao().x + ", " + p.getLocalizacao().y + ").");
+
+        requisicaoPalete (p, wallie); // vai de (x,y) a (7,2)
+        InventarioDAO.getInstance().remove(p.getCodID());
+        gestor_Pedidos.removeRA(r.codeID);
+        RobotsDAO.getInstance().remove(wallie.getCodeID());
+        RobotsDAO.getInstance().put(wallie);
+    }
+
+    public Robot run_r(Palete p, Robot wallie){
+        UI.notifica("O Robot " + wallie.getCodeID() + " vai agora iniciar a recolha da Palete "
+                + p.getCodID() + " na localização (" + p.getLocalizacao().x + ", " + p.getLocalizacao().y + ").");
+
+        requisicaoPalete (p, wallie); // vai de (x,y) a (7,2)
+        InventarioDAO.getInstance().remove(p.getCodID());
+        RobotsDAO.getInstance().remove(wallie.getCodeID());
+        RobotsDAO.getInstance().put(wallie);
+
+        return wallie;
+    }
+
+    public Robot run_e(Palete p, Robot wallie){
+        UI.notifica("O Robot " + wallie.getCodeID()
+                + " vai agora iniciar a recolha da Palete " + p.getCodID() + " na localização (0,1).");
+
+        entregaPalete(p, wallie); // vai de (0,1) a (x,y)
+        InventarioDAO.getInstance().put(p);
+        RobotsDAO.getInstance().remove(wallie.getCodeID());
+        RobotsDAO.getInstance().put(wallie);
+
+        return wallie;
+    }
+
+    public void run_both(int e, int r){
+        List<Entrega> lista_e = automatico_e(e);
+        List<Requisicao> lista_r  = automatico_r(r);
+        int paletesPorMover = lista_r.size()+lista_e.size();
+        robosEmProgresso.removeIf(Future::isDone);
+
+        while(paletesPorMover > 0 && RobotsDisponiveis() != null) {
+            if (lista_e.size() > 0 && RobotsDisponiveis() != null) {
+                Entrega ne = lista_e.get(0);
+                Future<Robot> futureTask = threadpool.submit(() -> run_e(lista_e.get(0).conteudo, getAvailable(robots_e)));
+                EntregaDAO.getInstance().put(ne);
+                lista_e.remove(0);
+                paletesPorMover--;
+                robosEmProgresso.add(futureTask);
+            }
+
+            if (lista_r.size() > 0 && RobotsDisponiveis() != null) {
+                Requisicao nr = lista_r.get(0);
+                Future<Robot> futureTask = threadpool.submit(() -> run_r(lista_r.get(0).conteudo, getAvailable(robots_r)));
+                RequisicaoDAO.getInstance().put(nr);
+                lista_r.remove(0);
+                paletesPorMover--;
+                robosEmProgresso.add(futureTask);
+            }
+        }
+    }
+
 }

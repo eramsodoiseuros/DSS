@@ -102,4 +102,6 @@ public interface Controlador {
     List<String> lista_robots();
 
     void map();
+
+    void both(int e1, int r1);
 }
