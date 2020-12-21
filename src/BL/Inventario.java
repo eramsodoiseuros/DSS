@@ -24,7 +24,6 @@ public class Inventario {
         this.size_t2 = size_t2;
     }
 
-
     protected int getSize_t1() {
         return size_t1;
     }

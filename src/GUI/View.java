@@ -315,16 +315,17 @@ public class View implements GUI {
         b.setOnAction(e -> {
             String ent = usertxt.getText();
             String req = txt.getText();
+            try{
+                int e1 = Integer.parseInt(ent);
+                int r1 = Integer.parseInt(req);
 
-            if(Integer.parseInt(ent) < 0) alert("ERRO", "Precisa de inserir um número positivo.");
-            if(Integer.parseInt(req) < 0) alert("ERRO", "Precisa de inserir um número positivo.");
+                if(e1 >= 0 && r1 >= 0){
+                    c.both(e1,r1);
+                } else alert("ERRO", "Erro ao inserir números inteiros positivos.");
+            } catch (NumberFormatException exception){
+                alert("ERRO", "Precisa de inserir um número positivo.");
+            }
 
-            int e1 = Integer.parseInt(ent);
-            int r1 = Integer.parseInt(req);
-
-            if(e1 >= 0 && r1 >= 0){
-                c.both(e1,r1);
-            } else alert("ERRO", "Erro ao inserir números inteiros positivos.");
             c.end_scene(e);
         });
 

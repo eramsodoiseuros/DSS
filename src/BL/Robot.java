@@ -116,7 +116,7 @@ public class Robot implements Dados<Robot>{
         return ativo;
     }
 
-    protected Integer getOrdensFeitas() {
+    public Integer getOrdensFeitas() {
         return ordensFeitas;
     }
 

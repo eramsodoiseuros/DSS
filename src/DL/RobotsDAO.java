@@ -3,10 +3,11 @@ package DL;
 import BL.Gestor;
 import BL.Robot;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.PriorityQueue;
-import java.util.Set;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
 
 public class RobotsDAO extends DataAcessObject<String, Robot>{
     private static RobotsDAO singleton = new RobotsDAO();
@@ -41,5 +42,25 @@ public class RobotsDAO extends DataAcessObject<String, Robot>{
 
     public Set<Robot> search(final String value) {
         return super.search(value, 0);
+    }
+
+    public void update(final Robot r) {
+        Connection connection = BaseDados.getConnection();
+        final String UPDATE = "UPDATE Robots SET codID=?, ordens_feitas=? WHERE ordens_feitas=?";
+
+        try {
+
+            PreparedStatement ps = connection.prepareStatement(UPDATE);
+
+            ps.setString(1, r.getCodeID());
+            ps.setInt(2, r.getOrdensFeitas()+1);
+
+            ps.executeUpdate();
+            ps.close();
+
+        } catch (SQLException e) {
+            //e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 }

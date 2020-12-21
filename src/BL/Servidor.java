@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import DL.*;
 import Exceptions.E404Exception;
+import GUI.View;
 import UI.UI;
 
 public class Servidor {
@@ -22,6 +23,7 @@ public class Servidor {
     private int tamanho_altura;
     private ExecutorService threadpool;
     private ArrayList<Future<Robot>> robosEmProgresso;
+    private final int N_MAX = 10;
 
     public Servidor(){
         this.listaGestores = new TreeMap<>();
@@ -99,20 +101,25 @@ public class Servidor {
 
         return new Robot();
     }
-
     public Point getEspacoLivre(){
         int i = 2;
         Point pointReturn = new Point();
 
         for(; i < 7; i++){
-            if (mapa[0][i] < 10 && mapa[0][i] >= 2) {
+            if (mapa[0][i] < N_MAX && mapa[0][i] >= 2) {
+                if(mapa[0][i]+1 > N_MAX)
+                    return where(0,i);
+                mapa[0][i]++;
                 pointReturn.setLocation(0,i);
                 return pointReturn;
             }
         }
 
         for(i = 2; i < 7; i++){
-            if (mapa[5][i] < 10 && mapa[5][i] >= 2) {
+            if (mapa[5][i] < N_MAX && mapa[5][i] >= 2) {
+                if(mapa[5][i]+1 > N_MAX)
+                    return where(5,i);
+                mapa[5][i]++;
                 pointReturn.setLocation(5,i);
                 return pointReturn;
             }
@@ -120,7 +127,19 @@ public class Servidor {
 
         return pointReturn;
     }
-
+    public Point where(int x, int y){
+        if(mapa[x][y]+1 > N_MAX){
+            return where(x,y+1);
+        }
+        else if(x == 0 && y == 6){
+            return where(5,2);
+        }
+        else{
+            Point p = new Point();
+            p.setLocation(x,y);
+            return p;
+        }
+    }
     public List<String> getEntAtivas(){
          ArrayList<Entrega> el = gestor_Pedidos.listaEntrega_ATIVAS();
          List<String> s = new ArrayList<>();
@@ -309,7 +328,10 @@ public class Servidor {
         return lista;
     }
 
-    private List<Entrega> automatico_e(int n){
+    private List<Entrega> automatico_e(int n) throws E404Exception{
+        if(inventario.size() == 60 && inventario.size()+n > 60){
+            throw new E404Exception("ERRO", "Não há espaço no Inventário, é impossivel Entregar Paletes de momento.");
+        }
         List<Entrega> eL = new ArrayList<>();
         List<String> lista = new ArrayList<>(Automatico.create(n));
         int t = 1;
@@ -317,15 +339,15 @@ public class Servidor {
         String s1 = "E1";
 
         while (searchEA(s1) || searchEF(s1)) {
-            s1 = "E" + t;
             t++;
+            s1 = "E" + t;
         }
 
         for(int i = 0; i < n; i++) {
             Palete p = criaPalete(lista.get(i));
-            String s2 = "E" + t;
+            eL.add(new Entrega(p, s1));
             t++;
-            eL.add(new Entrega(p, s2));
+            s1 = "E" + t;
         }
         return eL;
     }
@@ -333,20 +355,20 @@ public class Servidor {
     private List<Requisicao> automatico_r(int n) throws E404Exception, IndexOutOfBoundsException  {
         List<Requisicao> rL = new ArrayList<>();
         List<Palete> lista = getNPaletes(n);
-        if(lista.size() == 0){
+        if(lista.size() == 0 && n > 0){
             throw new E404Exception("ERRO", "Não há nenhuma palete no Inventário, é impossivel criar Requisições de momento.");
         }
         int t = 1;
-        String s1 = "P1";
+        String s1 = "R1";
         while(searchRA(s1) || searchRF(s1)){
-            s1 = "P" + t;
             t++;
+            s1 = "R" + t;
         }
 
         for(int i = 0; i < n; i++){
-            String s2 = "P" + t;
+            rL.add(new Requisicao(lista.get(i),s1));
             t++;
-            rL.add(new Requisicao(lista.get(i),s2));
+            s1 = "R" + t;
         }
 
         return rL;
@@ -357,13 +379,12 @@ public class Servidor {
         Palete p = e.conteudo;
 
         UI.notifica("O Robot " + wallie.getCodeID()
-                + " vai agora iniciar a recolha da Palete " + p.getCodID() + " na localização (0,1).");
+                + " vai agora iniciar a recolha da Palete " + p.getCodID() + " na localização (1,0).");
 
         entregaPalete(p, wallie); // vai de (0,1) a (x,y)
         InventarioDAO.getInstance().put(p);
         gestor_Pedidos.removeEA(e.codeID);
-        RobotsDAO.getInstance().remove(wallie.getCodeID());
-        RobotsDAO.getInstance().put(wallie);
+        RobotsDAO.getInstance().update(wallie);
     }
 
     public void giveWork(Requisicao r){
@@ -376,8 +397,7 @@ public class Servidor {
         requisicaoPalete (p, wallie); // vai de (x,y) a (7,2)
         InventarioDAO.getInstance().remove(p.getCodID());
         gestor_Pedidos.removeRA(r.codeID);
-        RobotsDAO.getInstance().remove(wallie.getCodeID());
-        RobotsDAO.getInstance().put(wallie);
+        RobotsDAO.getInstance().update(wallie);
     }
 
     public Robot run_r(Palete p, Robot wallie){
@@ -386,26 +406,62 @@ public class Servidor {
 
         requisicaoPalete (p, wallie); // vai de (x,y) a (7,2)
         InventarioDAO.getInstance().remove(p.getCodID());
-        RobotsDAO.getInstance().remove(wallie.getCodeID());
-        RobotsDAO.getInstance().put(wallie);
+        RobotsDAO.getInstance().update(wallie);
 
         return wallie;
     }
 
     public Robot run_e(Palete p, Robot wallie){
         UI.notifica("O Robot " + wallie.getCodeID()
-                + " vai agora iniciar a recolha da Palete " + p.getCodID() + " na localização (0,1).");
+                + " vai agora iniciar a recolha da Palete " + p.getCodID() + " na localização (1,0).");
 
         entregaPalete(p, wallie); // vai de (0,1) a (x,y)
         InventarioDAO.getInstance().put(p);
-        RobotsDAO.getInstance().remove(wallie.getCodeID());
-        RobotsDAO.getInstance().put(wallie);
+        RobotsDAO.getInstance().update(wallie);
 
         return wallie;
     }
 
     public void run_both(int e, int r) throws E404Exception {
-        robosEmProgresso.removeIf(Future::isDone);
+        List<Entrega> lista_e = automatico_e(e);
+        List<Requisicao> lista_r = automatico_r(r);
+
+        while (true){
+
+            robosEmProgresso.removeIf(Future::isDone);
+            if (RobotsDisponiveis() != null){
+                if(e != 0){
+
+                    Entrega ne = lista_e.get(0);
+                    Future<Robot> futureTask = threadpool.submit(() -> run_e(lista_e.get(0).conteudo, getAvailable(robots_e)));
+                    EntregaDAO.getInstance().put(ne);
+                    lista_e.remove(0);
+                    robosEmProgresso.add(futureTask);
+                    e--;
+                }
+
+                else if(r != 0){
+                    Requisicao nr = lista_r.get(0);
+                    Future<Robot> futureTask = threadpool.submit(() -> run_r(lista_r.get(0).conteudo, getAvailable(robots_r)));
+                    RequisicaoDAO.getInstance().put(nr);
+                    lista_r.remove(0);
+                    robosEmProgresso.add(futureTask);
+                    r--;
+                }
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException interruptedException) {
+                    View.alert("ERRO", "Thread failed to zzz.");
+                }
+            }
+
+            if (r ==0 && e == 0 && robosEmProgresso.size() == 0) break;
+        }
+        UI.notifica("Todas as tarefas foram realizadas.");
+    }
+
+    /*
+    public void run_both(int e, int r) throws E404Exception {
 
         if(e != 0){
             List<Entrega> lista_e = automatico_e(e);
@@ -415,6 +471,11 @@ public class Servidor {
         if(r != 0){
             List<Requisicao> lista_r = automatico_r(r);
             run_r(lista_r);
+        }
+
+        while (true){
+            robosEmProgresso.removeIf(Future::isDone);
+            if (r == 0 && e == 0 && robosEmProgresso.size() == 0) break;
         }
     }
 
@@ -437,6 +498,7 @@ public class Servidor {
             robosEmProgresso.add(futureTask);
         }
     }
+    */
 
 
     public void recolherRobo(Robot robot){

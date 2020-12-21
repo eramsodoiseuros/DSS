@@ -59,9 +59,9 @@ public class ControladorSessoes implements Controlador{
         Palete p = servidor.search(s);
         if(p != null && servidor.isParkingAvailable()){
             int t = 1;
-            String s1 = "P1";
+            String s1 = "R1";
             while(servidor.searchRA(s1) || servidor.searchRF(s1)){
-                s1 = "P" + t;
+                s1 = "R" + t;
                 t++;
             }
             Requisicao r = new Requisicao(p,s1);

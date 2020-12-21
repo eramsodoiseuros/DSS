@@ -1,6 +1,8 @@
 package DL;
 
 
+import BL.Robot;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -361,4 +363,5 @@ public abstract class DataAcessObject<K, O> {
             }
         }
     }
+
 }
