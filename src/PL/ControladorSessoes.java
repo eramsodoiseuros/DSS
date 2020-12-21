@@ -2,6 +2,7 @@ package PL;
 
 import BL.*;
 
+import Exceptions.E404Exception;
 import GUI.View;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
@@ -114,7 +115,11 @@ public class ControladorSessoes implements Controlador{
     }
 
     public void both(int e, int r){
-        servidor.run_both(e,r);
+        try {
+            servidor.run_both(e,r);
+        } catch (E404Exception | IndexOutOfBoundsException e404Exception) {
+            return;
+        }
     }
 
     public List<String> getReqFeitas() {

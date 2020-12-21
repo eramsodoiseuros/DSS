@@ -11,6 +11,7 @@ public class Robot implements Dados<Robot>{
     private String codeID;
     private Integer ordensFeitas;
 
+    // true = em movimento , false = LIVRE
     private Boolean ativo;
     private Integer posX;
     private Integer posY;
@@ -45,7 +46,7 @@ public class Robot implements Dados<Robot>{
     //momento em que o robo se encontra ligado até pegar/recolher na palete na pos X Y
     public boolean andaParaPalete(Integer[][] mapa, int x, int y){
         boolean did_it  = false;
-        if ( ((x == 0 && getPosX() == 1) || (x == 5 && getPosX() == 4)) && getPosY() == y)
+        if ( ((x == 0 && posX == 1) || (x == 5 && posX == 4)) && posY == y)
             did_it = true;
         else rotate(mapa);
         return did_it;
@@ -54,9 +55,7 @@ public class Robot implements Dados<Robot>{
     //do momento em que o robo tem uma palete e chega a area de carregamento
     public boolean entregaPalete(Integer[][] mapa){
         boolean did_it  = false;
-        Integer lastX   = getPosX();
-        Integer lastY   = getPosY();
-        if (lastX == 2 && lastY == 6)
+        if (posX == 2 && posY == 6)
             did_it = true;
         else rotate(mapa);
         return did_it;
@@ -65,9 +64,9 @@ public class Robot implements Dados<Robot>{
     //retorna o robo para a posição defaul e desliga o moço
     public boolean takeBreak(Integer[][] mapa){
         boolean did_it  = false;
-        if (getPosX() == 1 && getPosY() == 1){
+        if (posX == 1 && posY == 1){
             mapa[1][1] = 0;
-            setAtivo(false);
+            this.ativo = false;
             this.ordensFeitas++; //assumir que robot acaba ordem sempre que retorna ao estado default
             did_it = true;
         } else rotate(mapa);
@@ -96,14 +95,13 @@ public class Robot implements Dados<Robot>{
             mapa[getPosX()][getPosY()]  = 0;
             mapa[newPosX][newPosY]      = 1;
             setPos(newPosX,newPosY);
-            UI.notifica("|->" + codeID + " está na posição (" + posX + ", " + posY + ").");
+            //UI.notifica("|->" + codeID + " está na posição (" + posX + ", " + posY + ").");
         }
     }
 
     //liga o robo para começar a trabalhar, se a posição inicial nao estiver ocupada
     protected boolean startWork(Integer[][] mapa) {
         if (mapa[1][1]!= 1){
-            setAtivo(true);
             moveState(mapa, 1,1);
             return true;
         }

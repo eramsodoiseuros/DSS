@@ -4,8 +4,10 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 import DL.*;
+import Exceptions.E404Exception;
 import UI.UI;
 
 public class Servidor {
@@ -22,9 +24,9 @@ public class Servidor {
     private ArrayList<Future<Robot>> robosEmProgresso;
 
     public Servidor(){
-        this.listaGestores = new HashMap<>();
-        this.robots_r = new HashMap<>();
-        this.robots_e = new HashMap<>();
+        this.listaGestores = new TreeMap<>();
+        this.robots_r = new TreeMap<>();
+        this.robots_e = new TreeMap<>();
         this.inventario = new Inventario();
         this.gestor_Pedidos = new GestorPedidos();
         this.parking = 2;
@@ -89,6 +91,7 @@ public class Servidor {
         while (b){
             for (Robot r1 : robots.values()) {
                 if (!r1.getAtivo()) {
+                    r1.setAtivo(true);
                     return r1;
                 }
             }
@@ -117,76 +120,38 @@ public class Servidor {
 
         return pointReturn;
     }
-    public Robot entregaPalete(Palete p, Robot robot) {
-
-        Point destino = getEspacoLivre();
-
-        boolean iniciado = false;
-        boolean entregou = false;
-
-        while (!iniciado) iniciado = robot.startWork(this.mapa);
-        while (!entregou) entregou = robot.andaParaPalete(mapa, destino.x, destino.y);
-
-        UI.notifica("O robot: " + robot.getCodeID() + " acabou de movimentar a Palete " + p.getCodID() + " e vai cessar atividade.");
-
-        p.setArmazenado(true);
-        p.setLocalizacao(destino);
-        if(mapa[destino.x][destino.y] > 2) mapa[destino.x][destino.y]++;
-        recolherRobo(robot);
-
-        return robot;
-    }
-    public Robot requisicaoPalete (Palete p, Robot r){
-        Point destino = p.getLocalizacao();
-        boolean temPalete = false;
-        boolean iniciado = false;
-        boolean entregouPalete = false;
-
-        while (!iniciado) iniciado = r.startWork(this.mapa);
-        while(!temPalete) temPalete = r.andaParaPalete(mapa, destino.x, destino.y);
-
-        if(mapa[destino.x][destino.y] > 2)mapa[destino.x][destino.y]--;
-        inventario.remove(p.getCodID());
-
-        while(!entregouPalete) entregouPalete = r.entregaPalete(mapa);
-        UI.notifica("O robot: " + r.getCodeID() + " acabou de movimentar a Palete " + p.getCodID() + " e vai cessar atividade.");
-        recolherRobo(r);
-
-        return r;
-    }
-
-    public void recolherRobo(Robot robot){
-        boolean voltou = false;
-        while (!voltou) voltou = robot.takeBreak(mapa);
-    }
 
     public List<String> getEntAtivas(){
          ArrayList<Entrega> el = gestor_Pedidos.listaEntrega_ATIVAS();
          List<String> s = new ArrayList<>();
          for (Entrega e : el)
-            s.add(gestor_Pedidos.EntToStringAtivas(e));
-         return s;
+            s.add(gestor_Pedidos.toStringEA(e));
+
+         return s.stream().sorted().collect(Collectors.toList());
     }
     public List<String> getEntFeitas(){
         ArrayList<Entrega> el = gestor_Pedidos.listaEntrega_FEITAS();
         List<String> s = new ArrayList<>();
         for (Entrega e : el)
-            s.add(gestor_Pedidos.EntToStringFeitas(e));
-        return s;
+            s.add(gestor_Pedidos.toStringEF(e));
+
+        return s.stream().sorted().collect(Collectors.toList());
     }
     public List<String> getReqFeitas(){
         ArrayList<Requisicao> rl = gestor_Pedidos.listaRequisicoes_FEITAS();
         List<String> s = new ArrayList<>();
         for (Requisicao r : rl)
-            s.add(gestor_Pedidos.ReqToStringFeitas(r));
-        return s;
+            s.add(gestor_Pedidos.toStringRF(r));
+
+        return s.stream().sorted().collect(Collectors.toList());
     }
     public List<String> getReqAtivas(){
         ArrayList<Requisicao> rl = gestor_Pedidos.listaRequisicoes_ATIVAS();
         List<String> s = new ArrayList<>();
         for (Requisicao r : rl)
-            s.add(gestor_Pedidos.ReqToStringAtivas(r));
-        return s;
+            s.add(gestor_Pedidos.toStringRA(r));
+
+        return s.stream().sorted().collect(Collectors.toList());
     }
     public List<String> RobotsDisponiveis() {
         ArrayList<String> disponiveis = new ArrayList<>();
@@ -198,7 +163,17 @@ public class Servidor {
             if(!r.getAtivo())
                 disponiveis.add(r.toString());
         }
-        return disponiveis;
+        return disponiveis.stream().sorted().collect(Collectors.toList());
+    }
+    public List<String> lista_robots() {
+        ArrayList<String> disponiveis = new ArrayList<>();
+        for(Robot r : robots_r.values()){
+            disponiveis.add(r.toString());
+        }
+        for(Robot r : robots_e.values()){
+            disponiveis.add(r.toString());
+        }
+        return disponiveis.stream().sorted().collect(Collectors.toList());
     }
 
     public void removeGestor (String codID){
@@ -262,30 +237,30 @@ public class Servidor {
         for(Palete p : inventario.values()){
             s.add(p.toStringFeitas());
         }
-        return s;
+        return s.stream().sorted().collect(Collectors.toList());
     }
     public List<String> listagem (){
         List<String> s = new ArrayList<>();
         for(Palete p : inventario.values()){
             s.add(p.toStringListagem());
         }
-        return s;
+        return s.stream().sorted().collect(Collectors.toList());
     }
     public List<String> listar_entregas() {
         ArrayList<Entrega> rl = gestor_Pedidos.listaEntregas();
         List<String> s = new ArrayList<>();
         for (Entrega r : rl){
-            s.add(gestor_Pedidos.EntToStringAtivas(r));
+            s.add(gestor_Pedidos.toStringEA(r));
         }
-        return s;
+        return s.stream().sorted().collect(Collectors.toList());
     }
     public List<String> listar_requisicoes() {
         ArrayList<Requisicao> rl = gestor_Pedidos.listaRequisicoes();
         List<String> s = new ArrayList<>();
         for (Requisicao r : rl){
-            s.add(gestor_Pedidos.ReqToStringAtivas(r));
+            s.add(gestor_Pedidos.toStringRA(r));
         }
-        return s;
+        return s.stream().sorted().collect(Collectors.toList());
     }
 
     public Palete search(String s){
@@ -325,16 +300,6 @@ public class Servidor {
         return gestor_Pedidos.getEA(s);
     }
 
-    public List<String> lista_robots() {
-        ArrayList<String> disponiveis = new ArrayList<>();
-        for(Robot r : robots_r.values()){
-            disponiveis.add(r.toString());
-        }
-        for(Robot r : robots_e.values()){
-            disponiveis.add(r.toString());
-        }
-        return disponiveis;
-    }
     public void print_map(){
         UI.notifica("Mapa atual do armazem: ");
         UI.print_mapa(mapa, 6, 8);
@@ -365,9 +330,12 @@ public class Servidor {
         return eL;
     }
 
-    private List<Requisicao> automatico_r(int n){
+    private List<Requisicao> automatico_r(int n) throws E404Exception, IndexOutOfBoundsException  {
         List<Requisicao> rL = new ArrayList<>();
         List<Palete> lista = getNPaletes(n);
+        if(lista.size() == 0){
+            throw new E404Exception("ERRO", "Não há nenhuma palete no Inventário, é impossivel criar Requisições de momento.");
+        }
         int t = 1;
         String s1 = "P1";
         while(searchRA(s1) || searchRF(s1)){
@@ -436,31 +404,80 @@ public class Servidor {
         return wallie;
     }
 
-    public void run_both(int e, int r){
-        List<Entrega> lista_e = automatico_e(e);
-        List<Requisicao> lista_r  = automatico_r(r);
-        int paletesPorMover = lista_r.size()+lista_e.size();
+    public void run_both(int e, int r) throws E404Exception {
         robosEmProgresso.removeIf(Future::isDone);
 
-        while(paletesPorMover > 0 && RobotsDisponiveis() != null) {
-            if (lista_e.size() > 0 && RobotsDisponiveis() != null) {
-                Entrega ne = lista_e.get(0);
-                Future<Robot> futureTask = threadpool.submit(() -> run_e(lista_e.get(0).conteudo, getAvailable(robots_e)));
-                EntregaDAO.getInstance().put(ne);
-                lista_e.remove(0);
-                paletesPorMover--;
-                robosEmProgresso.add(futureTask);
-            }
+        if(e != 0){
+            List<Entrega> lista_e = automatico_e(e);
+            run_e(lista_e);
+        }
 
-            if (lista_r.size() > 0 && RobotsDisponiveis() != null) {
-                Requisicao nr = lista_r.get(0);
-                Future<Robot> futureTask = threadpool.submit(() -> run_r(lista_r.get(0).conteudo, getAvailable(robots_r)));
-                RequisicaoDAO.getInstance().put(nr);
-                lista_r.remove(0);
-                paletesPorMover--;
-                robosEmProgresso.add(futureTask);
-            }
+        if(r != 0){
+            List<Requisicao> lista_r = automatico_r(r);
+            run_r(lista_r);
         }
     }
 
+    public void run_e(List<Entrega> lista){
+        while(lista.size() > 0 && RobotsDisponiveis() != null) {
+            Entrega ne = lista.get(0);
+            Future<Robot> futureTask = threadpool.submit(() -> run_e(lista.get(0).conteudo, getAvailable(robots_e)));
+            EntregaDAO.getInstance().put(ne);
+            lista.remove(0);
+            robosEmProgresso.add(futureTask);
+        }
+    }
+
+    public void run_r(List<Requisicao> lista){
+        while(lista.size() > 0 && RobotsDisponiveis() != null) {
+            Requisicao nr = lista.get(0);
+            Future<Robot> futureTask = threadpool.submit(() -> run_r(lista.get(0).conteudo, getAvailable(robots_r)));
+            RequisicaoDAO.getInstance().put(nr);
+            lista.remove(0);
+            robosEmProgresso.add(futureTask);
+        }
+    }
+
+
+    public void recolherRobo(Robot robot){
+        boolean voltou = false;
+        while (!voltou) voltou = robot.takeBreak(mapa);
+    }
+    public Robot entregaPalete(Palete p, Robot robot) {
+
+        Point destino = getEspacoLivre();
+
+        boolean iniciado = false;
+        boolean entregou = false;
+
+        while (!iniciado) iniciado = robot.startWork(this.mapa);
+        while (!entregou) entregou = robot.andaParaPalete(mapa, destino.x, destino.y);
+
+        UI.notifica("O robot: " + robot.getCodeID() + " acabou de movimentar a Palete " + p.getCodID() + " e vai cessar atividade.");
+
+        p.setArmazenado(true);
+        p.setLocalizacao(destino);
+        if(mapa[destino.x][destino.y] > 2) mapa[destino.x][destino.y]++;
+        recolherRobo(robot);
+
+        return robot;
+    }
+    public Robot requisicaoPalete (Palete p, Robot r){
+        Point destino = p.getLocalizacao();
+        boolean temPalete = false;
+        boolean iniciado = false;
+        boolean entregouPalete = false;
+
+        while (!iniciado) iniciado = r.startWork(this.mapa);
+        while(!temPalete) temPalete = r.andaParaPalete(mapa, destino.x, destino.y);
+
+        if(mapa[destino.x][destino.y] > 2)mapa[destino.x][destino.y]--;
+        inventario.remove(p.getCodID());
+
+        while(!entregouPalete) entregouPalete = r.entregaPalete(mapa);
+        UI.notifica("O robot: " + r.getCodeID() + " acabou de movimentar a Palete " + p.getCodID() + " e vai cessar atividade.");
+        recolherRobo(r);
+
+        return r;
+    }
 }

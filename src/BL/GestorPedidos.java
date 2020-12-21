@@ -76,16 +76,16 @@ public class GestorPedidos {
                 '}';
     }
 
-    public String EntToStringAtivas(Entrega e){
+    public String toStringEA(Entrega e){
         return "Entrega: " + e.getCodID() + " - " + e.toStingConteudoAtivas();
     }
-    public String EntToStringFeitas(Entrega e){
+    public String toStringEF(Entrega e){
         return "Entrega: " + e.getCodID() + " - " + e.toStringConteudoFeitas();
     }
-    public String ReqToStringAtivas(Requisicao r){
+    public String toStringRA(Requisicao r){
         return "Requisição: " + r.getCodID() + " - " + r.toStingConteudoAtivas();
     }
-    public String ReqToStringFeitas(Requisicao r){
+    public String toStringRF(Requisicao r){
         return "Requisição: " + r.getCodID() + " - " + r.toStringConteudoFeitas();
     }
 
@@ -122,10 +122,10 @@ public class GestorPedidos {
         return requisicoes_ATIVAS.containsKey(s);
     }
     protected boolean searchEF(String codID) {
-        return entrega_FEITAS.containsKey(codID);
+        return (entrega_FEITAS.containsKey(codID) || EntregaDAO.getInstance().find(codID).size() > 0);
     }
     protected boolean searchRF(String s) {
-        return requisicoes_FEITAS.containsKey(s);
+        return (requisicoes_FEITAS.containsKey(s)|| RequisicaoDAO.getInstance().find(s).size() > 0);
     }
 
     public Requisicao getRA(String s) {
