@@ -1,7 +1,6 @@
 package BL;
 
 import DL.Dados;
-import DL.InventarioDAO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +52,6 @@ public class Entrega extends Pedido implements Dados<Entrega>{
     }
 
     public String toStringConteudoFeitas() {
-        return conteudo.toStringEF();
+        return conteudo.toStringFeitas();
     }
 }

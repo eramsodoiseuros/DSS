@@ -84,10 +84,6 @@ public class Palete implements Dados<Palete> {
     }
 
     public String toStringFeitas(){
-        return "Palete: - " + codeID + " - " + toStringLocalizacao(localizacao) + " - " + conteudo;
-    }
-
-    public String toStringEF(){
         return "Palete: - " + codeID + " - " + conteudo;
     }
 
