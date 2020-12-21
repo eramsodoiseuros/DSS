@@ -44,7 +44,7 @@ public class RobotsDAO extends DataAcessObject<String, Robot>{
         return super.search(value, 0);
     }
 
-    public void update(final Robot r) {
+    public Robot update(final Robot r) {
         Connection connection = BaseDados.getConnection();
         final String UPDATE = "UPDATE Robots SET codID=?, ordens_feitas=? WHERE ordens_feitas=?";
 
@@ -53,14 +53,21 @@ public class RobotsDAO extends DataAcessObject<String, Robot>{
             PreparedStatement ps = connection.prepareStatement(UPDATE);
 
             ps.setString(1, r.getCodeID());
-            ps.setInt(2, r.getOrdensFeitas()+1);
+            System.out.println(r.getOrdensFeitas());
+            ps.setInt(2, r.getOrdensFeitas());
+            ps.setInt(3, r.getOrdensFeitas());
 
             ps.executeUpdate();
-            ps.close();
+            connection.commit();
 
         } catch (SQLException e) {
-            //e.printStackTrace();
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
+        return r;
     }
 }

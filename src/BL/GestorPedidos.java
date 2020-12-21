@@ -90,7 +90,7 @@ public class GestorPedidos {
     }
 
     protected void addEntrega(Entrega e) {
-        System.out.println("NOTIFICAÇÃO DE MUDANÇA DE ESTADO: " + "Entrega ->" + e.codeID + "     ||      C->" + e.conteudo + " de momento está NÃO PROCESSADA.");
+        UI.notifica("NOTIFICAÇÃO DE MUDANÇA DE ESTADO: " + "Entrega ->" + e.codeID + "     ||      C->" + e.conteudo + " de momento está NÃO PROCESSADA.");
         entrega.putIfAbsent(e.codeID,e);
     }
     protected void addRequisicao(Requisicao r) {

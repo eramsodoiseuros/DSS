@@ -14,16 +14,6 @@ public class Armazem extends Application {
         window.setTitle("Menu de Admin");
         window.show();
 
-        /*
-        Thread task = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                view.start();
-            }
-        });
-
-        task.start();
-        */
     }
 
 

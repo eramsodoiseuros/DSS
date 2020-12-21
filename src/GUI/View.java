@@ -64,8 +64,8 @@ public class View implements GUI {
         listView = new ListView<>();
         listView.getItems().addAll(
                 "Registar Gestor", "Eliminar Gestor", "Login de Gestor", "Painel de Robots",
-                "Entregas Ativas", "Requisições Ativas", "Requisições Feitas",
-                "Entregas Feitas", "Requisitar Palete", "Requisitar Entrega", "Correr X"
+                "Requisições Feitas", "Entregas Feitas", "Requisitar Palete",
+                "Requisitar Entrega", "Correr X"
         );
 
         listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -105,15 +105,7 @@ public class View implements GUI {
         }
 
         if(s.equals("[Painel de Robots]")){
-            make_window("Painel das Requisições Feitas", painel_pedido(c.lista_robots()));
-        }
-
-        if(s.equals("[Entregas Ativas]")){
-            painel_EA();
-        }
-
-        if(s.equals("[Requisições Ativas]")){
-            painel_RA();
+            make_window("Painel dos Robots", painel_pedido(c.lista_robots()));
         }
 
         if(s.equals("[Entregas Feitas]")){
@@ -133,7 +125,7 @@ public class View implements GUI {
         }
 
         if(s.equals("[Correr X]")){
-            make_window("RUNNING", correr_X());
+            make_window("Formulário de Pedidos", correr_X());
         }
     }
 
@@ -145,9 +137,8 @@ public class View implements GUI {
         listView = new ListView<>();
         listView.getItems().addAll(
                 "Consultar Inventário", "Aceitar Pedidos",
-                "Consultar Robots disponiveis", "Entregas Ativas", "Requisições Ativas",
-                "Requisições Feitas", "Entregas Feitas", "Consultar Listagem de Localizações",
-                "Consultar Mapa"
+                "Consultar Robots disponiveis", "Requisições Feitas", "Entregas Feitas",
+                "Consultar Listagem de Localizações", "Consultar Mapa"
 
         );
 
@@ -186,14 +177,6 @@ public class View implements GUI {
 
         if(s.equals("[Consultar Robots disponiveis]")){
             make_window("Lista de Robots disponiveis", painel_pedido(c.robots()));
-        }
-
-        if(s.equals("[Entregas Ativas]")){
-            painel_EA();
-        }
-
-        if(s.equals("[Requisições Ativas]")){
-            painel_RA();
         }
 
         if(s.equals("[Entregas Feitas]")){
@@ -404,14 +387,8 @@ public class View implements GUI {
         return new Scene(layout, 500, 400);
     }
 
-    public void painel_EA(){
-        make_window("Painel das Entregas Ativas", painel_pedido(c.getEntAtivas()));
-    }
     public void painel_EF(){
         make_window("Painel das Entregas Feitas", painel_pedido(c.getEntFeitas()));
-    }
-    public void painel_RA(){
-        make_window("Painel das Requisições Ativas", painel_pedido(c.getReqAtivas()));
     }
     public void painel_RF(){
         make_window("Painel das Requisições Feitas", painel_pedido(c.getReqFeitas()));

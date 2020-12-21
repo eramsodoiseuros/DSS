@@ -46,6 +46,7 @@ public class Servidor {
                 else if ((i == 2 || i == 3) && j >= 2 && j < 6) mapa[i][j] = -1;
                 else mapa[i][j] = 0;
             }
+
         mapa[0][1] = 0;
         mapa[2][7] = 0;
         for(int a = 2; a <=6;a++ ) {
@@ -58,11 +59,11 @@ public class Servidor {
         }
 
         for (Robot r : RobotsDAO.getInstance().values()) {
-            if( Integer.parseInt(r.getCodeID().substring(1,r.getCodeID().length())) % 2 != 0 ){
+            if( Integer.parseInt(r.getCodeID().substring(1)) % 2 != 0 ){
                 robots_e.put(r.getCodeID(), r);
             }
 
-            if( Integer.parseInt(r.getCodeID().substring(1,r.getCodeID().length())) % 2 == 0 ){
+            if( Integer.parseInt(r.getCodeID().substring(1)) % 2 == 0 ){
                 robots_r.put(r.getCodeID(), r);
             }
         }
@@ -87,7 +88,6 @@ public class Servidor {
             mapa[p.getLocalizacao().x][p.getLocalizacao().y]++;
         }
     }
-
     private Robot getAvailable(Map<String, Robot> robots){
         boolean b = true;
         while (b){
@@ -101,7 +101,7 @@ public class Servidor {
 
         return new Robot();
     }
-    public Point getEspacoLivre(){
+    private Point getEspacoLivre(){
         int i = 2;
         Point pointReturn = new Point();
 
@@ -127,7 +127,7 @@ public class Servidor {
 
         return pointReturn;
     }
-    public Point where(int x, int y){
+    private Point where(int x, int y){
         if(mapa[x][y]+1 > N_MAX){
             return where(x,y+1);
         }
@@ -140,6 +140,7 @@ public class Servidor {
             return p;
         }
     }
+
     public List<String> getEntAtivas(){
          ArrayList<Entrega> el = gestor_Pedidos.listaEntrega_ATIVAS();
          List<String> s = new ArrayList<>();
@@ -351,7 +352,6 @@ public class Servidor {
         }
         return eL;
     }
-
     private List<Requisicao> automatico_r(int n) throws E404Exception, IndexOutOfBoundsException  {
         List<Requisicao> rL = new ArrayList<>();
         List<Palete> lista = getNPaletes(n);
@@ -379,14 +379,13 @@ public class Servidor {
         Palete p = e.conteudo;
 
         UI.notifica("O Robot " + wallie.getCodeID()
-                + " vai agora iniciar a recolha da Palete " + p.getCodID() + " na localização (1,0).");
+                + " vai agora iniciar a recolha da Palete " + p.getCodID() + " no ponto de Recolha.");
 
         entregaPalete(p, wallie); // vai de (0,1) a (x,y)
         InventarioDAO.getInstance().put(p);
         gestor_Pedidos.removeEA(e.codeID);
-        RobotsDAO.getInstance().update(wallie);
+        RobotsDAO.getInstance().put(wallie);
     }
-
     public void giveWork(Requisicao r){
         Robot wallie = getAvailable(robots_r);
         Palete p = r.conteudo;
@@ -397,27 +396,26 @@ public class Servidor {
         requisicaoPalete (p, wallie); // vai de (x,y) a (7,2)
         InventarioDAO.getInstance().remove(p.getCodID());
         gestor_Pedidos.removeRA(r.codeID);
-        RobotsDAO.getInstance().update(wallie);
+        RobotsDAO.getInstance().put(wallie);
     }
 
-    public Robot run_r(Palete p, Robot wallie){
+    private Robot run_r(Palete p, Robot wallie){
         UI.notifica("O Robot " + wallie.getCodeID() + " vai agora iniciar a recolha da Palete "
                 + p.getCodID() + " na localização (" + p.getLocalizacao().x + ", " + p.getLocalizacao().y + ").");
 
         requisicaoPalete (p, wallie); // vai de (x,y) a (7,2)
         InventarioDAO.getInstance().remove(p.getCodID());
-        RobotsDAO.getInstance().update(wallie);
+        RobotsDAO.getInstance().put(wallie);
 
         return wallie;
     }
-
-    public Robot run_e(Palete p, Robot wallie){
+    private Robot run_e(Palete p, Robot wallie){
         UI.notifica("O Robot " + wallie.getCodeID()
-                + " vai agora iniciar a recolha da Palete " + p.getCodID() + " na localização (1,0).");
+                + " vai agora iniciar a recolha da Palete " + p.getCodID() + " no ponto de Recolha.");
 
         entregaPalete(p, wallie); // vai de (0,1) a (x,y)
         InventarioDAO.getInstance().put(p);
-        RobotsDAO.getInstance().update(wallie);
+        RobotsDAO.getInstance().put(wallie);
 
         return wallie;
     }
@@ -460,52 +458,11 @@ public class Servidor {
         UI.notifica("Todas as tarefas foram realizadas.");
     }
 
-    /*
-    public void run_both(int e, int r) throws E404Exception {
-
-        if(e != 0){
-            List<Entrega> lista_e = automatico_e(e);
-            run_e(lista_e);
-        }
-
-        if(r != 0){
-            List<Requisicao> lista_r = automatico_r(r);
-            run_r(lista_r);
-        }
-
-        while (true){
-            robosEmProgresso.removeIf(Future::isDone);
-            if (r == 0 && e == 0 && robosEmProgresso.size() == 0) break;
-        }
-    }
-
-    public void run_e(List<Entrega> lista){
-        while(lista.size() > 0 && RobotsDisponiveis() != null) {
-            Entrega ne = lista.get(0);
-            Future<Robot> futureTask = threadpool.submit(() -> run_e(lista.get(0).conteudo, getAvailable(robots_e)));
-            EntregaDAO.getInstance().put(ne);
-            lista.remove(0);
-            robosEmProgresso.add(futureTask);
-        }
-    }
-
-    public void run_r(List<Requisicao> lista){
-        while(lista.size() > 0 && RobotsDisponiveis() != null) {
-            Requisicao nr = lista.get(0);
-            Future<Robot> futureTask = threadpool.submit(() -> run_r(lista.get(0).conteudo, getAvailable(robots_r)));
-            RequisicaoDAO.getInstance().put(nr);
-            lista.remove(0);
-            robosEmProgresso.add(futureTask);
-        }
-    }
-    */
-
-
-    public void recolherRobo(Robot robot){
+    private void recolherRobo(Robot robot){
         boolean voltou = false;
         while (!voltou) voltou = robot.takeBreak(mapa);
     }
-    public Robot entregaPalete(Palete p, Robot robot) {
+    private Robot entregaPalete(Palete p, Robot robot) {
 
         Point destino = getEspacoLivre();
 
@@ -519,12 +476,11 @@ public class Servidor {
 
         p.setArmazenado(true);
         p.setLocalizacao(destino);
-        if(mapa[destino.x][destino.y] > 2) mapa[destino.x][destino.y]++;
         recolherRobo(robot);
 
         return robot;
     }
-    public Robot requisicaoPalete (Palete p, Robot r){
+    private Robot requisicaoPalete (Palete p, Robot r){
         Point destino = p.getLocalizacao();
         boolean temPalete = false;
         boolean iniciado = false;

@@ -20,7 +20,6 @@ public class Automatico {
             return null;
         }
     }
-
     public static List<String> create(int e){
         List<String> lista = new ArrayList<>();
         for(int i = 0; i < e; i++){
