@@ -88,7 +88,7 @@ public class Robot implements Dados<Robot>{
     private void moveState(Integer[][] mapa, Integer newPosX, Integer newPosY){
         if (mapa[newPosX][newPosY] != 1){
             try {
-                Thread.sleep(250);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 View.alert("ERRO", "O Robot falhou em ficar quieto... Thread Interrupted.");
             }

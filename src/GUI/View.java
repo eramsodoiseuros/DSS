@@ -296,6 +296,7 @@ public class View implements GUI {
 
         Button b = new Button("Processar.");
         b.setOnAction(e -> {
+            c.end_scene(e);
             String ent = usertxt.getText();
             String req = txt.getText();
             try{
@@ -308,8 +309,6 @@ public class View implements GUI {
             } catch (NumberFormatException exception){
                 alert("ERRO", "Precisa de inserir um número positivo.");
             }
-
-            c.end_scene(e);
         });
 
         layout.getChildren().addAll(lbl1, usertxt, lbl2, txt, b);

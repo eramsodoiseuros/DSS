@@ -325,8 +325,7 @@ public class Servidor {
         UI.print_mapa(mapa, 6, 8);
     }
     private List<Palete> getNPaletes(int n) {
-        List<Palete> lista = inventario.listar(n);
-        return lista;
+        return inventario.listar(n);
     }
 
     private List<Entrega> automatico_e(int n) throws E404Exception{
@@ -378,8 +377,8 @@ public class Servidor {
         Robot wallie = getAvailable(robots_e);
         Palete p = e.conteudo;
 
-        UI.notifica("O Robot " + wallie.getCodeID()
-                + " vai agora iniciar a recolha da Palete " + p.getCodID() + " no ponto de Recolha.");
+        UI.notifica("O Robot: " + wallie.getCodeID()
+                + " vai agora iniciar a recolha da Palete " + p.getCodID() + " no ponto de Recolha (E).");
 
         entregaPalete(p, wallie); // vai de (0,1) a (x,y)
         InventarioDAO.getInstance().put(p);
@@ -390,8 +389,8 @@ public class Servidor {
         Robot wallie = getAvailable(robots_r);
         Palete p = r.conteudo;
 
-        UI.notifica("O Robot " + wallie.getCodeID() + " vai agora iniciar a recolha da Palete "
-                + p.getCodID() + " na localização (" + p.getLocalizacao().x + ", " + p.getLocalizacao().y + ").");
+        UI.notifica("O Robot: " + wallie.getCodeID() + " vai agora iniciar a recolha da Palete "
+                + p.getCodID() + " na localização (" + p.getLocalizacao().x + ", " + p.getLocalizacao().y + ") (R).");
 
         requisicaoPalete (p, wallie); // vai de (x,y) a (7,2)
         InventarioDAO.getInstance().remove(p.getCodID());
@@ -400,22 +399,20 @@ public class Servidor {
     }
 
     private Robot run_r(Palete p, Robot wallie){
-        UI.notifica("O Robot " + wallie.getCodeID() + " vai agora iniciar a recolha da Palete "
-                + p.getCodID() + " na localização (" + p.getLocalizacao().x + ", " + p.getLocalizacao().y + ").");
+        UI.notifica("O Robot: " + wallie.getCodeID() + " vai agora iniciar a recolha da Palete "
+                + p.getCodID() + " na localização (" + p.getLocalizacao().x + ", " + p.getLocalizacao().y + ") (R).");
 
         requisicaoPalete (p, wallie); // vai de (x,y) a (7,2)
         InventarioDAO.getInstance().remove(p.getCodID());
-        RobotsDAO.getInstance().put(wallie);
 
         return wallie;
     }
     private Robot run_e(Palete p, Robot wallie){
-        UI.notifica("O Robot " + wallie.getCodeID()
-                + " vai agora iniciar a recolha da Palete " + p.getCodID() + " no ponto de Recolha.");
+        UI.notifica("O Robot: " + wallie.getCodeID()
+                + " vai agora iniciar a recolha da Palete " + p.getCodID() + " no ponto de Recolha (E).");
 
         entregaPalete(p, wallie); // vai de (0,1) a (x,y)
         InventarioDAO.getInstance().put(p);
-        RobotsDAO.getInstance().put(wallie);
 
         return wallie;
     }
@@ -424,12 +421,11 @@ public class Servidor {
         List<Entrega> lista_e = automatico_e(e);
         List<Requisicao> lista_r = automatico_r(r);
 
-        while (true){
+        do {
 
             robosEmProgresso.removeIf(Future::isDone);
-            if (RobotsDisponiveis() != null){
-                if(e != 0){
-
+            if (RobotsDisponiveis() != null) {
+                if (e != 0 && mapa[1][1] == 0) {
                     Entrega ne = lista_e.get(0);
                     Future<Robot> futureTask = threadpool.submit(() -> run_e(lista_e.get(0).conteudo, getAvailable(robots_e)));
                     EntregaDAO.getInstance().put(ne);
@@ -437,8 +433,12 @@ public class Servidor {
                     robosEmProgresso.add(futureTask);
                     e--;
                 }
-
-                else if(r != 0){
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException interruptedException) {
+                    View.alert("ERRO", "Thread failed to zzz.");
+                }
+                if (r != 0 && mapa[1][1] == 0) {
                     Requisicao nr = lista_r.get(0);
                     Future<Robot> futureTask = threadpool.submit(() -> run_r(lista_r.get(0).conteudo, getAvailable(robots_r)));
                     RequisicaoDAO.getInstance().put(nr);
@@ -447,15 +447,24 @@ public class Servidor {
                     r--;
                 }
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(1000);
                 } catch (InterruptedException interruptedException) {
                     View.alert("ERRO", "Thread failed to zzz.");
                 }
             }
 
-            if (r ==0 && e == 0 && robosEmProgresso.size() == 0) break;
-        }
+        } while (r != 0 || e != 0 || robosEmProgresso.size() != 0);
         UI.notifica("Todas as tarefas foram realizadas.");
+        update_all();
+    }
+
+    private void update_all() {
+        for(Robot wallie : robots_r.values()){
+            RobotsDAO.getInstance().put(wallie);
+        }
+        for(Robot wallie : robots_e.values()){
+            RobotsDAO.getInstance().put(wallie);
+        }
     }
 
     private void recolherRobo(Robot robot){
@@ -472,7 +481,7 @@ public class Servidor {
         while (!iniciado) iniciado = robot.startWork(this.mapa);
         while (!entregou) entregou = robot.andaParaPalete(mapa, destino.x, destino.y);
 
-        UI.notifica("O robot: " + robot.getCodeID() + " acabou de movimentar a Palete " + p.getCodID() + " e vai cessar atividade.");
+        UI.notifica("   -> O Robot: " + robot.getCodeID() + " acabou de movimentar a Palete " + p.getCodID() + " e vai cessar atividade.");
 
         p.setArmazenado(true);
         p.setLocalizacao(destino);
@@ -493,7 +502,7 @@ public class Servidor {
         inventario.remove(p.getCodID());
 
         while(!entregouPalete) entregouPalete = r.entregaPalete(mapa);
-        UI.notifica("O robot: " + r.getCodeID() + " acabou de movimentar a Palete " + p.getCodID() + " e vai cessar atividade.");
+        UI.notifica("   -> O Robot: " + r.getCodeID() + " acabou de movimentar a Palete " + p.getCodID() + " e vai cessar atividade.");
         recolherRobo(r);
 
         return r;

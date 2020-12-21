@@ -55,7 +55,7 @@ public class RobotsDAO extends DataAcessObject<String, Robot>{
             ps.setString(1, r.getCodeID());
             System.out.println(r.getOrdensFeitas());
             ps.setInt(2, r.getOrdensFeitas());
-            ps.setInt(3, r.getOrdensFeitas());
+            ps.setInt(3, r.getOrdensFeitas()-1);
 
             ps.executeUpdate();
             connection.commit();

@@ -1,7 +1,5 @@
 package UI;
 
-import PL.ControladorSessoes;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +14,11 @@ public class UI {
             for(int j = 0; j < c; j++){
                 if(mapa[i][j]==-1)
                     linha.add("X");
-                else linha.add(mapa[i][j]+"");
+                else if(mapa[i][j]==2)
+                    linha.add("0");
+                else if(mapa[i][j]==0)
+                    linha.add("o");
+                else linha.add( mapa[i][j]-2 +"");
             }
             System.out.println(linha);
             linha.removeAll(linha);
