@@ -48,10 +48,10 @@ public class Entrega extends Pedido implements Dados<Entrega>{
     }
 
     public String toStingConteudoAtivas() {
-        return conteudo.toStringAtivas();
+        return conteudo.toStringID_C();
     }
 
     public String toStringConteudoFeitas() {
-        return conteudo.toStringFeitas();
+        return conteudo.toStringID_A_C();
     }
 }

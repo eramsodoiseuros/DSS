@@ -4,6 +4,7 @@ import BL.*;
 
 import Exceptions.E404Exception;
 import GUI.View;
+import UI.UI;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.stage.Stage;
@@ -118,7 +119,7 @@ public class ControladorSessoes implements Controlador{
         try {
             servidor.run_both(e,r);
         } catch (E404Exception | IndexOutOfBoundsException e404Exception) {
-            return;
+            UI.notifica("erro.");
         }
     }
 

@@ -16,6 +16,7 @@ public class Servidor {
     private Map<String, Robot> robots_r; // par
     private Map<String, Robot> robots_e; // impar
     private Inventario inventario;
+    private HashMap<String,Palete> temp;
     private GestorPedidos gestor_Pedidos;
     private Integer parking;
     private Integer[][] mapa; // -1 nao pode, 0 onde pode, 1 onde esta, prateleiras vazias 2, prateleiras cheias 3, 4-10 quantidade de stuff la
@@ -24,12 +25,14 @@ public class Servidor {
     private ExecutorService threadpool;
     private ArrayList<Future<Robot>> robosEmProgresso;
     private final int N_MAX = 10;
+    private static final int MAX_E = 80;
 
     public Servidor(){
         this.listaGestores = new TreeMap<>();
         this.robots_r = new TreeMap<>();
         this.robots_e = new TreeMap<>();
         this.inventario = new Inventario();
+        this.temp = new HashMap<>();
         this.gestor_Pedidos = new GestorPedidos();
         this.parking = 2;
         this.robosEmProgresso = new ArrayList<>();
@@ -243,19 +246,19 @@ public class Servidor {
     public Palete criaPalete (String c){
         int t = 1;
         String s = "p1";
-        while(inventario.contains(s)){
+        while(inventario.contains(s) || temp.containsKey(s)){
             s = "p" + t;
             t++;
         }
         Palete p = new Palete(s,c);
-        inventario.add(p);
+        temp.putIfAbsent(p.getCodID(),p);
         return p;
     }
 
     public List<String> inventario (){
         List<String> s = new ArrayList<>();
         for(Palete p : inventario.values()){
-            s.add(p.toStringFeitas());
+            s.add(p.toStringID_C());
         }
         return s.stream().sorted().collect(Collectors.toList());
     }
@@ -328,10 +331,8 @@ public class Servidor {
         return inventario.listar(n);
     }
 
-    private List<Entrega> automatico_e(int n) throws E404Exception{
-        if(inventario.size() == 60 && inventario.size()+n > 60){
-            throw new E404Exception("ERRO", "Não há espaço no Inventário, é impossivel Entregar Paletes de momento.");
-        }
+    private List<Entrega> automatico_e(int n){
+
         List<Entrega> eL = new ArrayList<>();
         List<String> lista = new ArrayList<>(Automatico.create(n));
         int t = 1;
@@ -351,12 +352,10 @@ public class Servidor {
         }
         return eL;
     }
-    private List<Requisicao> automatico_r(int n) throws E404Exception, IndexOutOfBoundsException  {
+    private List<Requisicao> automatico_r(int n) throws IndexOutOfBoundsException  {
         List<Requisicao> rL = new ArrayList<>();
         List<Palete> lista = getNPaletes(n);
-        if(lista.size() == 0 && n > 0){
-            throw new E404Exception("ERRO", "Não há nenhuma palete no Inventário, é impossivel criar Requisições de momento.");
-        }
+
         int t = 1;
         String s1 = "R1";
         while(searchRA(s1) || searchRF(s1)){
@@ -382,6 +381,7 @@ public class Servidor {
 
         entregaPalete(p, wallie); // vai de (0,1) a (x,y)
         InventarioDAO.getInstance().put(p);
+        inventario.add(p);
         gestor_Pedidos.removeEA(e.codeID);
         RobotsDAO.getInstance().put(wallie);
     }
@@ -394,6 +394,7 @@ public class Servidor {
 
         requisicaoPalete (p, wallie); // vai de (x,y) a (7,2)
         InventarioDAO.getInstance().remove(p.getCodID());
+        inventario.remove(p.getCodID());
         gestor_Pedidos.removeRA(r.codeID);
         RobotsDAO.getInstance().put(wallie);
     }
@@ -404,6 +405,7 @@ public class Servidor {
 
         requisicaoPalete (p, wallie); // vai de (x,y) a (7,2)
         InventarioDAO.getInstance().remove(p.getCodID());
+        inventario.remove(p.getCodID());
 
         return wallie;
     }
@@ -413,11 +415,20 @@ public class Servidor {
 
         entregaPalete(p, wallie); // vai de (0,1) a (x,y)
         InventarioDAO.getInstance().put(p);
+        inventario.add(p);
 
         return wallie;
     }
 
     public void run_both(int e, int r) throws E404Exception {
+        if(inventario.size() == MAX_E || inventario.size()+e > MAX_E){
+            throw new E404Exception("ERRO", "Não há espaço no Inventário, é impossivel Entregar Paletes de momento.");
+        }
+
+        if(inventario.size() == 0 && r > 0){
+            throw new E404Exception("ERRO", "Não há nenhuma palete no Inventário, é impossivel criar Requisições de momento.");
+        }
+
         List<Entrega> lista_e = automatico_e(e);
         List<Requisicao> lista_r = automatico_r(r);
 
@@ -434,7 +445,7 @@ public class Servidor {
                     e--;
                 }
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
                 } catch (InterruptedException interruptedException) {
                     View.alert("ERRO", "Thread failed to zzz.");
                 }
@@ -447,7 +458,7 @@ public class Servidor {
                     r--;
                 }
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
                 } catch (InterruptedException interruptedException) {
                     View.alert("ERRO", "Thread failed to zzz.");
                 }

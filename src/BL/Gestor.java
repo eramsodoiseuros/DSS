@@ -122,8 +122,4 @@ private boolean online;
         return r;
     }
 
-/* FALTA FAZER
-    private Map<String, Pair> consultaLista (boolean online){
-
-    }*/
 }

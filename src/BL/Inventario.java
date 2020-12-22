@@ -1,5 +1,6 @@
 package BL;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -67,6 +68,6 @@ public class Inventario {
     }
 
     protected List<Palete> listar(int n){
-        return inventario.values().stream().limit(n).collect(Collectors.toList());
+        return inventario.values().stream().filter(palete -> !palete.getLocalizacao().equals(new Point(1, 0))).limit(n).collect(Collectors.toList());
     }
 }

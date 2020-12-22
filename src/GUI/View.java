@@ -323,18 +323,18 @@ public class View implements GUI {
         cb.getItems().addAll(req);
         cb.setPromptText("Requisições a necessitar de aprovação: ");
         cb.setOnAction(e -> {
+            c.end_scene(e);
             String[] split = cb.getValue().split(" ", 8);
             c.addRA(split[1]);
-            c.end_scene(e);
         });
 
         ComboBox<String> cb2 = new ComboBox<>();
         cb2.getItems().addAll(ent);
         cb2.setPromptText("Entregas a necessitar de aprovação: ");
         cb2.setOnAction(e -> {
+            c.end_scene(e);
             String[] split = cb2.getValue().split(" ", 8);
             c.addEA(split[1]);
-            c.end_scene(e);
         });
 
         layout.getChildren().addAll(lblUser,cb, cb2);

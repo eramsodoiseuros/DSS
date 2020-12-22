@@ -47,10 +47,10 @@ public class Requisicao extends Pedido implements Dados<Requisicao> {
     }
 
     public String toStingConteudoAtivas() {
-        return conteudo.toStringAtivas();
+        return conteudo.toStringID_A_C();
     }
 
     public String toStringConteudoFeitas() {
-        return conteudo.toStringFeitas();
+        return conteudo.toStringID_C();
     }
 }

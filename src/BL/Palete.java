@@ -75,22 +75,21 @@ public class Palete implements Dados<Palete> {
                 '}';
     }
 
-    public String toStringAtivas(){
-        return "Palete: - " + codeID + " - " + conteudo;
+    public String toStringID_NA_C(){
+        return "Palete: " + codeID + " - NÃO ARMAZENADA - " + conteudo;
     }
-
+    public String toStringID_A_C(){
+        return "Palete: " + codeID + " - ARMAZENADA - " + conteudo + " - " + toStringLocalizacao(localizacao);
+    }
+    public String toStringID_C(){
+        return "Palete: " + codeID + " - " + conteudo;
+    }
     public String toStringLocalizacao(Point p){
         return "Localização: " + "(" + p.x + ", " + p.y + ")";
     }
-
-    public String toStringFeitas(){
-        return "Palete: - " + codeID + " - " + conteudo;
-    }
-
     public String toStringListagem(){
-        return "Palete: - " + codeID + " - " + toStringLocalizacao(localizacao);
+        return "Palete: " + codeID + " - " + toStringLocalizacao(localizacao);
     }
-
     public String conteudo(){
         return conteudo;
     }

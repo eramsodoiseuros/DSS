@@ -41,21 +41,16 @@ public class GestorPedidos {
         return new ArrayList<>(entrega_ATIVAS.values());
     }
 
-    protected void removeRF(String codID){
-        this.requisicoes_FEITAS.remove(codID);
-    }
     protected void removeRA(String codID){
         this.requisicoes_FEITAS.putIfAbsent(codID, requisicoes_ATIVAS.get(codID));
-        UI.notifica("NOTIFICAÇÃO DE MUDANÇA DE ESTADO: " + "R->" + codID + "    ||      C->" + requisicoes_FEITAS.get(codID).conteudo + " de momento está FEITA.");
+        UI.notifica("NOTIFICAÇÃO DE MUDANÇA DE ESTADO: " + "R->" + codID + "    ||      Conteudo ->" + requisicoes_FEITAS.get(codID).conteudo.toStringID_C() + " de momento está FEITA.");
         RequisicaoDAO.getInstance().put(requisicoes_ATIVAS.get(codID));
         this.requisicoes_ATIVAS.remove(codID);
     }
-    protected void removeEF(String codID){
-        this.entrega_FEITAS.remove(codID);
-    }
+
     protected void removeEA(String codID){
         this.entrega_FEITAS.putIfAbsent(codID, entrega_ATIVAS.get(codID));
-        UI.notifica("NOTIFICAÇÃO DE MUDANÇA DE ESTADO: " + "E->" + codID + "    ||      C->" + entrega_FEITAS.get(codID).conteudo + " de momento está FEITA.");
+        UI.notifica("NOTIFICAÇÃO DE MUDANÇA DE ESTADO: " + "E->" + codID + "    ||      Conteudo ->" + entrega_FEITAS.get(codID).conteudo.toStringID_A_C() + " de momento está FEITA.");
         EntregaDAO.getInstance().put(entrega_ATIVAS.get(codID));
         this.entrega_ATIVAS.remove(codID);
     }
@@ -90,21 +85,21 @@ public class GestorPedidos {
     }
 
     protected void addEntrega(Entrega e) {
-        UI.notifica("NOTIFICAÇÃO DE MUDANÇA DE ESTADO: " + "Entrega ->" + e.codeID + "     ||      C->" + e.conteudo + " de momento está NÃO PROCESSADA.");
+        UI.notifica("NOTIFICAÇÃO DE MUDANÇA DE ESTADO: " + "Entrega ->" + e.codeID + "     ||      Conteudo ->" + e.conteudo.toStringID_NA_C() + " de momento está NÃO PROCESSADA.");
         entrega.putIfAbsent(e.codeID,e);
     }
     protected void addRequisicao(Requisicao r) {
-        UI.notifica("NOTIFICAÇÃO DE MUDANÇA DE ESTADO: " + "Requisição ->" + r.codeID + "     ||      C->" + r.conteudo + " de momento está NÃO PROCESSADA.");
+        UI.notifica("NOTIFICAÇÃO DE MUDANÇA DE ESTADO: " + "Requisição ->" + r.codeID + "     ||      Conteudo ->" + r.conteudo.toStringID_C() + " de momento está NÃO PROCESSADA.");
         requisicoes.putIfAbsent(r.codeID, r);
     }
     protected void removeEntrega(String e) {
         this.entrega_ATIVAS.putIfAbsent(e, entrega.get(e));
-        UI.notifica("NOTIFICAÇÃO DE MUDANÇA DE ESTADO: " + "E->" + e + "    ||      C->" + entrega.get(e).conteudo + " de momento está ATIVA.");
+        UI.notifica("NOTIFICAÇÃO DE MUDANÇA DE ESTADO: " + "E->" + e + "    ||      Conteudo ->" + entrega.get(e).conteudo.toStringID_C() + " de momento está ATIVA.");
         this.entrega.remove(e);
     }
     protected void removeRequisicao(String r) {
         this.requisicoes_ATIVAS.putIfAbsent(r, requisicoes.get(r));
-        UI.notifica("NOTIFICAÇÃO DE MUDANÇA DE ESTADO: " + "R->" + r + "    ||      C->" + requisicoes.get(r).conteudo + " de momento está ATIVA.");
+        UI.notifica("NOTIFICAÇÃO DE MUDANÇA DE ESTADO: " + "R->" + r + "    ||      Conteudo ->" + requisicoes.get(r).conteudo.toStringID_C() + " de momento está ATIVA.");
         this.requisicoes.remove(r);
     }
 
