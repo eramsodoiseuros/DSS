@@ -14,12 +14,4 @@ public interface GUI {
      * */
     Scene menu();
 
-    /**
-     * Função que gera a Scene JavaFX representativa do
-     * @return Scene repesentativa do
-     * */
-    Scene painel_pedido(List<String> lista);
-
-    Scene painel_gestor(String codID);
-
 }

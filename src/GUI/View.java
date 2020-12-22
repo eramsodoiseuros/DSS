@@ -129,8 +129,7 @@ public class View implements GUI {
         }
     }
 
-    @Override
-    public Scene painel_gestor(String codID) {
+    private Scene painel_gestor(String codID) {
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(20, 20, 20, 20));
 
@@ -272,8 +271,7 @@ public class View implements GUI {
         return new Scene(layout, 500, 400);
     }
 
-    @Override
-    public Scene painel_pedido(List<String> lista) {
+    private Scene painel_pedido(List<String> lista) {
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(20, 20, 20, 20));
 
@@ -386,13 +384,13 @@ public class View implements GUI {
         return new Scene(layout, 500, 400);
     }
 
-    public void painel_EF(){
+    private void painel_EF(){
         make_window("Painel das Entregas Feitas", painel_pedido(c.getEntFeitas()));
     }
-    public void painel_RF(){
+    private void painel_RF(){
         make_window("Painel das Requisições Feitas", painel_pedido(c.getReqFeitas()));
     }
-    public void logInGestor(String codID, String pwd){
+    private void logInGestor(String codID, String pwd){
         if(c.iniciaSessao(codID, pwd)){
             View.make_window("Menu do Gestor", painel_gestor(codID));
         } else View.alert("ERRO", "Falha ao iniciar a sessão, verifique os seus dados.");
